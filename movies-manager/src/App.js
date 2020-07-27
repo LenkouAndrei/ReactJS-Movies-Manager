@@ -1,26 +1,27 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { CreateElement } from './CreateElement';
+import { RComponent } from './RComponent';
+import { PComponent } from './PComponent';
+import { Bye } from './FComponent';
+
+const el = React.createElement;
+const listOfRules = [
+  {ruleKey: 1, label: 'Do not worry'},
+  {ruleKey: 2, label: 'Be happy'},
+]
+const name = 'Tomas';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return (el(
+      'div',
+      { style: {border: '10px solid #0088ff'} },
+      el(CreateElement, {name}, null),
+      <RComponent data={listOfRules} />,
+      <PComponent/>,
+      <Bye name={name}/>
+  ));
 }
 
 export default App;

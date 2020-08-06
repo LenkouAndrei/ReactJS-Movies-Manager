@@ -1,44 +1,47 @@
-const path = require("path");
+const { merge } = require('webpack-merge');
 
-module.exports = {
-  entry: "./src/index.js",
-  mode: "development",
-  output: {
-    filename: "./main.js"
-  },
-  devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    compress: true,
-    port: 9000,
-    watchContentBase: true,
-    progress: true
-  },
-
-  module: {
-    rules: [
-      {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: "babel-loader"
-        }
-      },
-      {
-        test: /\.css$/,
-        use: [
-          "style-loader",
-          {
-            loader: "css-loader",
-            options: {
-              modules: true
-            }
+module.exports = () => {
+  const common = {
+    mode: process.env.NODE_ENV,
+    entry: './src/index.js',
+    module: {
+      rules: [
+        {
+          test: /\.jsx?$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader'
           }
-        ]
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: ["file-loader"]
-      }
-    ]
-  }
-};
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true
+              }
+            },
+            'sass-loader'
+          ]
+        },
+        {
+          test: /\.(png|svg|jpg|gif)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {name: 'img/[name].[ext]'}
+            },
+            'image-webpack-loader'
+          ]
+        }
+      ]
+    }
+  };
+
+  const restConfig = process.env.NODE_ENV === 'development' ?
+  require('./webpack.config.dev') : require('./webpack.config.prod');
+
+  return merge(common, restConfig);
+}

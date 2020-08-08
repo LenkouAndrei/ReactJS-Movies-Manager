@@ -1,10 +1,9 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { CreateElement } from './CreateElement';
 import { RComponent } from './RComponent';
 import { PComponent } from './PComponent';
-import { Bye } from './FComponent';
+import { FComponent } from './FComponent';
 
 const el = React.createElement;
 const listOfRules = [
@@ -20,7 +19,7 @@ function App() {
       el(CreateElement, {name}, null),
       <RComponent data={listOfRules} />,
       <PComponent/>,
-      <Bye name={name}/>
+      <FComponent name={name}/>
   ));
 }
 

@@ -1,16 +1,7 @@
 {
-    "presets": [
-        [
-            "@babel/preset-env",
-            {
-              "targets": {
-                "browsers": [
-                  "last 2 versions",
-                  "Explorer 11"
-                ]
-              }
-            }
-        ]
-    ],
-    "plugins": ["babel-plugin-styled-components"]
+  "presets": [
+    "@babel/env",
+    "@babel/react"
+  ],
+  "plugins": ["babel-plugin-styled-components"]
 }

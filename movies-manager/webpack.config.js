@@ -3,9 +3,14 @@ const { merge } = require('webpack-merge');
 module.exports = () => {
   const common = {
     mode: process.env.NODE_ENV,
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     module: {
       rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
         {
           test: /\.jsx?$/,
           exclude: /(node_modules|bower_components)/,
@@ -17,12 +22,7 @@ module.exports = () => {
           test: /\.scss$/,
           use: [
             'style-loader',
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true
-              }
-            },
+            'css-loader',
             'sass-loader'
           ]
         },
@@ -37,7 +37,10 @@ module.exports = () => {
           ]
         }
       ]
-    }
+    },
+    resolve: {
+      extensions: [ '.tsx', '.ts', '.js' ],
+    },
   };
 
   const restConfig = process.env.NODE_ENV === 'development' ?

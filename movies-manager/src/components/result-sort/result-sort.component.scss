@@ -1,0 +1,20 @@
+.result-sort{
+    &__btn {
+        width: 200px;
+        padding: 10px 5px;
+        border-bottom: 2px solid lighten(#474a51, 30%);
+        background-color: #000;
+        color: lighten(#474a51, 30%);
+        font-size: 16px;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:not(.untracked):focus {
+            color: #FA8072;
+            border-color: #FA8072;
+            outline: none;
+        }
+    }
+}

@@ -1,0 +1,36 @@
+.search {
+    padding: 30px 70px 0;
+
+    &__headline {
+        padding-bottom: 10px;
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 26px;
+    }
+
+    &__container {
+        display: flex;
+    }
+
+    &__input {
+        align-self: stretch;
+        flex: 1;
+        padding-left: 15px;
+        background-color: #474a51;
+        border-color: lighten(#474a51, 40%);
+        color: lighten(#474a51, 30%);
+    }
+
+    &__btn {
+        flex: 0;
+        margin-left: 5px;
+        padding: 5px 15px;
+        color: #fff;
+        background-color: #FA8072;
+        font-size: 18px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

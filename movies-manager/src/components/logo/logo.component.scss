@@ -1,0 +1,13 @@
+.logo {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #FA8072;
+
+    &__text {
+        font-size: 15px;
+
+        &--bold {
+            font-weight: 600;
+        }
+    }
+}

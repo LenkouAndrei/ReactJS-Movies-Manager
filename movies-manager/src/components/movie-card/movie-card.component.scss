@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 $card-width: 350px;
 $settingDiameter: 40px;
 
@@ -23,7 +25,7 @@ $settingDiameter: 40px;
         right: 30px;
         border-radius: 50%;
         text-align: center;
-        background-color: rgba(255, 255, 255, .5);
+        background-color: $white-opacity-3;
     }
 
     &__icon {
@@ -42,7 +44,6 @@ $settingDiameter: 40px;
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        color: #fff;
     }
 
     &__title {
@@ -52,7 +53,7 @@ $settingDiameter: 40px;
 
     &__release-date {
         padding: 2px 5px;
-        border: 1px solid #fff;
+        border: 1px solid $grey-border-color;
     }
 
     &__genres {

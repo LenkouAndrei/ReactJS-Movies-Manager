@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .result-filter{
     &__list {
         display: flex;
@@ -5,9 +7,9 @@
 
     &__btn {
         padding: 10px 5px;
-        border-bottom: 2px solid lighten(#474a51, 30%);
-        background-color: #000;
-        color: lighten(#474a51, 30%);
+        border-bottom: 2px solid $grey-border-color;
+        background-color: $black;
+        color: $grey-font-color;
         font-size: 16px;
 
         &:hover {
@@ -15,7 +17,7 @@
         }
 
         &:focus {
-            border-color: #FA8072;
+            border-color: $solmon;
             outline: none;
         }
     }

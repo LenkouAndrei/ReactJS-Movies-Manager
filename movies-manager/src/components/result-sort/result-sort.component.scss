@@ -1,10 +1,12 @@
+@import "../../styles/variables.scss";
+
 .result-sort{
     &__btn {
         width: 200px;
         padding: 10px 5px;
-        border-bottom: 2px solid lighten(#474a51, 30%);
-        background-color: #000;
-        color: lighten(#474a51, 30%);
+        border-bottom: 2px solid $grey-border-color;
+        background-color: $black;
+        color: $grey-font-color;
         font-size: 16px;
 
         &:hover {
@@ -12,8 +14,8 @@
         }
 
         &:not(.untracked):focus {
-            color: #FA8072;
-            border-color: #FA8072;
+            color: $solmon;
+            border-color: $solmon;
             outline: none;
         }
     }

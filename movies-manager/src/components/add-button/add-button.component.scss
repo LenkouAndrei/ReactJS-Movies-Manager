@@ -1,8 +1,10 @@
+@import "../../styles/variables.scss";
+
 .add-btn {
     padding: 5px 10px;
     text-transform: uppercase;
-    color: #FA8072;
-    background-color: rgba(255, 255, 255, .3);
+    color: $solmon;
+    background-color: $white-opacity-3;
     font-size: 18px;
     font-weight: 600;
 

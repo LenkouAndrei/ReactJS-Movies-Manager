@@ -1,0 +1,20 @@
+const path = require('path');
+const webpack = require('webpack');
+
+module.exports = {
+  output: {
+    filename: 'main.js',
+  },
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000,
+    watchContentBase: true,
+    progress: true
+  },
+  watch: true,
+  devtool: 'source-map',
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+  ],
+};

@@ -1,22 +1,38 @@
-import React from "react";
-import { Logo, AddButton, Search } from "../../components";
+import React, { Component } from "react";
+import { Logo, AddButton } from "../../components";
 import { Wrapper } from "../wrapper/wrapper.component";
+import { TNullable } from "../../types/types";
 import "./header.component.scss";
 
-interface IHeaderProps {
-    pageName: string;
+export interface IHeaderProps {
+    pageName: PageName;
 };
 
-const blockName = "header";
-const pagesWithAddBtn = ['main'];
+export enum PageName {
+    Main = 'Main',
+    Form = 'Form'
+}
 
-export const Header = (/*{ pageName = 'main' }: IHeaderProps*/) => <header className={blockName}>
+const blockName = "header";
+
+export const Header = ({ pageName }: IHeaderProps) => {
+    let headerElement: TNullable<JSX.Element> = null;
+    switch (pageName) {
+        case PageName.Main:
+            headerElement = <AddButton/>;
+            break;
+        default:
+            break;
+    }
+
+return (<header className={blockName}>
     <Wrapper>
         <>
             <section className={`${blockName}__top`}>
                 <Logo/>
-                <AddButton/>
+                { headerElement }
             </section>
         </>
     </Wrapper>
-</header>;
+</header>)
+};

@@ -1,0 +1,22 @@
+@import "../../styles/variables.scss";
+
+.result-sort{
+    &__btn {
+        width: 200px;
+        padding: 10px 5px;
+        border-bottom: 2px solid $grey-border-color;
+        background-color: $black;
+        color: $grey-font-color;
+        font-size: 16px;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:not(.untracked):focus {
+            color: $solmon;
+            border-color: $solmon;
+            outline: none;
+        }
+    }
+}

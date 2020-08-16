@@ -1,0 +1,12 @@
+@import "../../styles/variables.scss";
+
+.header {
+    padding: 10px 0 50px;
+    margin-bottom: 5px;
+    background-color: $black;
+
+    &__top {
+        display: flex;
+        justify-content: space-between;
+    }
+}

@@ -1,21 +1,8 @@
 import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAlignJustify } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAlignJustify } from "@fortawesome/free-solid-svg-icons";
+import { IMovieInfo } from "../../types/types";
 import "./movie-card.component.scss";
-
-export interface IMovieInfo {
-    title: string;
-    tagline: string;
-    vote_average: number;
-    vote_count: number;
-    release_date: string;
-    poster_path: string;
-    overview: string;
-    budget: number;
-    revenue: number;
-    genres: string[];
-    runtime: number;
-};
 
 const blockName = 'movie';
 

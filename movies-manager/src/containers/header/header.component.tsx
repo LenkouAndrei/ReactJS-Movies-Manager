@@ -10,7 +10,8 @@ export interface IHeaderProps {
 
 export enum PageName {
     Main = 'Main',
-    Form = 'Form'
+    AddForm = 'AddForm',
+    EditForm = 'EditForm',
 }
 
 const blockName = "header";

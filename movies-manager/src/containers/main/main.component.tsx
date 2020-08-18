@@ -1,64 +1,102 @@
-import React from "react";
+import React, { Component } from "react";
 import "./main.component.scss";
 import { Wrapper } from "../wrapper/wrapper.component";
-import { ResultFilter, ResultSort, Search, MovieCard, IMovieInfo } from "../../components";
+import { Modal } from "../modal/modal.component";
+import { ResultFilter, ResultSort, Search, MovieCard } from "../../components";
+import { IMovie } from "../../types/types";
 
-interface IMovie extends IMovieInfo {
-    id: number;
-};
+interface IMovieSort {
+    title: string;
+    isActive: boolean;
+}
 
 const movies = require('../../data.json');
 const blockName = 'result';
+const moviesSortSet = [
+    { 
+        title: 'voteAverage',
+        isActive: true,
+    },
+    { 
+        title: 'voteCount',
+        isActive: false,
+    },
+    { 
+        title: 'releaseDate',
+        isActive: false,
+    },
+    { 
+        title: 'revenue',
+        isActive: false,
+    },
+];
 
-export const Main = () => {
-    const allMoviesGenres: string[] = movies.reduce((allGenres: string[], { genres }: IMovie) => {
-        allGenres.push(...genres);
-        return allGenres;
-    }, ['All']);
-    const moviesGenres = Array.from(new Set(allMoviesGenres));
-    const moviesSortSet = [
-        { 
-            title: 'voteAverage',
-            isActive: true,
-        },
-        { 
-            title: 'voteCount',
-            isActive: false,
-        },
-        { 
-            title: 'releaseDate',
-            isActive: false,
-        },
-        { 
-            title: 'revenue',
-            isActive: false,
-        },
-    ];
-const moviesCards = movies.map(({id, ...rest}: IMovie) => {
-    return <li
-        className={`${blockName}__movies-card`}
-        key={id}>
-        <MovieCard {...rest}/>
-    </li>
-});
-return <main className={blockName}>
-    <Wrapper>
-        <Search/>
-    </Wrapper>
-    <div className={`${blockName}__separator`}></div>
-    <Wrapper>
-        <>
-            <section className={`${blockName}__filter`}>
-                <ResultFilter genres={moviesGenres}/>
-                <ResultSort sortSet={moviesSortSet}/>
-            </section>
-            <div className={`${blockName}__amount`}>
-                <strong className="strong">{movies.length}</strong> movies found
-            </div>
-            <ul className={`${blockName}__cards-list`}>
-                {moviesCards}
-            </ul>
-        </>
-    </Wrapper>
-</main>
+interface IMainState {
+    isDialogOpen: boolean;
+    movies: IMovie[];
+    moviesSortSet: IMovieSort[];
+    moviesGenres: string[];
+}
+
+export class Main extends Component<any, IMainState> {
+    constructor(props: any) {
+        super(props);
+
+        const allMoviesGenres: string[] = movies.reduce((allGenres: string[], { genres }: IMovie) => {
+            allGenres.push(...genres);
+            return allGenres;
+        }, ['All']);
+        const moviesGenres = Array.from(new Set(allMoviesGenres));
+        this.state = {
+            isDialogOpen: false,
+            movies,
+            moviesSortSet,
+            moviesGenres,
+        }
+    }
+
+    showModal = () => {
+        this.setState({ isDialogOpen: true });
+    };
+
+    hideModal = () => {
+        this.setState({ isDialogOpen: false });
+    };
+
+    render() {
+        const moviesCards = this.state.movies.map(({id, ...rest}: IMovie) => {
+            return <li
+                className={`${blockName}__movies-card`}
+                key={id}
+                onClick={this.showModal.bind(this)}>
+                <MovieCard {...rest}/>
+            </li>
+        });
+        return <main className={blockName}>
+            <Modal isOpen={this.state.isDialogOpen} handleClose={this.hideModal}>
+                <p>Hi Jack!</p>
+            </Modal>   
+            <Wrapper>
+                <Search/>
+            </Wrapper>
+            <div className={`${blockName}__separator`}></div>
+            <Wrapper>
+                <>
+                    <section className={`${blockName}__filter`}>
+                        <ResultFilter genres={this.state.moviesGenres}/>
+                        <ResultSort sortSet={this.state.moviesSortSet}/>
+                    </section>
+                    <div className={`${blockName}__amount`}>
+                        <strong className="strong">{movies.length}</strong> movies found
+                    </div>
+                    <ul className={`${blockName}__cards-list`}>
+                        {moviesCards}
+                    </ul>
+                </>
+            </Wrapper>
+        </main>
+    }
 };
+
+const container = document.createElement("div");
+document.body.appendChild(container);

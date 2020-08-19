@@ -11,27 +11,35 @@ $settingDiameter: 40px;
     &:hover {
         cursor: pointer;
 
-        .movie__settings {
+        .movie__icon-container {
             display: block;
         }
     }
 
     &__settings {
-        display: none;
-        width: $settingDiameter;
-        height: $settingDiameter;
         position: absolute;
-        top: 30px;
-        right: 30px;
-        border-radius: 50%;
-        text-align: center;
-        background-color: $white-opacity-3;
+        top: 0;
+        right: 0;
+        width: 350px;
+        height: 300px;
     }
 
     &__icon {
         position: absolute;
         top: 50%;
         transform: translate(-50%, -50%);
+
+        &-container {
+            display: none;
+            width: $settingDiameter;
+            height: $settingDiameter;
+            border-radius: 50%;
+            text-align: center;
+            background-color: $white-opacity-3;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+        }
     }
 
     &__image {
@@ -59,5 +67,38 @@ $settingDiameter: 40px;
     &__genres {
         width: 100%;
         margin-top: 5px;
+    }
+}
+
+.menu {
+    display: flex;
+    flex-flow: column;
+    background-color: $black;
+    box-sizing: border-box;
+    width: 200px;
+    padding: 5px 0;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    &__btn--close{
+        background-color: transparent;
+        align-self: flex-end;
+        cursor: pointer;
+    }
+
+    &__icon {
+        color: $grey-font-color;
+    }
+
+    &__list {
+        margin-top: 5px;
+        &-item {
+            padding: 10px;
+    
+            &:hover {
+                background-color: $solmon;
+            }
+        }
     }
 }

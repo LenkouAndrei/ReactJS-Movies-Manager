@@ -1,14 +1,9 @@
 @import "../../styles/variables.scss";
 
 .delete-modal {
-    width: 500px;
-    padding: 15px 30px;
-    box-sizing: border-box;
-    margin: 0 auto;
     display: flex;
     flex-flow: column;
-    background-color: $black;
-
+    
     &__btn {
 
         &--close {

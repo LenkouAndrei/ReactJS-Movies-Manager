@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./main.component.scss";
 import { Wrapper } from "../wrapper/wrapper.component";
 import { Modal } from "../modal/modal.component";
+import { FormPage } from "../form-page/form-page.component";
 import { ResultFilter, ResultSort, Search, MovieCard } from "../../components";
 import { IMovie } from "../../types/types";
 
@@ -74,7 +75,7 @@ export class Main extends Component<any, IMainState> {
         });
         return <main className={blockName}>
             <Modal isOpen={this.state.isDialogOpen} handleClose={this.hideModal}>
-                <p>Hi Jack!</p>
+                <FormPage { ...this.state.movies[0] }/>
             </Modal>   
             <Wrapper>
                 <Search/>

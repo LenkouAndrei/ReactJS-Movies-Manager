@@ -35,96 +35,84 @@ export class FormPage extends Component<{}, IMovie> {
             return <option value={genre}>{ genre }</option>
         });
 
-        return <main className={`${blockName}__container`}>
-            <Wrapper>
-                <div className={`${blockName}__wrapper`}>
-                    <button className={`${blockName}__btn--close`}>
-                        <FontAwesomeIcon
-                            className={`${blockName}__icon`}
-                            icon={faTimes}
-                            size='2x'/>
-                    </button>
-                    <form  className={blockName}>
-                        <h2 className={`${blockName}__headline`}>Edit Movie</h2>
-                        {
-                            this.state.id && <div className={`${blockName}__field-wrapper`}>
-                                <div className={`${blockName}__title`}>movie id</div>
-                                <div className={`${blockName}__text`}>{this.state.id}</div>
-                            </div>
-                        }
-                        <div className={`${blockName}__field-wrapper`}>
-                            <label
-                                htmlFor="title"
-                                className={`${blockName}__label`}>title</label>
-                            <input
-                                id="title"
-                                className={`${blockName}__input`}
-                                type="text"
-                                value={this.state.title || ''}
-                                placeholder="Title here"/>
-                        </div>
-                        <div className={`${blockName}__field-wrapper`}>
-                            <label
-                                htmlFor="releaseDate"
-                                className={`${blockName}__label`}>release date</label>
-                            <input
-                                id="releaseDate"
-                                className={`${blockName}__input`}
-                                type="text"
-                                value={this.state.release_date || ''}
-                                placeholder="Select date"/>
-                            <FontAwesomeIcon
-                                className={`${blockName}__icon--bright`}
-                                icon={faCalendar}/>
-                        </div>
-                        <div className={`${blockName}__field-wrapper`}>
-                            <label
-                                htmlFor="movieUrl"
-                                className={`${blockName}__label`}>movie url</label>
-                            <input
-                                id="movieUrl"
-                                className={`${blockName}__input`}
-                                type="text"
-                                value={url || ''}
-                                placeholder="Url here"/>
-                        </div>
-                        <div className={`${blockName}__field-wrapper`}>
-                            <div className={`${blockName}__title`}>genre</div>
-                            <FormSelect genres={this.state.genres}/>
-                        </div>
-                        <div className={`${blockName}__field-wrapper`}>
-                            <label
-                                htmlFor="overview"
-                                className={`${blockName}__label`}>overview</label>
-                            <input
-                                id="overview"
-                                className={`${blockName}__input`}
-                                type="text"
-                                value={this.state.overview || ''}
-                                placeholder="Overview here"/>
-                        </div>
-                        <div className={`${blockName}__field-wrapper`}>
-                            <label
-                                htmlFor="runtime"
-                                className={`${blockName}__label`}>runtime</label>
-                            <input
-                                id="runtime"
-                                className={`${blockName}__input`}
-                                type="text"
-                                value={this.state.runtime || ''}
-                                placeholder="Runtime here"/>
-                        </div>
-                        <div className={`${blockName}__btn-wrapper`}>
-                            <button className={`${blockName}__btn--reset`}>
-                                Reset
-                            </button>
-                            <button className={`${blockName}__btn--save`}>
-                                Save
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </Wrapper>
-        </main>;
+        const movieIdField = this.state.id && <div className={`${blockName}__field-wrapper`}>
+            <div className={`${blockName}__title`}>movie id</div>
+            <div className={`${blockName}__text`}>{this.state.id}</div>
+        </div>
+
+        return <form  className={blockName}>
+            <h2 className={`${blockName}__headline`}>Edit Movie</h2>
+            { movieIdField }
+            <div className={`${blockName}__field-wrapper`}>
+                <label
+                    htmlFor="title"
+                    className={`${blockName}__label`}>title</label>
+                <input
+                    id="title"
+                    className={`${blockName}__input`}
+                    type="text"
+                    value={this.state.title || ''}
+                    placeholder="Title here"/>
+            </div>
+            <div className={`${blockName}__field-wrapper`}>
+                <label
+                    htmlFor="releaseDate"
+                    className={`${blockName}__label`}>release date</label>
+                <input
+                    id="releaseDate"
+                    className={`${blockName}__input`}
+                    type="text"
+                    value={this.state.release_date || ''}
+                    placeholder="Select date"/>
+                <FontAwesomeIcon
+                    className={`${blockName}__icon--bright`}
+                    icon={faCalendar}/>
+            </div>
+            <div className={`${blockName}__field-wrapper`}>
+                <label
+                    htmlFor="movieUrl"
+                    className={`${blockName}__label`}>movie url</label>
+                <input
+                    id="movieUrl"
+                    className={`${blockName}__input`}
+                    type="text"
+                    value={url || ''}
+                    placeholder="Url here"/>
+            </div>
+            <div className={`${blockName}__field-wrapper`}>
+                <div className={`${blockName}__title`}>genre</div>
+                <FormSelect genres={this.state.genres}/>
+            </div>
+            <div className={`${blockName}__field-wrapper`}>
+                <label
+                    htmlFor="overview"
+                    className={`${blockName}__label`}>overview</label>
+                <input
+                    id="overview"
+                    className={`${blockName}__input`}
+                    type="text"
+                    value={this.state.overview || ''}
+                    placeholder="Overview here"/>
+            </div>
+            <div className={`${blockName}__field-wrapper`}>
+                <label
+                    htmlFor="runtime"
+                    className={`${blockName}__label`}>runtime</label>
+                <input
+                    id="runtime"
+                    className={`${blockName}__input`}
+                    type="text"
+                    value={this.state.runtime || ''}
+                    placeholder="Runtime here"/>
+            </div>
+            <div className={`${blockName}__btn-wrapper`}>
+                <button className={`${blockName}__btn--reset`}>
+                    Reset
+                </button>
+                <button className={`${blockName}__btn--save`}>
+                    Save
+                </button>
+            </div>
+        </form>;
     }
 }

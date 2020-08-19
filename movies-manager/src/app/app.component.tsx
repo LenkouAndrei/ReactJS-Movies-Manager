@@ -9,7 +9,6 @@ import {
   FormPage
 } from "../containers";
 import { TNullable, IMovie } from '../types/types';
-import { DeleteModal } from '../components';
 import "./app.component.scss";
 
 const movieToEdit: IMovie = {

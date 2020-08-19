@@ -5,19 +5,6 @@
     padding: 0 30px;
     box-sizing: border-box;
 
-    &__container {
-        background-color: $black;
-    }
-
-    &__wrapper {
-        width: 700px;
-        margin: 0 auto;
-        padding: 10px 20px;
-        display: flex;
-        flex-flow: column;
-        background-color: $white-opacity-3;
-    }
-
     &__btn {
         &--close,
         &--reset {

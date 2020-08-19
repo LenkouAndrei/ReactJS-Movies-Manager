@@ -8,4 +8,17 @@
         display: flex;
         justify-content: space-between;
     }
+
+    .add-btn {
+        padding: 5px 10px;
+        text-transform: uppercase;
+        color: $solmon;
+        background-color: $white-opacity-3;
+        font-size: 18px;
+        font-weight: 600;
+    
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }

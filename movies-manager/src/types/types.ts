@@ -17,3 +17,11 @@ export interface IMovieInfo {
 export interface IMovie extends IMovieInfo {
     id?: number;
 };
+
+export interface ISelectConfig {
+    showOptionList: boolean;
+    options: TSortListItem[];
+    chosenOption: TSortListItem;
+}
+
+export type TSortListItem = 'vote average' | 'vote count' | 'release date' | 'revenue';

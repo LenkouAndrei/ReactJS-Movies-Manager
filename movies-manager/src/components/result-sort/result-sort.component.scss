@@ -1,8 +1,18 @@
 @import "../../styles/variables.scss";
 
 .result-sort{
+    &__container {
+        position: relative;
+    }
+
+    &__list {
+        position: absolute;
+        z-index: 100;
+    }
+
     &__btn {
         width: 200px;
+        box-sizing: border-box;
         padding: 10px 5px;
         border-bottom: 2px solid $grey-border-color;
         background-color: $black;
@@ -18,5 +28,14 @@
             border-color: $solmon;
             outline: none;
         }
+
+        &.untracked {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    &__icon--bright {
+        color: $solmon;
     }
 }

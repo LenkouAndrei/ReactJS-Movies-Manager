@@ -26,7 +26,9 @@ export const Modal = ({ handleClose, isOpen, children }: IModalProps): JSX.Eleme
                   icon={faTimes}
                   size='2x'/>
           </button>
-          <section className={`${blockName}__content`}>
+          <section
+            className={`${blockName}__content`}
+            onClick={event => event.stopPropagation()}>
             {children}
           </section>
         </div>

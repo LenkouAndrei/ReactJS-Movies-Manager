@@ -43,7 +43,7 @@ class AppComponent extends Component<{}, IHeaderProps> {
       case PageName.AddForm:
         mainContent = <FormPage {...null}/>;
       case PageName.EditForm:
-        mainContent = <FormPage {...movieToEdit}/>;
+        mainContent = <FormPage { ...movieToEdit }/>;
       default:
           break;
     }

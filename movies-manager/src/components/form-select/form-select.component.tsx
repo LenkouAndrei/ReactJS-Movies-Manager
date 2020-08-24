@@ -1,17 +1,17 @@
-import React, { Component } from "react";
+import React, { Component, ChangeEvent } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import "./form-select.component.scss";
 
-interface IGenreWithState {
-    isChecked: boolean;
-    label: string;
-};
-
 interface ISelectFormState {
-    genres: IGenreWithState[],
-    selectedGenreLabel: string,
+    genres: string[],
+    selectedGenres: string[],
     isOpen: boolean;
+}
+
+interface ISelectFormProps {
+    onApplyGenres: (newGenres: string[]) => void;
+    genres: string[];
 }
 
 const allGenres = [
@@ -20,57 +20,59 @@ const allGenres = [
     'Comedy',
     'Family',
     'Drama',
-    'Romance'
+    'Romance',
 ];
 
 const blockName = 'form-select';
 
-export class FormSelect extends Component<{genres: string[]}, ISelectFormState> {
-    constructor(props: {genres: string[]}) {
+export class FormSelect extends Component<ISelectFormProps, ISelectFormState> {
+    constructor(props: ISelectFormProps) {
         super(props);
-        const modifiedGenres = allGenres.map((label: string) => {
-            return {
-                label,
-                isChecked: props.genres.includes(label),
-            }
-        });
         this.state = {
-            genres: modifiedGenres,
-            selectedGenreLabel: modifiedGenres
-                .filter(({ isChecked }: IGenreWithState) => isChecked)
-                .map(({ label }: IGenreWithState) => label).join(', ') || 'Select Genre',
+            genres: Array.from(new Set([ ...allGenres, ...this.props.genres ])),
+            selectedGenres: this.props.genres,
             isOpen: false,
         }
     }
 
-    openSelectDropdown = (): void => {
-        this.setState({ ...this.state, isOpen: true });
+    toggleSelectDropdown = (): void => {
+        if (!this.state.isOpen) {
+            this.setState({ isOpen: true });
+        } else {
+            this.setState({ isOpen: false });
+            this.props.onApplyGenres(this.state.selectedGenres);
+        }
     }
 
-    componentWillUnmount() {
-        console.log("Smth ent wrong");
-      }
+    handleCheckboxChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        const { checked, name } = target;
+        const selectedGenres = checked ? [ ...this.state.selectedGenres, name ] :
+            this.state.selectedGenres.filter(genre => genre !== name);
+        this.setState({ selectedGenres });
+    }
 
     render(): JSX.Element {
-        const genresList = this.state.genres.map((genre: IGenreWithState) => {
+        const genresList = this.state.genres.map(genre => {
             return <li
                 className={`${blockName}__item`}
-                key={genre.label}>
+                key={genre}>
                 <label className={`${blockName}__label`}>
                     <input
                         className={`${blockName}__checkbox`}
                         type="checkbox"
-                        checked={genre.isChecked}/>
-                    {genre.label}
+                        name={genre}
+                        checked={this.state.selectedGenres.includes(genre)}
+                        onChange={ this.handleCheckboxChange}/>
+                    {genre}
                 </label>
             </li>;
         })
         return <>
             <button
                 className={`${blockName}__btn`}
-                onClick={this.openSelectDropdown}>
-                <span className={`${blockName}__label`}>
-                    { this.state.selectedGenreLabel }
+                onClick={this.toggleSelectDropdown}>
+                <span className={`${blockName}__chosen-items`}>
+                    { this.state.selectedGenres.join(', ') || 'Select Genre' }
                 </span>
                 <FontAwesomeIcon
                     className={`${blockName}__icon`}

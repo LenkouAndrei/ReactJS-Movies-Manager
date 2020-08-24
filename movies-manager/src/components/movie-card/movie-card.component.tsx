@@ -46,7 +46,6 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
     }
 
     passInfo(itemTitle: string) {
-        console.log('Props ', this.props);
         this.props.onClickMovie(itemTitle, this.props.id, true);
         this.hideEditMenu();
     }

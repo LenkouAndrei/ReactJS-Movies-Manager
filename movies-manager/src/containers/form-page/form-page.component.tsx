@@ -1,7 +1,6 @@
-import React, { Component } from "react";
-import { Wrapper } from "../wrapper/wrapper.component";
+import React, { Component, ChangeEvent } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { IMovie } from "../../types/types";
 import { FormSelect } from "../../components";
 import "./form-page.component.scss";
@@ -24,15 +23,43 @@ const defaultMovie: IMovie = {
 
 const url: string = '';
 
-export class FormPage extends Component<{}, IMovie> {
+export class FormPage extends Component<IMovie, any> {
+    private readonly startState: IMovie;
     constructor(props: IMovie) {
         super(props);
-        this.state = { ...defaultMovie, ...props};
+        this.startState = { ...defaultMovie, ...this.props};
+        this.state = { ...defaultMovie, ...this.props};
+    }
+
+    handleChange(event: ChangeEvent<HTMLInputElement>) {
+        const value = event.target.value;
+        const name = event.target.name as keyof IMovie | 'url';
+        if (name === 'url') {
+            console.log('url value ', value);
+            return;
+        }
+
+        this.setState({ [name]: value });
+    }
+
+    updateGenres(newGenres: string[]) {
+        this.setState({ genres: newGenres });
+    }
+
+    handleSubmit(event: Event) {
+        console.log('Отправленная форма: ', this.state);
+        event.preventDefault();
+    }
+
+    resetState() {
+        this.setState({ ...this.startState });
     }
 
     render() {
         const genres: JSX.Element[] = this.state.genres.map((genre: string) => {
-            return <option value={genre}>{ genre }</option>
+            return <option
+                key={genre}
+                value={genre}>{ genre }</option>
         });
 
         const movieIdField = this.state.id && <div className={`${blockName}__field-wrapper`}>
@@ -40,7 +67,9 @@ export class FormPage extends Component<{}, IMovie> {
             <div className={`${blockName}__text`}>{this.state.id}</div>
         </div>
 
-        return <form  className={blockName}>
+        return <form
+            className={blockName}
+            onSubmit={this.handleSubmit.bind(this)}>
             <h2 className={`${blockName}__headline`}>Edit Movie</h2>
             { movieIdField }
             <div className={`${blockName}__field-wrapper`}>
@@ -50,9 +79,10 @@ export class FormPage extends Component<{}, IMovie> {
                 <input
                     id="title"
                     className={`${blockName}__input`}
+                    name="title"
                     type="text"
-                    value={this.state.title || ''}
-                    placeholder="Title here"/>
+                    value={this.state.title || 'Title here'}
+                    onChange={this.handleChange.bind(this)}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <label
@@ -61,9 +91,10 @@ export class FormPage extends Component<{}, IMovie> {
                 <input
                     id="releaseDate"
                     className={`${blockName}__input`}
+                    name="release_date"
                     type="text"
-                    value={this.state.release_date || ''}
-                    placeholder="Select date"/>
+                    value={this.state.release_date || 'Select date'}
+                    onChange={this.handleChange.bind(this)}/>
                 <FontAwesomeIcon
                     className={`${blockName}__icon--bright`}
                     icon={faCalendar}/>
@@ -75,13 +106,16 @@ export class FormPage extends Component<{}, IMovie> {
                 <input
                     id="movieUrl"
                     className={`${blockName}__input`}
+                    name="url"
                     type="text"
-                    value={url || ''}
-                    placeholder="Url here"/>
+                    value={url || 'Url here'}
+                    onChange={this.handleChange.bind(this)}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <div className={`${blockName}__title`}>genre</div>
-                <FormSelect genres={this.state.genres}/>
+                <FormSelect
+                    onApplyGenres={this.updateGenres}
+                    genres={this.state.genres}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <label
@@ -90,9 +124,10 @@ export class FormPage extends Component<{}, IMovie> {
                 <input
                     id="overview"
                     className={`${blockName}__input`}
+                    name="overview"
                     type="text"
-                    value={this.state.overview || ''}
-                    placeholder="Overview here"/>
+                    value={this.state.overview || 'Overview here'}
+                    onChange={this.handleChange.bind(this)}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <label
@@ -101,15 +136,20 @@ export class FormPage extends Component<{}, IMovie> {
                 <input
                     id="runtime"
                     className={`${blockName}__input`}
+                    name="runtime"
                     type="text"
-                    value={this.state.runtime || ''}
-                    placeholder="Runtime here"/>
+                    value={this.state.runtime || 'Runtime here'}
+                    onChange={this.handleChange.bind(this)}/>
             </div>
             <div className={`${blockName}__btn-wrapper`}>
-                <button className={`${blockName}__btn--reset`}>
-                    Reset
+                <button
+                    onClick={this.resetState.bind(this)}
+                    className={`${blockName}__btn--reset`}>
+                        Reset
                 </button>
-                <button className={`${blockName}__btn--save`}>
+                <button
+                    className={`${blockName}__btn--save`}
+                    type="submit">
                     Save
                 </button>
             </div>

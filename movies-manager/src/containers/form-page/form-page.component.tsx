@@ -5,16 +5,21 @@ import { IMovie } from "../../types/types";
 import { FormSelect } from "../../components";
 import "./form-page.component.scss";
 
+interface ISaveChanges {
+    movie: IMovie;
+	onSaveChanges: (editableMovie: IMovie) => void;
+}
+
 const blockName = 'form';
 
 const defaultMovie: IMovie = {
-    title: '',
+    title: 'Title here',
     tagline: '',
     vote_average: 0,
     vote_count: 0,
-    release_date: '',
+    release_date: 'Select date',
     poster_path: '',
-    overview: '',
+    overview: 'Overview here',
     budget: 0,
     revenue: 0,
     genres: [],
@@ -23,12 +28,12 @@ const defaultMovie: IMovie = {
 
 const url: string = '';
 
-export class FormPage extends Component<IMovie, any> {
+export class FormPage extends Component<ISaveChanges, any> {
     private readonly startState: IMovie;
-    constructor(props: IMovie) {
+    constructor(props: ISaveChanges) {
         super(props);
-        this.startState = { ...defaultMovie, ...this.props};
-        this.state = { ...defaultMovie, ...this.props};
+        this.startState = { ...defaultMovie, ...this.props.movie};
+        this.state = { ...defaultMovie, ...this.props.movie};
     }
 
     handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -49,6 +54,7 @@ export class FormPage extends Component<IMovie, any> {
     handleSubmit(event: Event) {
         console.log('Отправленная форма: ', this.state);
         event.preventDefault();
+        this.props.onSaveChanges(this.state as IMovie);
     }
 
     resetState() {
@@ -65,7 +71,7 @@ export class FormPage extends Component<IMovie, any> {
         const movieIdField = this.state.id && <div className={`${blockName}__field-wrapper`}>
             <div className={`${blockName}__title`}>movie id</div>
             <div className={`${blockName}__text`}>{this.state.id}</div>
-        </div>
+        </div>;
 
         return <form
             className={blockName}
@@ -81,7 +87,7 @@ export class FormPage extends Component<IMovie, any> {
                     className={`${blockName}__input`}
                     name="title"
                     type="text"
-                    value={this.state.title || 'Title here'}
+                    value={this.state.title}
                     onChange={this.handleChange.bind(this)}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
@@ -93,7 +99,7 @@ export class FormPage extends Component<IMovie, any> {
                     className={`${blockName}__input`}
                     name="release_date"
                     type="text"
-                    value={this.state.release_date || 'Select date'}
+                    value={this.state.release_date}
                     onChange={this.handleChange.bind(this)}/>
                 <FontAwesomeIcon
                     className={`${blockName}__icon--bright`}
@@ -126,7 +132,7 @@ export class FormPage extends Component<IMovie, any> {
                     className={`${blockName}__input`}
                     name="overview"
                     type="text"
-                    value={this.state.overview || 'Overview here'}
+                    value={this.state.overview}
                     onChange={this.handleChange.bind(this)}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
@@ -138,7 +144,7 @@ export class FormPage extends Component<IMovie, any> {
                     className={`${blockName}__input`}
                     name="runtime"
                     type="text"
-                    value={this.state.runtime || 'Runtime here'}
+                    value={this.state.runtime}
                     onChange={this.handleChange.bind(this)}/>
             </div>
             <div className={`${blockName}__btn-wrapper`}>

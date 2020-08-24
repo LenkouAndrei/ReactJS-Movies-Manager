@@ -3,11 +3,12 @@ import { Logo } from "../../components";
 import { Wrapper } from "../wrapper/wrapper.component";
 import { Modal } from "../modal/modal.component";
 import { FormPage } from "../form-page/form-page.component";
-import { TNullable } from "../../types/types";
+import { IMovie, TNullable } from "../../types/types";
 import "./header.component.scss";
 
 export interface IHeaderProps {
     pageName: PageName;
+    onAddBtnClick: (newMovie: IMovie) => void;
 };
 
 export enum PageName {
@@ -34,10 +35,17 @@ export class Header extends Component<IHeaderProps, IMainState> {
 
     showModal = () => {
         this.setState({ isDialogOpen: true });
+	    document.body.classList.add('overflow-hidden');
     };
 
     hideModal = () => {
         this.setState({ isDialogOpen: false });
+	    document.body.classList.remove('overflow-hidden');
+    };
+
+	createNewMovie(newMovie: IMovie) {
+	    this.props.onAddBtnClick(newMovie);
+        this.hideModal();
     };
 
     getHeaderElement(): TNullable<JSX.Element> {
@@ -48,7 +56,7 @@ export class Header extends Component<IHeaderProps, IMainState> {
                         className={'add-btn'}
                         onClick={this.showModal}>+ Add Movie</button>
                     <Modal isOpen={this.state.isDialogOpen} handleClose={this.hideModal}>
-                        <FormPage {...null}/>
+                        <FormPage onSaveChanges={this.createNewMovie.bind(this)} movie={null}/>
                     </Modal>
                 </>;
             default:

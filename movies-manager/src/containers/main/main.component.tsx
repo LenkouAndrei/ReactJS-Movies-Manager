@@ -4,7 +4,14 @@ import { Wrapper } from "../wrapper/wrapper.component";
 import { Modal } from "../modal/modal.component";
 import { FormPage } from "../form-page/form-page.component";
 import { ResultFilter, ResultSort, Search, MovieCard, DeleteModal } from "../../components";
-import { IMovie, TSortListItem, ISelectConfig } from "../../types/types";
+import {
+	IMovie,
+	TSortListItem,
+	ISelectConfig,
+	IMoviesGenresConfig,
+	TGenresListItem,
+	TNullable
+} from "../../types/types";
 
 const movies = require('../../data.json');
 const blockName = 'result';
@@ -16,14 +23,18 @@ interface IMainState {
     movieToEdit: IMovie;
     movies: IMovie[];
     moviesSortConfig: ISelectConfig;
-    moviesGenres: string[];
+    moviesGenresConfig: IMoviesGenresConfig;
 }
 
-export class Main extends Component<any, IMainState> {
-    constructor(props: any) {
+interface IMainProps {
+    movieToAdd: TNullable<IMovie>;
+}
+
+export class Main extends Component<IMainProps, IMainState> {
+    constructor(props: IMainProps) {
         super(props);
 
-        const allMoviesGenres: string[] = movies.reduce((allGenres: string[], { genres }: IMovie) => {
+        const allMoviesGenres: TGenresListItem[] = movies.reduce((allGenres: string[], { genres }: IMovie) => {
             allGenres.push(...genres);
             return allGenres;
         }, ['All']);
@@ -38,7 +49,10 @@ export class Main extends Component<any, IMainState> {
                 options: moviesSortList,
                 chosenOption: moviesSortList[0],
             },
-            moviesGenres,
+            moviesGenresConfig: {
+                genres: moviesGenres,
+                currentGenre: moviesGenres[0],
+            },
         }
     }
 
@@ -73,6 +87,27 @@ export class Main extends Component<any, IMainState> {
         }));
     }
 
+    setMovies(editableMovie: IMovie) {
+        const movieIdx = this.state.movies.findIndex(({ id }: IMovie) => id === editableMovie.id);
+        const movie = { ...this.state.movies[movieIdx], ...editableMovie };
+        const movies = this.state.movies.splice(2, 1, movie);
+        this.setState({ movies });
+    }
+
+    saveFormChanges(editableMovie: IMovie) {
+        this.setMovies(editableMovie);
+        this.hideModal();
+    }
+
+    setCurrentGenre(genre: TGenresListItem) {
+        this.setState({
+            moviesGenresConfig: {
+                ...this.state.moviesGenresConfig,
+                currentGenre: genre,
+            }
+        })
+    }
+
     render() {
         const moviesCards = this.state.movies.map((movie: IMovie) => {
             return <li
@@ -83,7 +118,7 @@ export class Main extends Component<any, IMainState> {
         });
         return <main className={blockName}>
             <Modal isOpen={this.state.isFormDialogOpen} handleClose={() => this.hideModal()}>
-                <FormPage { ...this.state.movieToEdit }/>
+                <FormPage onSaveChanges={this.saveFormChanges.bind(this)} movie={ this.state.movieToEdit }/>
             </Modal>   
             <Modal isOpen={this.state.isDeleteDialogOpen} handleClose={() => this.hideModal()}>
                 <DeleteModal title={this.state.movieToEdit.title}/>
@@ -95,7 +130,7 @@ export class Main extends Component<any, IMainState> {
             <Wrapper>
                 <>
                     <section className={`${blockName}__filter`}>
-                        <ResultFilter genres={this.state.moviesGenres}/>
+                        <ResultFilter onGenreClick={this.setCurrentGenre.bind(this)} { ...this.state.moviesGenresConfig }/>
                         <ResultSort onSortClick={this.updateMoviesSortConfig.bind(this)} {...this.state.moviesSortConfig}/>
                     </section>
                     <div className={`${blockName}__amount`}>

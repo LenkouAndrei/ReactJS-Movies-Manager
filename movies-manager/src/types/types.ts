@@ -25,3 +25,10 @@ export interface ISelectConfig {
 }
 
 export type TSortListItem = 'vote average' | 'vote count' | 'release date' | 'revenue';
+
+export type TGenresListItem = keyof IMovie | 'All';
+
+export interface IMoviesGenresConfig {
+	genres: TGenresListItem[];
+	currentGenre: TGenresListItem;
+}

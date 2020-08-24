@@ -22,18 +22,21 @@ export const ResultSort = ({ showOptionList, options, chosenOption, onSortClick 
     });
 
     return <div className={`${blockName}__container`}>
-        <button
-            className={`${blockName}__btn untracked`}
-            onClick={() => onSortClick(!showOptionList, chosenOption) }>
-          <span>{ chosenOption }</span>
-          <FontAwesomeIcon
-            className={`${blockName}__icon--bright`}
-            icon={ showOptionList ? faAngleUp : faAngleDown }/>
-        </button>
-        {showOptionList && (
-            <ul className={`${blockName}__list`}>
-                {listItems}
-            </ul>
-        )}
-      </div>;
+            <span className={`${blockName}label`}>Sort By:</span>
+            <div className={`${blockName}__container--btn`}>
+                <button
+                    className={`${blockName}__btn untracked`}
+                    onClick={() => onSortClick(!showOptionList, chosenOption) }>
+                    <span>{ chosenOption }</span>
+                    <FontAwesomeIcon
+                        className={`${blockName}__icon--bright`}
+                        icon={ showOptionList ? faAngleUp : faAngleDown }/>
+                </button>
+                {showOptionList && (
+                    <ul className={`${blockName}__list`}>
+                        {listItems}
+                    </ul>
+                )}
+            </div>
+        </div>;
 };

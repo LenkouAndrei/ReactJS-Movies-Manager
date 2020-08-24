@@ -23,6 +23,8 @@
     }
 }
 
-.highlight {
-    color: $solmon !important;
+.result-filter__btn.highlight {
+    color: $solmon;
+    border-color: $solmon;
+    outline: none;
 }

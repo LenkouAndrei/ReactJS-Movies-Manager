@@ -29,28 +29,39 @@ const movieToEdit: IMovie = {
   "runtime": 106
 };
 
-class AppComponent extends Component<{}, IHeaderProps> {
+interface IAppState {
+	pageName: PageName;
+	newMovie: TNullable<IMovie>;
+}
+
+class AppComponent extends Component<{}, IAppState> {
   constructor(props: any) {
     super(props);
-    this.state = {pageName: PageName.Main};
+    this.state = {
+      pageName: PageName.Main,
+      newMovie: null,
+    };
   }
+
+  updateNewMovie(newMovie: IMovie) {
+    this.setState({ newMovie });
+  }
+
   render() {
     let mainContent: TNullable<JSX.Element> = null;
     switch(this.state.pageName) {
       case PageName.Main:
-        mainContent = <Main />;
+        mainContent = <Main movieToAdd={this.state.newMovie}/>;
         break;
       case PageName.AddForm:
         mainContent = <FormPage {...null}/>;
-      case PageName.EditForm:
-        mainContent = <FormPage { ...movieToEdit }/>;
       default:
           break;
     }
     return (
       <React.StrictMode>
         <ErrorBoundary>
-          <Header pageName={this.state.pageName}/>
+          <Header onAddBtnClick={this.updateNewMovie.bind(this)} pageName={this.state.pageName}/>
           { mainContent }
           {/* <DeleteModal /> */}
           <Footer />

@@ -26,7 +26,7 @@ const movieToEdit: IMovie = {
       "Drama",
       "Romance"
   ],
-  "runtime": 106
+  "runtime": 106,
 };
 
 interface IAppState {

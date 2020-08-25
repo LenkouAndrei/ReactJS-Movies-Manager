@@ -34,6 +34,10 @@ export class Main extends Component<IMainProps, IMainState> {
     constructor(props: IMainProps) {
         super(props);
 
+        if (this.props.movieToAdd) {
+	        movies.push(this.props.movieToAdd);
+        }
+
         const allMoviesGenres: TGenresListItem[] = movies.reduce((allGenres: string[], { genres }: IMovie) => {
             allGenres.push(...genres);
             return allGenres;
@@ -88,10 +92,12 @@ export class Main extends Component<IMainProps, IMainState> {
     }
 
     setMovies(editableMovie: IMovie) {
-        const movieIdx = this.state.movies.findIndex(({ id }: IMovie) => id === editableMovie.id);
-        const movie = { ...this.state.movies[movieIdx], ...editableMovie };
-        const movies = this.state.movies.splice(2, 1, movie);
-        this.setState({ movies });
+        this.setState((state) => {
+	        const movieIdx = state.movies.findIndex(({ id }: IMovie) => id === editableMovie.id);
+	        const newMovies = [ ...state.movies ];
+	        newMovies.splice(movieIdx, 1, editableMovie);
+            return { movies: newMovies };
+        });
     }
 
     saveFormChanges(editableMovie: IMovie) {
@@ -113,7 +119,7 @@ export class Main extends Component<IMainProps, IMainState> {
             return <li
                 className={`${blockName}__movies-card`}
                 key={movie.id}>
-                <MovieCard onClickMovie={this.handleMovieToEditChange.bind(this)} {...movie}/>
+                <MovieCard onClickMovie={this.handleMovieToEditChange.bind(this)} movie={movie}/>
             </li>
         });
         return <main className={blockName}>

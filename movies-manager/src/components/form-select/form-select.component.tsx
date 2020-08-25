@@ -35,7 +35,9 @@ export class FormSelect extends Component<ISelectFormProps, ISelectFormState> {
         }
     }
 
-    toggleSelectDropdown = (): void => {
+    toggleSelectDropdown = (event: any): void => {
+	    event.preventDefault();
+	    event.stopPropagation();
         if (!this.state.isOpen) {
             this.setState({ isOpen: true });
         } else {

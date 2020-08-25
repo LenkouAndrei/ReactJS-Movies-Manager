@@ -52,7 +52,6 @@ export class FormPage extends Component<ISaveChanges, any> {
     }
 
     handleSubmit(event: Event) {
-        console.log('Отправленная форма: ', this.state);
         event.preventDefault();
         this.props.onSaveChanges(this.state as IMovie);
     }
@@ -120,7 +119,7 @@ export class FormPage extends Component<ISaveChanges, any> {
             <div className={`${blockName}__field-wrapper`}>
                 <div className={`${blockName}__title`}>genre</div>
                 <FormSelect
-                    onApplyGenres={this.updateGenres}
+                    onApplyGenres={this.updateGenres.bind(this)}
                     genres={this.state.genres}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
@@ -153,11 +152,10 @@ export class FormPage extends Component<ISaveChanges, any> {
                     className={`${blockName}__btn--reset`}>
                         Reset
                 </button>
-                <button
+                <input
                     className={`${blockName}__btn--save`}
-                    type="submit">
-                    Save
-                </button>
+                    type="submit"
+                    value="Save" />
             </div>
         </form>;
     }

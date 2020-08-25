@@ -6,11 +6,12 @@ import "./movie-card.component.scss";
 
 const blockName = 'movie';
 
-interface IMovieCardState extends IMovie {
-    isEditMenuVisible: boolean;
+interface IMovieCardState {
+	isEditMenuVisible: boolean;
 }
 
-interface IMovieCardProps extends IMovie {
+interface IMovieCardProps {
+	movie: IMovie;
     onClickMovie: (modalDialogType: any, id: number, isOpen: boolean) => void
 }
 
@@ -24,9 +25,8 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
         this.wrapperRef = React.createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.state = {
-            ...this.props,
             isEditMenuVisible: false,
-        }
+        };
     }
 
     handleClickOutside(event: Event) {
@@ -46,7 +46,7 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
     }
 
     passInfo(itemTitle: string) {
-        this.props.onClickMovie(itemTitle, this.props.id, true);
+        this.props.onClickMovie(itemTitle, this.props.movie.id, true);
         this.hideEditMenu();
     }
 
@@ -84,12 +84,12 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
         return <figure className={blockName}>
             <img
                 className={`${blockName}__image`}
-                src={this.state.poster_path}
-                alt={this.state.title}/>
+                src={this.props.movie.poster_path}
+                alt={this.props.movie.title}/>
             <figcaption className={`${blockName}__info`}>
-                <span className={`${blockName}__title`}>{this.state.title}</span>
-                <span className={`${blockName}__release-date`}>{this.state.release_date}</span>
-                <span className={`${blockName}__genres`}>{this.state.genres.join(', ')}</span>
+                <span className={`${blockName}__title`}>{this.props.movie.title}</span>
+                <span className={`${blockName}__release-date`}>{this.props.movie.release_date}</span>
+                <span className={`${blockName}__genres`}>{this.props.movie.genres.join(', ')}</span>
                 <div
                     className={`${blockName}__settings`}>
                         { this.state.isEditMenuVisible ? menu : icon }

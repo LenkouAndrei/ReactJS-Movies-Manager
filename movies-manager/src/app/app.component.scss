@@ -52,3 +52,18 @@ table {
 .intro {
     background-color: yellow;
 }
+
+#root {
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+
+  > footer,
+  > header {
+	flex: 0;
+  }
+
+  main {
+	flex: 1;
+  }
+}

@@ -107,6 +107,9 @@ export class Main extends Component<IMainProps, IMainState> {
         this.setState(({ moviesSortConfig }: IMainState) => ({
             moviesSortConfig: { ...moviesSortConfig, ...newSortConfig }
         }));
+        if (title) {
+            this.sortMoviesByField(title.replace(' ', '_') as keyof IMovie);
+        }
     }
 
     updateMoviesSet(editableMovie: IMovie) {
@@ -132,6 +135,16 @@ export class Main extends Component<IMainProps, IMainState> {
         newMovies.splice(movieIdx, 1);
         this.setState({ movies: newMovies });
         this.hideModal();
+    }
+
+    sortMoviesByField(field: keyof IMovie) {
+        const moviesCopy: IMovie[] = [ ...this.state.movies ];
+        if (field === 'release_date') {
+            moviesCopy.sort((movieA, movieB) => +new Date(movieA[field]) - +new Date(movieB[field]));
+        } else {
+            moviesCopy.sort((movieA, movieB) => (movieA[field] as number) - (movieB[field] as number));
+        }
+        this.setState({ movies: moviesCopy });
     }
 
     render() {

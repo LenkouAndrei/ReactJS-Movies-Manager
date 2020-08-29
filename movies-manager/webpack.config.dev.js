@@ -13,7 +13,7 @@ module.exports = {
     progress: true
   },
   watch: true,
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
   ],

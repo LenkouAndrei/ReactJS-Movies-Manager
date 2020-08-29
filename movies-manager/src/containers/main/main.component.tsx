@@ -3,7 +3,7 @@ import "./main.component.scss";
 import { Wrapper } from "../wrapper/wrapper.component";
 import { Modal } from "../modal/modal.component";
 import { FormPage } from "../form-page/form-page.component";
-import { ResultFilter, ResultSort, Search, MovieCard, DeleteModal } from "../../components";
+import { ResultFilter, ResultSort, Search, MovieCard, DeleteModal, Details } from "../../components";
 import {
 	IMovie,
 	TSortListItem,
@@ -25,6 +25,7 @@ interface IMainState {
     moviesSortConfig: ISelectConfig;
     moviesGenresConfig: IMoviesGenresConfig;
     greatestId: number;
+    movieWithDetails: TNullable<IMovie>;
 }
 
 interface IMainProps {
@@ -61,6 +62,7 @@ export class Main extends Component<IMainProps, IMainState> {
                 currentGenre: moviesGenres[0],
             },
             greatestId,
+            movieWithDetails: null,
         }
     }
 
@@ -146,6 +148,13 @@ export class Main extends Component<IMainProps, IMainState> {
         this.setState({ movies: moviesCopy });
     }
 
+    showDetails(event: React.MouseEvent, movieWithDetails: IMovie) {
+        if (!event.ctrlKey) {
+            return;
+        }
+        this.setState({ movieWithDetails });
+    }
+
     render() {
         const { currentGenre } = this.state.moviesGenresConfig;
         const moviesCards = this.state.movies.filter((movie: IMovie) =>  (
@@ -165,7 +174,7 @@ export class Main extends Component<IMainProps, IMainState> {
                     <DeleteModal  onDeleteConfirm={this.deleteMovie.bind(this)} title={this.state.movieToEdit.title}/>
                 </Modal>  
                 <Wrapper>
-                    <Search/>
+                { this.state.movieWithDetails ? <Details { ...this.state.movieWithDetails }/> : <Search/> }
                 </Wrapper>
                 <div className={`${blockName}__separator`}></div>
                 <Wrapper>

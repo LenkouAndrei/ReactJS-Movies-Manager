@@ -1,14 +1,16 @@
-import React from "react";
-import "./result-filter.component.scss";
+import React from 'react';
 import { IMoviesGenresConfig, TGenresListItem } from '../../types/types';
+import './result-filter.component.scss';
 
-interface IResultFilterProps extends IMoviesGenresConfig{
-	onGenreClick: (genre: TGenresListItem) => void,
+interface IResultFilterProps extends IMoviesGenresConfig {
+    onGenreClick: (genre: TGenresListItem) => void;
 }
 
 const blockName = 'result-filter';
 
-export const ResultFilter = ({ genres, currentGenre, onGenreClick }: IResultFilterProps) => {
+type TResultFilter = ({ genres, currentGenre, onGenreClick }: IResultFilterProps) => JSX.Element;
+
+export const ResultFilter: TResultFilter = ({ genres, currentGenre, onGenreClick }: IResultFilterProps) => {
     const listItems = genres.map(title => {
         return <li
             className={`${blockName}__item`}
@@ -16,7 +18,7 @@ export const ResultFilter = ({ genres, currentGenre, onGenreClick }: IResultFilt
                 <button
                     className={`${blockName}__btn  ${currentGenre === title ? 'highlight' : ''}`}
                     onClick={() => onGenreClick(title)}>{title}</button>
-            </li>
+            </li>;
     });
-    return <ul className={`${blockName}__list`}>{listItems}</ul>
+    return <ul className={`${blockName}__list`}>{listItems}</ul>;
 };

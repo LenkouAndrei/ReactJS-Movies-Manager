@@ -1,7 +1,9 @@
-import React from "react";
-import { Logo } from "../../components";
-import "./footer.component.scss";
+import React from 'react';
+import { Logo } from '../../components';
+import './footer.component.scss';
 
-export const Footer = () => <footer className="footer">
+type TFooter = () => JSX.Element;
+
+export const Footer: TFooter = () => <footer className='footer'>
     <Logo/>
 </footer>;

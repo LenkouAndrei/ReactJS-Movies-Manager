@@ -1,16 +1,18 @@
-import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
-import { ISelectConfig, TSortListItem } from "../../types/types";
-import "./result-sort.component.scss";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ISelectConfig, TSortListItem } from '../../types/types';
+import './result-sort.component.scss';
 
 const blockName = 'result-sort';
 
 interface ISelectProps extends ISelectConfig {
-    onSortClick: (isOpen: boolean, title?: TSortListItem) => void
+    onSortClick: (isOpen: boolean, title?: TSortListItem) => void;
 }
 
-export const ResultSort = ({ showOptionList, options, chosenOption, onSortClick }: ISelectProps) => {
+type TResultSort = ({ showOptionList, options, chosenOption, onSortClick }: ISelectProps) => JSX.Element;
+
+export const ResultSort: TResultSort = ({ showOptionList, options, chosenOption, onSortClick }: ISelectProps) => {
     const listItems = options.map(option => {
         return <li
             className={`${blockName}__item`}

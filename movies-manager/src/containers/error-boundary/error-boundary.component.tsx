@@ -1,21 +1,22 @@
-import React from "react";
+import React, { ErrorInfo, ReactNode } from 'react';
+import { TNullable } from '../../types/types';
 
 interface IErrorState {
-    error: any;
-    errorInfo: any;
+    error: TNullable<Error>;
+    errorInfo: TNullable<ErrorInfo>;
 };
 
-export class ErrorBoundary extends React.Component<{}, IErrorState> {
-    constructor(props: any) {
+export class ErrorBoundary extends React.Component<IErrorState, IErrorState> {
+    constructor(props: IErrorState) {
       super(props);
       this.state = { error: null, errorInfo: null };
     }
-    
-    componentDidCatch(error: any, errorInfo: any) {
-      this.setState({ error, errorInfo })
+
+    public componentDidCatch(error: TNullable<Error>, errorInfo: TNullable<ErrorInfo>): void {
+      this.setState({ error, errorInfo });
     }
-    
-    render() {
+
+    public render(): JSX.Element | ReactNode {
       if (this.state.errorInfo) {
         return (
           <div>

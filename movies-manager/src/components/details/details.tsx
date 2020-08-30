@@ -1,28 +1,37 @@
-import React from "react";
-import { IMovie } from "../../types/types";
-import "./details.scss";
+import React from 'react';
+import { IMovie } from '../../types/types';
+import './details.scss';
 
 const blockName = 'details';
 
-const movie = {
-    "id": 337167,
-    "title": "Fifty Shades Freed",
-    "tagline": "Don't miss the climax",
-    "vote_average": 6.1,
-    "vote_count": 1195,
-    "release_date": "2018-02-07",
-    "poster_path": "https://image.tmdb.org/t/p/w500/3kcEGnYBHDeqmdYf8ZRbKdfmlUy.jpg",
-    "overview": "Believing they have left behind shadowy figures from their past, newlyweds Christian and Ana fully embrace an inextricable connection and shared life of luxury. But just as she steps into her role as Mrs. Grey and he relaxes into an unfamiliar stability, new threats could jeopardize their happy ending before it even begins.",
-    "budget": 55000000,
-    "revenue": 136906000,
-    "genres": [
-        "Drama",
-        "Romance"
+const movie: IMovie = {
+    'id': 337167,
+    'title': 'Fifty Shades Freed',
+    'tagline': 'Don\'t miss the climax',
+    'vote_average': 6.1,
+    'vote_count': 1195,
+    'release_date': '2018-02-07',
+    'poster_path': 'https://image.tmdb.org/t/p/w500/3kcEGnYBHDeqmdYf8ZRbKdfmlUy.jpg',
+    'overview': 'Believing they have left behind shadowy figures from their past, newlyweds Christian and Ana fully embrace an inextricable connection and shared life of luxury. But just as she steps into her role as Mrs. Grey and he relaxes into an unfamiliar stability, new threats could jeopardize their happy ending before it even begins.',
+    'budget': 55000000,
+    'revenue': 136906000,
+    'genres': [
+        'Drama',
+        'Romance'
     ],
-    "runtime": 106
+    'runtime': 106
 };
 
-export const Details = ({ title, poster_path, vote_average, tagline, release_date, runtime, overview}: IMovie) => {
+type TDetails = (props: IMovie) => JSX.Element;
+
+export const Details: TDetails = ({
+    title,
+    poster_path,
+    vote_average,
+    tagline,
+    release_date,
+    runtime,
+    overview}: IMovie) => {
     return <article className={blockName}>
         <img
             className={`${blockName}__image`}
@@ -41,4 +50,4 @@ export const Details = ({ title, poster_path, vote_average, tagline, release_dat
             <p className={`${blockName}__description`}>{ overview }</p>
         </div>
     </article>;
-}
+};

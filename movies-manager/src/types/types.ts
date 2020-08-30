@@ -12,11 +12,11 @@ export interface IMovieInfo {
     revenue: number;
     genres: string[];
     runtime: number;
-};
+}
 
 export interface IMovie extends IMovieInfo {
     id?: number;
-};
+}
 
 export interface ISelectConfig {
     showOptionList: boolean;
@@ -29,6 +29,6 @@ export type TSortListItem = 'vote average' | 'vote count' | 'release date' | 're
 export type TGenresListItem = keyof IMovie | 'All';
 
 export interface IMoviesGenresConfig {
-	genres: TGenresListItem[];
-	currentGenre: TGenresListItem;
+    genres: TGenresListItem[];
+    currentGenre: TGenresListItem;
 }

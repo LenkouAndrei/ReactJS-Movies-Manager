@@ -23,7 +23,7 @@
       "curly": true,
       "indent": [
         true,
-        "tabs"
+        "spaces"
       ],
       "interface-name": true,
       "max-line-length": [

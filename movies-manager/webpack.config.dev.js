@@ -3,7 +3,8 @@ const webpack = require('webpack');
 
 module.exports = {
   output: {
-    filename: 'main.js',
+    filename: 'main.[hash].js',
+    chunkFilename: '[id].[hash].js'
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),

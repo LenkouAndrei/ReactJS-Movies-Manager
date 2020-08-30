@@ -1,9 +1,14 @@
 const { merge } = require('webpack-merge');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = () => {
   const common = {
     mode: process.env.NODE_ENV,
-    entry: './src/index.tsx',
+    entry: {
+      index: './src/index.tsx'
+    },
     module: {
       rules: [
         {
@@ -15,7 +20,7 @@ module.exports = () => {
           test: /\.jsx?$/,
           exclude: /(node_modules|bower_components)/,
           use: {
-            loader: 'babel-loader'
+            loader: 'babel-loader?optional[]=runtime' // runtime to separate to external functions and reduce amount of code
           }
         },
         {
@@ -23,6 +28,7 @@ module.exports = () => {
           use: [
             'style-loader',
             'css-loader',
+            'postcss-loader', // need for autoprefixer
             'sass-loader'
           ]
         },
@@ -31,7 +37,7 @@ module.exports = () => {
           use: [
             {
               loader: 'file-loader',
-              options: {name: 'img/[name].[ext]'}
+              options: {name: 'img/[name].[hash:6].[ext]'}
             },
             'image-webpack-loader'
           ]
@@ -41,6 +47,19 @@ module.exports = () => {
     resolve: {
       extensions: [ '.tsx', '.ts', '.js' ],
     },
+    plugins: [
+      new webpack.NoEmitOnErrorsPlugin(), // deprecate compilation if error occure
+      new HtmlWebpackPlugin({
+        chunks: ['index'],
+        template: './index.html'
+      }),
+      new CleanWebpackPlugin(),
+    ],
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+      }
+    }
   };
 
   const restConfig = process.env.NODE_ENV === 'development' ?

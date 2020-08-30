@@ -54,9 +54,9 @@ export class Main extends Component<IMainProps, IMainState> {
         const greatestId: number = movies.reduce((accum: number, curr: IMovie) => {
             return curr.id > accum ? curr.id : accum;
         }, 0);
-        
+
         if ( this.props.movieToAdd ) {
-	        movies.push(this.props.movieToAdd);
+            movies.push(this.props.movieToAdd);
         }
 
         this.state = {
@@ -97,7 +97,7 @@ export class Main extends Component<IMainProps, IMainState> {
             isDeleteDialogOpen: modalType === 'Delete',
         });
         document.body.classList.add('overflow-hidden');
-    };
+    }
 
     public hideModal: TVoidWithNoArgs = () => {
         this.setState({
@@ -105,7 +105,7 @@ export class Main extends Component<IMainProps, IMainState> {
             isDeleteDialogOpen: false,
         });
         document.body.classList.remove('overflow-hidden');
-    };
+    }
 
     public handleMovieToEditChange: THandleMovie = (modalDialogType: string, id: number) => {
         this.setState({ movieToEdit: this.state.movies.find((movie: IMovie) => movie.id === id)});
@@ -126,8 +126,9 @@ export class Main extends Component<IMainProps, IMainState> {
     }
 
     public updateMoviesSet: TUpdateMovieSet = (editableMovie: IMovie) => {
-        const movieIdx: number = this.state.movies.findIndex(({ id }: IMovie) => id === this.state.movieToEdit.id);
-        const newMovies = [ ...this.state.movies ];
+        const movieIdx: number = this.state.movies
+            .findIndex(({ id }: IMovie) => id === this.state.movieToEdit.id);
+        const newMovies: IMovie[] = [ ...this.state.movies ];
         newMovies.splice(movieIdx, 1, editableMovie);
         this.setState({ movies: newMovies });
         this.hideModal();
@@ -143,8 +144,9 @@ export class Main extends Component<IMainProps, IMainState> {
     }
 
     public deleteMovie: TVoidWithNoArgs = () => {
-        const movieIdx: number = this.state.movies.findIndex(({ id }: IMovie) => id === this.state.movieToEdit.id);
-        const newMovies = [ ...this.state.movies ];
+        const movieIdx: number = this.state.movies
+            .findIndex(({ id }: IMovie) => id === this.state.movieToEdit.id);
+        const newMovies: IMovie[] = [ ...this.state.movies ];
         newMovies.splice(movieIdx, 1);
         this.setState({ movies: newMovies });
         this.hideModal();
@@ -181,12 +183,13 @@ export class Main extends Component<IMainProps, IMainState> {
             return <main className={blockName}>
                 <Modal isOpen={this.state.isFormDialogOpen} handleClose={() => this.hideModal()}>
                     <FormPage onSaveChanges={this.updateMoviesSet} movie={ this.state.movieToEdit }/>
-                </Modal>   
+                </Modal>
                 <Modal isOpen={this.state.isDeleteDialogOpen} handleClose={() => this.hideModal()}>
                     <DeleteModal  onDeleteConfirm={this.deleteMovie} title={this.state.movieToEdit.title}/>
-                </Modal>  
+                </Modal>
                 <Wrapper>
-                { this.state.movieWithDetails ? <Details { ...this.state.movieWithDetails }/> : <Search/> }
+                    { this.state.movieWithDetails ?
+                        <Details { ...this.state.movieWithDetails }/> : <Search/> }
                 </Wrapper>
                 <div className={`${blockName}__separator`}></div>
                 <Wrapper>
@@ -209,7 +212,7 @@ export class Main extends Component<IMainProps, IMainState> {
                 </Wrapper>
             </main>;
     }
-};
+}
 
 const container: HTMLDivElement = document.createElement('div');
 document.body.appendChild(container);

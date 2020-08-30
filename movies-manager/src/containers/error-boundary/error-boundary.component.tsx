@@ -4,7 +4,7 @@ import { TNullable } from '../../types/types';
 interface IErrorState {
     error: TNullable<Error>;
     errorInfo: TNullable<ErrorInfo>;
-};
+}
 
 export class ErrorBoundary extends React.Component<IErrorState, IErrorState> {
     constructor(props: IErrorState) {
@@ -30,6 +30,5 @@ export class ErrorBoundary extends React.Component<IErrorState, IErrorState> {
         );
       }
       return this.props.children;
-    }  
+    }
   }
-  

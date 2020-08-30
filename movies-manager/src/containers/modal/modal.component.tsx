@@ -13,7 +13,7 @@ interface IModalProps {
 const blockName = 'modal';
 type TModal = ({ handleClose, isOpen, children }: IModalProps) => JSX.Element;
 
-export const Modal: TModal = ({ handleClose, isOpen, children }: IModalProps): JSX.Element => { 
+export const Modal: TModal = ({ handleClose, isOpen, children }: IModalProps): JSX.Element => {
     const content: JSX.Element = (
       isOpen && <aside
         className={`${blockName}__overlay`}

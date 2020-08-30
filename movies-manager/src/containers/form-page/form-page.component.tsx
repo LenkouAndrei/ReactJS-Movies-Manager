@@ -1,14 +1,19 @@
-import React, { Component, ChangeEvent } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { ChangeEvent, Component } from 'react';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
-import { IMovie } from "../../types/types";
-import { FormSelect } from "../../components";
-import "./form-page.component.scss";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormSelect } from '../../components';
+import { IMovie } from '../../types/types';
+import './form-page.component.scss';
 
 interface ISaveChanges {
     movie: IMovie;
-	onSaveChanges: (editableMovie: IMovie) => void;
+    onSaveChanges: (editableMovie: IMovie) => void;
 }
+
+type THandleSubmit = (event: React.FormEvent) => void;
+type THandleChange = (event: ChangeEvent<HTMLInputElement>) => void;
+type TUpdateGenres = (newGenres: string[]) => void;
+type TResetState = () => void;
 
 const blockName = 'form';
 
@@ -26,7 +31,7 @@ const defaultMovie: IMovie = {
     runtime: 0,
 };
 
-const url: string = '';
+const url = '';
 
 export class FormPage extends Component<ISaveChanges, any> {
     private readonly startState: IMovie;
@@ -36,7 +41,7 @@ export class FormPage extends Component<ISaveChanges, any> {
         this.state = { ...defaultMovie, ...this.props.movie};
     }
 
-    handleChange(event: ChangeEvent<HTMLInputElement>) {
+    public handleChange: THandleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         const name = event.target.name as keyof IMovie | 'url';
         if (name === 'url') {
@@ -47,115 +52,115 @@ export class FormPage extends Component<ISaveChanges, any> {
         this.setState({ [name]: value });
     }
 
-    updateGenres(newGenres: string[]) {
+    public updateGenres: TUpdateGenres = (newGenres: string[]) => {
         this.setState({ genres: newGenres });
     }
 
-    handleSubmit(event: Event) {
+    public handleSubmit: THandleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         this.props.onSaveChanges(this.state as IMovie);
     }
 
-    resetState() {
+    public resetState: TResetState = () => {
         this.setState({ ...this.startState });
     }
 
-    render() {
+    public render(): JSX.Element {
         const genres: JSX.Element[] = this.state.genres.map((genre: string) => {
             return <option
                 key={genre}
-                value={genre}>{ genre }</option>
+                value={genre}>{ genre }</option>;
         });
 
-        const movieIdField = this.state.id && <div className={`${blockName}__field-wrapper`}>
+        const movieIdField: JSX.Element | undefined = this.state.id && <div className={`${blockName}__field-wrapper`}>
             <div className={`${blockName}__title`}>movie id</div>
             <div className={`${blockName}__text`}>{this.state.id}</div>
         </div>;
 
         return <form
             className={blockName}
-            onSubmit={this.handleSubmit.bind(this)}>
+            onSubmit={this.handleSubmit}>
             <h2 className={`${blockName}__headline`}>Edit Movie</h2>
             { movieIdField }
             <div className={`${blockName}__field-wrapper`}>
                 <label
-                    htmlFor="title"
+                    htmlFor='title'
                     className={`${blockName}__label`}>title</label>
                 <input
-                    id="title"
+                    id='title'
                     className={`${blockName}__input`}
-                    name="title"
-                    type="text"
+                    name='title'
+                    type='text'
                     value={this.state.title}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <label
-                    htmlFor="releaseDate"
+                    htmlFor='releaseDate'
                     className={`${blockName}__label`}>release date</label>
                 <input
-                    id="releaseDate"
+                    id='releaseDate'
                     className={`${blockName}__input`}
-                    name="release_date"
-                    type="text"
+                    name='release_date'
+                    type='text'
                     value={this.state.release_date}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
                 <FontAwesomeIcon
                     className={`${blockName}__icon--bright`}
                     icon={faCalendar}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <label
-                    htmlFor="movieUrl"
+                    htmlFor='movieUrl'
                     className={`${blockName}__label`}>movie url</label>
                 <input
-                    id="movieUrl"
+                    id='movieUrl'
                     className={`${blockName}__input`}
-                    name="url"
-                    type="text"
+                    name='url'
+                    type='text'
                     value={url || 'Url here'}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <div className={`${blockName}__title`}>genre</div>
                 <FormSelect
-                    onApplyGenres={this.updateGenres.bind(this)}
+                    onApplyGenres={this.updateGenres}
                     genres={this.state.genres}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <label
-                    htmlFor="overview"
+                    htmlFor='overview'
                     className={`${blockName}__label`}>overview</label>
                 <input
-                    id="overview"
+                    id='overview'
                     className={`${blockName}__input`}
-                    name="overview"
-                    type="text"
+                    name='overview'
+                    type='text'
                     value={this.state.overview}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <label
-                    htmlFor="runtime"
+                    htmlFor='runtime'
                     className={`${blockName}__label`}>runtime</label>
                 <input
-                    id="runtime"
+                    id='runtime'
                     className={`${blockName}__input`}
-                    name="runtime"
-                    type="text"
+                    name='runtime'
+                    type='text'
                     value={this.state.runtime}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
             </div>
             <div className={`${blockName}__btn-wrapper`}>
                 <button
-                    onClick={this.resetState.bind(this)}
+                    onClick={this.resetState}
                     className={`${blockName}__btn--reset`}>
                         Reset
                 </button>
                 <input
                     className={`${blockName}__btn--save`}
-                    type="submit"
-                    value="Save" />
+                    type='submit'
+                    value='Save' />
             </div>
         </form>;
     }

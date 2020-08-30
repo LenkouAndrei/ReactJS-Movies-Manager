@@ -38,16 +38,16 @@ export class Header extends Component<IHeaderProps, IMainState> {
 
     public showModal: TModalToggler = () => {
         this.setState({ isDialogOpen: true });
-	    document.body.classList.add( 'overflow-hidden' );
+        document.body.classList.add( 'overflow-hidden' );
     }
 
     public hideModal: TModalToggler = () => {
         this.setState({ isDialogOpen: false });
-	    document.body.classList.remove( 'overflow-hidden' );
+        document.body.classList.remove( 'overflow-hidden' );
     }
 
-	public createNewMovie: TCreateMovie = (newMovie: IMovie) => {
-	    this.props.onAddBtnClick(newMovie);
+    public createNewMovie: TCreateMovie = (newMovie: IMovie) => {
+        this.props.onAddBtnClick(newMovie);
         this.hideModal();
     }
 
@@ -79,4 +79,4 @@ export class Header extends Component<IHeaderProps, IMainState> {
             </Wrapper>
         </header>;
     }
-};
+}

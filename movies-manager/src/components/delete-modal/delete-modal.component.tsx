@@ -1,14 +1,14 @@
 import React from 'react';
 import './delete-modal.component.scss';
 
-const blockName: string = 'delete-modal';
+const blockName = 'delete-modal';
 
 interface IDeletModalProps {
     title: string;
     onDeleteConfirm(): void;
 }
 
-type TDeletModal = (props: IDeletModalProps) => JSX.Element
+type TDeletModal = (props: IDeletModalProps) => JSX.Element;
 
 export const DeleteModal: TDeletModal = (props: IDeletModalProps): JSX.Element => {
     return <div className={blockName}>
@@ -18,6 +18,6 @@ export const DeleteModal: TDeletModal = (props: IDeletModalProps): JSX.Element =
         </span>
         <button
             className={`${blockName}__btn--confirm`}
-            onClick={props.onDeleteConfirm}>Confirm</button>  
+            onClick={props.onDeleteConfirm}>Confirm</button>
     </div>;
-}
+};

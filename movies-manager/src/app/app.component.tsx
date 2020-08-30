@@ -31,8 +31,8 @@ const movieToEdit: IMovie = {
 };
 
 interface IAppState {
-	pageName: PageName;
-	newMovie: TNullable<IMovie>;
+  pageName: PageName;
+  newMovie: TNullable<IMovie>;
 }
 
 class AppComponent extends Component<{}, IAppState> {
@@ -50,7 +50,7 @@ class AppComponent extends Component<{}, IAppState> {
 
   public render(): JSX.Element {
     let mainContent: TNullable<JSX.Element> = null;
-    switch(this.state.pageName) {
+    switch ( this.state.pageName ) {
       case PageName.Main:
         mainContent = <Main movieToAdd={this.state.newMovie}/>;
         break;

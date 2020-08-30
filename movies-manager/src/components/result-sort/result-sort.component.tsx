@@ -12,15 +12,19 @@ interface ISelectProps extends ISelectConfig {
 
 type TResultSort = ({ showOptionList, options, chosenOption, onSortClick }: ISelectProps) => JSX.Element;
 
-export const ResultSort: TResultSort = ({ showOptionList, options, chosenOption, onSortClick }: ISelectProps) => {
-    const listItems = options.map(option => {
+export const ResultSort: TResultSort = ({
+    showOptionList,
+    options,
+    chosenOption,
+    onSortClick}: ISelectProps) => {
+    const listItems: JSX.Element[] = options.map(option => {
         return <li
             className={`${blockName}__item`}
             key={option}>
                 <button
                     className={`${blockName}__btn`}
                     onClick={() => onSortClick(!showOptionList, option) }>{option}</button>
-            </li>
+            </li>;
     });
 
     return <div className={`${blockName}__container`}>

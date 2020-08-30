@@ -36,8 +36,7 @@ export class FormSelect extends Component<ISelectFormProps, ISelectFormState> {
     }
 
     public toggleSelectDropdown = (event: React.MouseEvent): void => {
-
-	    event.preventDefault();
+        event.preventDefault();
         event.stopPropagation();
 
         if ( !this.state.isOpen ) {

@@ -1,5 +1,4 @@
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const buildFolderName = 'build';
 
@@ -17,9 +16,6 @@ module.exports = {
     watchContentBase: true,
     progress: true
   },
-  plugins: [
-    new CleanWebpackPlugin(),
-  ],
   optimization: {
     minimizer: [new UglifyJsPlugin({test: /\.js(\?.*)?$/i})]
   },

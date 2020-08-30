@@ -6,8 +6,14 @@ interface IErrorState {
     errorInfo: TNullable<ErrorInfo>;
 }
 
-export class ErrorBoundary extends React.Component<IErrorState, IErrorState> {
-    constructor(props: IErrorState) {
+interface IErrorProps {
+  children: any[];
+  error?: TNullable<Error>;
+  errorInfo?: TNullable<ErrorInfo>;
+}
+
+export class ErrorBoundary extends React.Component<IErrorProps, IErrorState> {
+    constructor(props: IErrorProps) {
       super(props);
       this.state = { error: null, errorInfo: null };
     }

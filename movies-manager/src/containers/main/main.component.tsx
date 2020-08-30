@@ -176,7 +176,8 @@ export class Main extends Component<IMainProps, IMainState> {
             ).map((movie: IMovie) => {
                 return <li
                     className={`${blockName}__movies-card`}
-                    key={movie.id}>
+                    key={movie.id}
+                    onClick={(event) => this.showDetails(event, movie)}>
                     <MovieCard onClickMovie={this.handleMovieToEditChange} movie={movie}/>
                 </li>;
             });

@@ -28,17 +28,17 @@ export function Header(props: IHeaderProps): JSX.Element {
     const showModal: TModalToggler = () => {
         setIsDialogOpen(true);
         document.body.classList.add( 'overflow-hidden' );
-    }
+    };
 
     const hideModal: TModalToggler = () => {
         setIsDialogOpen(false);
         document.body.classList.remove( 'overflow-hidden' );
-    }
+    };
 
     const createNewMovie: TCreateMovie = (newMovie: IMovie) => {
         props.onAddBtnClick(newMovie);
         hideModal();
-    }
+    };
 
     const getHeaderElement: () => TNullable<JSX.Element> = () => {
         switch (props.pageName) {
@@ -54,7 +54,7 @@ export function Header(props: IHeaderProps): JSX.Element {
             default:
                 return null;
         }
-    }
+    };
 
     return <header className={blockName}>
         <Wrapper>

@@ -37,7 +37,7 @@ const defaultMovie: IMovie = {
 
 const url = '';
 
-export function FormPage(props: ISaveChanges) {
+export function FormPage(props: ISaveChanges): JSX.Element {
     const startState: IMovie = { ...defaultMovie, ...props.movie};
     const [ movieInfo, setMovieInfo ] = useState({ ...defaultMovie, ...props.movie});
 
@@ -48,20 +48,20 @@ export function FormPage(props: ISaveChanges) {
         }
 
         setMovieInfo({ ...movieInfo, [name]: value });
-    }
+    };
 
     const updateGenres: TUpdateGenres = (newGenres: string[]) => {
         setMovieInfo({ ...movieInfo, genres: newGenres });
-    }
+    };
 
     const handleSubmit: THandleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         props.onSaveChanges(movieInfo);
-    }
+    };
 
     const resetState: TResetState = () => {
         setMovieInfo({ ...startState });
-    }
+    };
 
     const genres: JSX.Element[] = movieInfo.genres.map((genre: string) => {
         return <option

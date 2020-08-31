@@ -34,14 +34,14 @@ export function FormSelect(props: ISelectFormProps): JSX.Element {
             setIsOpen(false);
             props.onApplyGenres(selectedGenres);
         }
-    }
+    };
 
     const handleCheckboxChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         const { checked, name } = target;
         const chosenGenres: string[] = checked ? [ ...selectedGenres, name ] :
             selectedGenres.filter(genre => genre !== name);
         setSelectedGenres(chosenGenres);
-    }
+    };
 
     const genresList: JSX.Element[] = genres.map(genre => {
         return <li

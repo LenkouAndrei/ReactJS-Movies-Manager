@@ -79,15 +79,18 @@ export function Main(props: IMainProps): JSX.Element {
     const [ greatestId, setGreatestId ] = useState(initGreatestId);
     const [ movieWithDetails, setMovieWithDetails ] = useState(null);
 
-    useEffect( () => {
-        if (!props.movieToAdd) {
-            return;
-        }
-        const currentId: number = greatestId + 1;
-        props.movieToAdd.id = currentId;
-        setMovies([ ...movies, props.movieToAdd]);
-        setGreatestId(currentId);
-    }, [props.movieToAdd]);
+    useEffect(
+        () => {
+            if (!props.movieToAdd) {
+                return;
+            }
+            const currentId: number = greatestId + 1;
+            props.movieToAdd.id = currentId;
+            setMovies([ ...movies, props.movieToAdd]);
+            setGreatestId(currentId);
+        },
+        [props.movieToAdd]
+    );
 
     const showModal: TShowModal = (modalType: string) => {
         setIsFormDialogOpen(modalType === 'Edit');
@@ -99,12 +102,12 @@ export function Main(props: IMainProps): JSX.Element {
         setIsFormDialogOpen(false);
         setIsDeleteDialogOpen(false);
         document.body.classList.remove('overflow-hidden');
-    }
+    };
 
     const handleMovieToEditChange: THandleMovie = (modalDialogType: string, id: number) => {
         setMovieToEdit(movies.find((movie: IMovie) => movie.id === id));
         showModal(modalDialogType);
-    }
+    };
 
     const sortMoviesByField: TSortMoviesByField = (field: keyof IMovie) => {
         const moviesCopy: IMovie[] = [ ...movies ];
@@ -114,8 +117,8 @@ export function Main(props: IMainProps): JSX.Element {
             moviesCopy.sort((movieA, movieB) => (movieA[field] as number) - (movieB[field] as number));
         }
         setMovies( moviesCopy );
-    }
-    
+    };
+
     const updateMoviesSortConfig: TUpdateMoviesSortConfig = (isOpen: boolean, title?: TSortListItem) => {
         const newSortConfig: Partial<ISelectConfig> = {
             showOptionList: isOpen,
@@ -125,7 +128,7 @@ export function Main(props: IMainProps): JSX.Element {
         if (title) {
             sortMoviesByField(title.replace(' ', '_') as keyof IMovie);
         }
-    }
+    };
 
     const updateMoviesSet: TUpdateMovieSet = (editableMovie: IMovie) => {
         const movieIdx: number = movies
@@ -134,14 +137,14 @@ export function Main(props: IMainProps): JSX.Element {
         newMovies.splice(movieIdx, 1, editableMovie);
         setMovies( newMovies );
         hideModal();
-    }
+    };
 
     const setCurrentGenre: TSetGenre = (genre: TGenresListItem) => {
         setMoviesGenresConfig({
             ...moviesGenresConfig,
             currentGenre: genre,
         });
-    }
+    };
 
     const deleteMovie: TVoidWithNoArgs = () => {
         const movieIdx: number = movies
@@ -150,14 +153,14 @@ export function Main(props: IMainProps): JSX.Element {
         newMovies.splice(movieIdx, 1);
         setMovies( newMovies );
         hideModal();
-    }
+    };
 
     const showDetails: TShowDetails = (event: React.MouseEvent, movie: IMovie) => {
         if (!event.ctrlKey) {
             return;
         }
         setMovieWithDetails( movie );
-    }
+    };
 
     const { currentGenre } = moviesGenresConfig;
     const moviesCards: JSX.Element[] = movies.filter((movie: IMovie) =>  (

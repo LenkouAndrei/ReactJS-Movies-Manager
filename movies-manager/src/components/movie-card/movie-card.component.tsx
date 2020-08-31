@@ -21,22 +21,22 @@ export function MovieCard(props: IMovieCardProps): JSX.Element {
         if (wrapperRef && !wrapperRef.current.contains(event.target as Node)) {
             hideEditMenu();
         }
-    }
+    };
 
     const hideEditMenu: () => void = () => {
         setIsEditMenuVisible(false);
         document.removeEventListener('mousedown', handleClickOutside);
-    }
+    };
 
     const showEditMenu: () => void = () => {
         setIsEditMenuVisible(true);
         document.addEventListener('mousedown', handleClickOutside);
-    }
+    };
 
     const passInfo: (itemTitle: string) => void = (itemTitle: string) => {
         props.onClickMovie(itemTitle, props.movie.id, true);
         hideEditMenu();
-    }
+    };
 
     const listItems: JSX.Element[] = menuItemTitles.map((itemTitle: string) => {
         return <li

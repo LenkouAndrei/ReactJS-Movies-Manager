@@ -23,6 +23,7 @@ export const ResultSort: TResultSort = ({
             key={option}>
                 <button
                     className={`${blockName}__btn`}
+                    // tslint:disable-next-line jsx-no-lambda
                     onClick={() => onSortClick(!showOptionList, option) }>{option}</button>
             </li>;
     });
@@ -32,6 +33,7 @@ export const ResultSort: TResultSort = ({
             <div className={`${blockName}__container--btn`}>
                 <button
                     className={`${blockName}__btn untracked`}
+                    // tslint:disable-next-line jsx-no-lambda
                     onClick={() => onSortClick(!showOptionList, chosenOption) }>
                     <span>{ chosenOption }</span>
                     <FontAwesomeIcon

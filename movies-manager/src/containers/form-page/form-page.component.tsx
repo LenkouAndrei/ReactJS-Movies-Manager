@@ -10,6 +10,10 @@ interface ISaveChanges {
     onSaveChanges: (editableMovie: IMovie) => void;
 }
 
+interface IFormPageState extends IMovie {
+    [key: string]: string | number | string[];
+}
+
 type THandleSubmit = (event: React.FormEvent) => void;
 type THandleChange = (event: ChangeEvent<HTMLInputElement>) => void;
 type TUpdateGenres = (newGenres: string[]) => void;
@@ -33,7 +37,7 @@ const defaultMovie: IMovie = {
 
 const url = '';
 
-export class FormPage extends Component<ISaveChanges, any> {
+export class FormPage extends Component<ISaveChanges, IFormPageState> {
     private readonly startState: IMovie;
     constructor(props: ISaveChanges) {
         super(props);
@@ -41,11 +45,9 @@ export class FormPage extends Component<ISaveChanges, any> {
         this.state = { ...defaultMovie, ...this.props.movie};
     }
 
-    public handleChange: THandleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        const name = event.target.name as keyof IMovie | 'url';
+    public handleChange: THandleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = target;
         if (name === 'url') {
-            console.log('url value ', value);
             return;
         }
 

@@ -72,7 +72,6 @@
         "check-else",
         "check-whitespace"
       ],
-      "ordered-imports": true,
       "quotemark": [
         true,
         "single",
@@ -96,7 +95,6 @@
         "call-signature",
         "parameter",
         "property-declaration",
-        "variable-declaration",
         "member-variable-declaration"
       ],
       "typedef-whitespace": [

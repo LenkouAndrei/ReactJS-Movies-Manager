@@ -10,8 +10,11 @@ interface IModalProps {
     children: JSX.Element;
 }
 
-const blockName = 'modal';
 type TModal = ({ handleClose, isOpen, children }: IModalProps) => JSX.Element;
+type TStopProppagation = (event: React.MouseEvent) => void;
+
+const blockName = 'modal';
+const stopPropagation: TStopProppagation = (event: React.MouseEvent) => event.stopPropagation();
 
 export const Modal: TModal = ({ handleClose, isOpen, children }: IModalProps): JSX.Element => {
     const content: JSX.Element = (
@@ -29,7 +32,7 @@ export const Modal: TModal = ({ handleClose, isOpen, children }: IModalProps): J
           </button>
           <section
             className={`${blockName}__content`}
-            onClick={event => event.stopPropagation()}>
+            onClick={stopPropagation}>
             {children}
           </section>
         </div>

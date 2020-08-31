@@ -55,6 +55,7 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
             return <li
                 key={itemTitle}
                 className={'menu__list-item'}
+                // tslint:disable-next-line jsx-no-lambda
                 onClick={() => this.passInfo(itemTitle)}>{ itemTitle }</li>;
         });
 

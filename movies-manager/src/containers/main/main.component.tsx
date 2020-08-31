@@ -46,14 +46,20 @@ export class Main extends Component<IMainProps, IMainState> {
         super(props);
 
         const allMoviesGenres: TGenresListItem[] =
-            movies.reduce((allGenres: TGenresListItem[], { genres }: IMovie) => {
-                allGenres.push(...genres as TGenresListItem[]);
-                return allGenres;
-            }, ['All']);
+            movies.reduce(
+                (allGenres: TGenresListItem[], { genres }: IMovie) => {
+                    allGenres.push(...genres as TGenresListItem[]);
+                    return allGenres;
+                },
+                ['All']
+            );
         const moviesGenres: TGenresListItem[] = Array.from(new Set(allMoviesGenres));
-        const greatestId: number = movies.reduce((accum: number, curr: IMovie) => {
-            return curr.id > accum ? curr.id : accum;
-        }, 0);
+        const greatestId: number = movies.reduce(
+            (accum: number, curr: IMovie) => {
+                return curr.id > accum ? curr.id : accum;
+            },
+            0
+        );
 
         if ( this.props.movieToAdd ) {
             movies.push(this.props.movieToAdd);
@@ -177,41 +183,42 @@ export class Main extends Component<IMainProps, IMainState> {
                 return <li
                     className={`${blockName}__movies-card`}
                     key={movie.id}
+                    // tslint:disable-next-line jsx-no-lambda
                     onClick={(event) => this.showDetails(event, movie)}>
                     <MovieCard onClickMovie={this.handleMovieToEditChange} movie={movie}/>
                 </li>;
             });
-            return <main className={blockName}>
-                <Modal isOpen={this.state.isFormDialogOpen} handleClose={() => this.hideModal()}>
-                    <FormPage onSaveChanges={this.updateMoviesSet} movie={ this.state.movieToEdit }/>
-                </Modal>
-                <Modal isOpen={this.state.isDeleteDialogOpen} handleClose={() => this.hideModal()}>
-                    <DeleteModal  onDeleteConfirm={this.deleteMovie} title={this.state.movieToEdit.title}/>
-                </Modal>
-                <Wrapper>
-                    { this.state.movieWithDetails ?
-                        <Details { ...this.state.movieWithDetails }/> : <Search/> }
-                </Wrapper>
-                <div className={`${blockName}__separator`}></div>
-                <Wrapper>
-                    <>
-                        <section className={`${blockName}__filter`}>
-                            <ResultFilter
-                                onGenreClick={this.setCurrentGenre}
-                                { ...this.state.moviesGenresConfig }/>
-                            <ResultSort
-                                onSortClick={this.updateMoviesSortConfig}
-                                {...this.state.moviesSortConfig}/>
-                        </section>
-                        <div className={`${blockName}__amount`}>
-                            <strong className='strong'>{movies.length}</strong> movies found
-                        </div>
-                        <ul className={`${blockName}__cards-list`}>
-                            {moviesCards}
-                        </ul>
-                    </>
-                </Wrapper>
-            </main>;
+        return <main className={blockName}>
+            <Modal isOpen={this.state.isFormDialogOpen} handleClose={this.hideModal}>
+                <FormPage onSaveChanges={this.updateMoviesSet} movie={ this.state.movieToEdit }/>
+            </Modal>
+            <Modal isOpen={this.state.isDeleteDialogOpen} handleClose={this.hideModal}>
+                <DeleteModal  onDeleteConfirm={this.deleteMovie} title={this.state.movieToEdit.title}/>
+            </Modal>
+            <Wrapper>
+                { this.state.movieWithDetails ?
+                    <Details { ...this.state.movieWithDetails }/> : <Search/> }
+            </Wrapper>
+            <div className={`${blockName}__separator`} />
+            <Wrapper>
+                <>
+                    <section className={`${blockName}__filter`}>
+                        <ResultFilter
+                            onGenreClick={this.setCurrentGenre}
+                            { ...this.state.moviesGenresConfig }/>
+                        <ResultSort
+                            onSortClick={this.updateMoviesSortConfig}
+                            {...this.state.moviesSortConfig}/>
+                    </section>
+                    <div className={`${blockName}__amount`}>
+                        <strong className='strong'>{movies.length}</strong> movies found
+                    </div>
+                    <ul className={`${blockName}__cards-list`}>
+                        {moviesCards}
+                    </ul>
+                </>
+            </Wrapper>
+        </main>;
     }
 }
 

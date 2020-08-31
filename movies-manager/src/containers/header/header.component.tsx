@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Logo } from '../../components';
 import { IMovie, TNullable } from '../../types/types';
 import { FormPage } from '../form-page/form-page.component';
@@ -22,44 +22,33 @@ type TCreateMovie = (newMovie: IMovie) => void;
 
 const blockName = 'header';
 
-interface IMainState {
-    isDialogOpen: boolean;
-    pageName: PageName;
-}
+export function Header(props: IHeaderProps): JSX.Element {
+    const [ isDialogOpen, setIsDialogOpen ] = useState(false);
 
-export class Header extends Component<IHeaderProps, IMainState> {
-    constructor(props: IHeaderProps) {
-        super(props);
-        this.state = {
-            isDialogOpen: false,
-            pageName: this.props.pageName,
-        };
-    }
-
-    public showModal: TModalToggler = () => {
-        this.setState({ isDialogOpen: true });
+    const showModal: TModalToggler = () => {
+        setIsDialogOpen(true);
         document.body.classList.add( 'overflow-hidden' );
     }
 
-    public hideModal: TModalToggler = () => {
-        this.setState({ isDialogOpen: false });
+    const hideModal: TModalToggler = () => {
+        setIsDialogOpen(false);
         document.body.classList.remove( 'overflow-hidden' );
     }
 
-    public createNewMovie: TCreateMovie = (newMovie: IMovie) => {
-        this.props.onAddBtnClick(newMovie);
-        this.hideModal();
+    const createNewMovie: TCreateMovie = (newMovie: IMovie) => {
+        props.onAddBtnClick(newMovie);
+        hideModal();
     }
 
-    public getHeaderElement(): TNullable<JSX.Element> {
-        switch (this.props.pageName) {
+    const getHeaderElement: () => TNullable<JSX.Element> = () => {
+        switch (props.pageName) {
             case PageName.Main:
                 return <>
                     <button
                         className={'add-btn'}
-                        onClick={this.showModal}>+ Add Movie</button>
-                    <Modal isOpen={this.state.isDialogOpen} handleClose={this.hideModal}>
-                        <FormPage onSaveChanges={this.createNewMovie} movie={null}/>
+                        onClick={showModal}>+ Add Movie</button>
+                    <Modal isOpen={isDialogOpen} handleClose={hideModal}>
+                        <FormPage onSaveChanges={createNewMovie} movie={null}/>
                     </Modal>
                 </>;
             default:
@@ -67,16 +56,14 @@ export class Header extends Component<IHeaderProps, IMainState> {
         }
     }
 
-    public render(): JSX.Element {
-        return <header className={blockName}>
-            <Wrapper>
-                <>
-                    <section className={`${blockName}__top`}>
-                        <Logo/>
-                        { this.getHeaderElement() }
-                    </section>
-                </>
-            </Wrapper>
-        </header>;
-    }
+    return <header className={blockName}>
+        <Wrapper>
+            <>
+                <section className={`${blockName}__top`}>
+                    <Logo/>
+                    { getHeaderElement() }
+                </section>
+            </>
+        </Wrapper>
+    </header>;
 }

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormSelect } from '../../components';
@@ -10,11 +10,7 @@ interface ISaveChanges {
     onSaveChanges: (editableMovie: IMovie) => void;
 }
 
-interface IFormPageState extends IMovie {
-    [key: string]: string | number | string[];
-}
-
-type THandleSubmit = (event: React.FormEvent) => void;
+type THandleSubmit = (event: FormEvent) => void;
 type THandleChange = (event: ChangeEvent<HTMLInputElement>) => void;
 type TUpdateGenres = (newGenres: string[]) => void;
 type TResetState = () => void;
@@ -37,9 +33,9 @@ const defaultMovie: IMovie = {
 
 const url = '';
 
-export function FormPage(props: ISaveChanges): JSX.Element {
-    const startState: IMovie = { ...defaultMovie, ...props.movie};
-    const [ movieInfo, setMovieInfo ] = useState({ ...defaultMovie, ...props.movie});
+export function FormPage({ movie, onSaveChanges }: ISaveChanges): JSX.Element {
+    const startState: IMovie = { ...defaultMovie, ...movie};
+    const [ movieInfo, setMovieInfo ] = useState({ ...defaultMovie, ...movie});
 
     const handleChange: THandleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = target;
@@ -54,9 +50,9 @@ export function FormPage(props: ISaveChanges): JSX.Element {
         setMovieInfo({ ...movieInfo, genres: newGenres });
     };
 
-    const handleSubmit: THandleSubmit = (event: React.FormEvent) => {
+    const handleSubmit: THandleSubmit = (event: FormEvent) => {
         event.preventDefault();
-        props.onSaveChanges(movieInfo);
+        onSaveChanges(movieInfo);
     };
 
     const resetState: TResetState = () => {

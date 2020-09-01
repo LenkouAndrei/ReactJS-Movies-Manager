@@ -1,4 +1,4 @@
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, Component, ReactNode } from 'react';
 import { TNullable } from '../../types/types';
 
 interface IErrorState {
@@ -12,7 +12,7 @@ interface IErrorProps {
   errorInfo?: TNullable<ErrorInfo>;
 }
 
-export class ErrorBoundary extends React.Component<IErrorProps, IErrorState> {
+export class ErrorBoundary extends Component<IErrorProps, IErrorState> {
     constructor(props: IErrorProps) {
       super(props);
       this.state = { error: null, errorInfo: null };

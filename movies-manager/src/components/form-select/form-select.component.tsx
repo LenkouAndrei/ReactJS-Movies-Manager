@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component, useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './form-select.component.scss';
@@ -19,12 +19,12 @@ const allGenres: string[] = [
 
 const blockName = 'form-select';
 
-export function FormSelect(props: ISelectFormProps): JSX.Element {
-    const [ genres , _setGenres ] = useState(Array.from(new Set([ ...allGenres, ...props.genres ])));
-    const [ selectedGenres , setSelectedGenres ] = useState(props.genres);
+export function FormSelect({ genres, onApplyGenres }: ISelectFormProps): JSX.Element {
+    const [ selectedGenres , setSelectedGenres ] = useState(genres);
     const [ isOpen , setIsOpen ] = useState(false);
+    const genresOptions = Array.from(new Set([ ...allGenres, ...genres ]));
 
-    const toggleSelectDropdown = (event: React.MouseEvent): void => {
+    const toggleSelectDropdown = (event: MouseEvent): void => {
         event.preventDefault();
         event.stopPropagation();
 
@@ -32,7 +32,7 @@ export function FormSelect(props: ISelectFormProps): JSX.Element {
             setIsOpen(true);
         } else {
             setIsOpen(false);
-            props.onApplyGenres(selectedGenres);
+            onApplyGenres(selectedGenres);
         }
     };
 
@@ -43,7 +43,7 @@ export function FormSelect(props: ISelectFormProps): JSX.Element {
         setSelectedGenres(chosenGenres);
     };
 
-    const genresList: JSX.Element[] = genres.map(genre => {
+    const genresList: JSX.Element[] = genresOptions.map(genre => {
         return <li
             className={`${blockName}__item`}
             key={genre}>

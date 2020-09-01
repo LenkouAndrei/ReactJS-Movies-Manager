@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import ReactDOM from 'react-dom';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,11 +10,11 @@ interface IModalProps {
     children: JSX.Element;
 }
 
-type TModal = ({ handleClose, isOpen, children }: IModalProps) => JSX.Element;
-type TStopProppagation = (event: React.MouseEvent) => void;
+type TModal = (props: IModalProps) => JSX.Element;
+type TStopProppagation = (event: MouseEvent) => void;
 
 const blockName = 'modal';
-const stopPropagation: TStopProppagation = (event: React.MouseEvent) => event.stopPropagation();
+const stopPropagation: TStopProppagation = (event: MouseEvent) => event.stopPropagation();
 
 export const Modal: TModal = ({ handleClose, isOpen, children }: IModalProps): JSX.Element => {
     const content: JSX.Element = (

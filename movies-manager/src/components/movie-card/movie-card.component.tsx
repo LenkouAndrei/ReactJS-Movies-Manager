@@ -13,7 +13,7 @@ interface IMovieCardProps {
 
 const menuItemTitles: string[] = ['Edit', 'Delete'];
 
-export function MovieCard(props: IMovieCardProps): JSX.Element {
+export function MovieCard({ movie, onClickMovie }: IMovieCardProps): JSX.Element {
     const [ isEditMenuVisible, setIsEditMenuVisible ] = useState(false);
     const wrapperRef: React.RefObject<HTMLInputElement> = React.createRef();
 
@@ -34,7 +34,7 @@ export function MovieCard(props: IMovieCardProps): JSX.Element {
     };
 
     const passInfo: (itemTitle: string) => void = (itemTitle: string) => {
-        props.onClickMovie(itemTitle, props.movie.id, true);
+        onClickMovie(itemTitle, movie.id, true);
         hideEditMenu();
     };
 
@@ -72,12 +72,12 @@ export function MovieCard(props: IMovieCardProps): JSX.Element {
     return <figure className={blockName}>
         <img
             className={`${blockName}__image`}
-            src={props.movie.poster_path}
-            alt={props.movie.title}/>
+            src={movie.poster_path}
+            alt={movie.title}/>
         <figcaption className={`${blockName}__info`}>
-            <span className={`${blockName}__title`}>{props.movie.title}</span>
-            <span className={`${blockName}__release-date`}>{props.movie.release_date}</span>
-            <span className={`${blockName}__genres`}>{props.movie.genres.join(', ')}</span>
+            <span className={`${blockName}__title`}>{movie.title}</span>
+            <span className={`${blockName}__release-date`}>{movie.release_date}</span>
+            <span className={`${blockName}__genres`}>{movie.genres.join(', ')}</span>
             <div
                 className={`${blockName}__settings`}>
                     { isEditMenuVisible ? menu : icon }

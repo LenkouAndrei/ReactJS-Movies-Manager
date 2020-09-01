@@ -10,12 +10,11 @@ import './app.component.scss';
 
 function AppComponent(): JSX.Element {
   const [newMovie, setNewMovie] = useState(null);
-  const [page, _setPage] = useState(PageName.Main);
 
   return (
     <React.StrictMode>
       <ErrorBoundary>
-        <Header onAddBtnClick={setNewMovie} pageName={page}/>
+        <Header onAddBtnClick={setNewMovie} pageName={PageName.Main}/>
         <Main movieToAdd={newMovie}/>
         <Footer />
       </ErrorBoundary>

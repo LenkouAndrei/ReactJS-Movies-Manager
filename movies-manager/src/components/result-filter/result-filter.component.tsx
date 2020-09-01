@@ -8,7 +8,7 @@ interface IResultFilterProps extends IMoviesGenresConfig {
 
 const blockName = 'result-filter';
 
-type TResultFilter = ({ genres, currentGenre, onGenreClick }: IResultFilterProps) => JSX.Element;
+type TResultFilter = (props: IResultFilterProps) => JSX.Element;
 
 export const ResultFilter: TResultFilter = ({ genres, currentGenre, onGenreClick }: IResultFilterProps) => {
     const listItems: JSX.Element[] = genres.map(title => {

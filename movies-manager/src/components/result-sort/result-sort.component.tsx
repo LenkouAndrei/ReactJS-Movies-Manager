@@ -10,7 +10,7 @@ interface ISelectProps extends ISelectConfig {
     onSortClick: (isOpen: boolean, title?: TSortListItem) => void;
 }
 
-type TResultSort = ({ showOptionList, options, chosenOption, onSortClick }: ISelectProps) => JSX.Element;
+type TResultSort = (props: ISelectProps) => JSX.Element;
 
 export const ResultSort: TResultSort = ({
     showOptionList,

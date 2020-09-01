@@ -1,7 +1,11 @@
 import React, { ReactChild } from 'react';
 import './wrapper.component.scss';
 
-type TWrapper = ({children}: { children: ReactChild }) => JSX.Element;
-export const Wrapper: TWrapper = ({children}: { children: ReactChild }) => <div className='wrapper'>
+interface IWrapperProps {
+    children: ReactChild;
+}
+
+type TWrapper = (props: IWrapperProps) => JSX.Element;
+export const Wrapper: TWrapper = ({ children }: IWrapperProps) => <div className='wrapper'>
     {children}
 </div>;

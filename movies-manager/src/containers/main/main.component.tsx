@@ -1,11 +1,10 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { FormPage } from '../form-page/form-page.component';
 import { Modal } from '../modal/modal.component';
 import { Wrapper } from '../wrapper/wrapper.component';
 import { DeleteModal, Details, MovieCard, ResultFilter, ResultSort, Search } from '../../components';
 import {
     IMovie,
-    IMoviesGenresConfig,
     ISelectConfig,
     TGenresListItem,
     TNullable,
@@ -16,17 +15,6 @@ import './main.component.scss';
 const defaultMovies: IMovie[] = require('../../data.json');
 const blockName = 'result';
 const moviesSortList: TSortListItem[] = [ 'vote average', 'vote count', 'release date', 'revenue' ];
-
-interface IMainState {
-    isFormDialogOpen: boolean;
-    isDeleteDialogOpen: boolean;
-    movieToEdit: IMovie;
-    movies: IMovie[];
-    moviesSortConfig: ISelectConfig;
-    moviesGenresConfig: IMoviesGenresConfig;
-    greatestId: number;
-    movieWithDetails: TNullable<IMovie>;
-}
 
 interface IMainProps {
     movieToAdd: TNullable<IMovie>;
@@ -39,7 +27,7 @@ type TSetGenre = (genre: TGenresListItem) => void;
 type TUpdateMovieSet = (editableMovie: IMovie) => void;
 type TUpdateMoviesSortConfig = (isOpen: boolean, title?: TSortListItem) => void;
 type TSortMoviesByField = (field: keyof IMovie) => void;
-type TShowDetails = (event: React.MouseEvent, movieWithDetails: IMovie) => void;
+type TShowDetails = (event: MouseEvent, movieWithDetails: IMovie) => void;
 
 export function Main(props: IMainProps): JSX.Element {
     const allMoviesGenres: TGenresListItem[] =
@@ -155,7 +143,7 @@ export function Main(props: IMainProps): JSX.Element {
         hideModal();
     };
 
-    const showDetails: TShowDetails = (event: React.MouseEvent, movie: IMovie) => {
+    const showDetails: TShowDetails = (event: MouseEvent, movie: IMovie) => {
         if (!event.ctrlKey) {
             return;
         }

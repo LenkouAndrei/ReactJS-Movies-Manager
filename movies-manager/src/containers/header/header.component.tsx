@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { Logo } from '../../components';
 import { IMovie, TNullable } from '../../types/types';
 import { FormPage } from '../form-page/form-page.component';
@@ -22,7 +22,7 @@ type TCreateMovie = (newMovie: IMovie) => void;
 
 const blockName = 'header';
 
-export function Header(props: IHeaderProps): JSX.Element {
+export function Header({ pageName, onAddBtnClick }: IHeaderProps): JSX.Element {
     const [ isDialogOpen, setIsDialogOpen ] = useState(false);
 
     const showModal: TModalToggler = () => {
@@ -36,12 +36,12 @@ export function Header(props: IHeaderProps): JSX.Element {
     };
 
     const createNewMovie: TCreateMovie = (newMovie: IMovie) => {
-        props.onAddBtnClick(newMovie);
+        onAddBtnClick(newMovie);
         hideModal();
     };
 
     const getHeaderElement: () => TNullable<JSX.Element> = () => {
-        switch (props.pageName) {
+        switch (pageName) {
             case PageName.Main:
                 return <>
                     <button

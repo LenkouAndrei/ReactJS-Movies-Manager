@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
 import { FormPage } from '../form-page/form-page.component';
 import { Modal } from '../modal/modal.component';
 import { Wrapper } from '../wrapper/wrapper.component';
@@ -127,12 +127,12 @@ export function Main(props: IMainProps): JSX.Element {
         hideModal();
     };
 
-    const setCurrentGenre: TSetGenre = (genre: TGenresListItem) => {
+    const setCurrentGenre: TSetGenre = useCallback((genre: TGenresListItem) => {
         setMoviesGenresConfig({
             ...moviesGenresConfig,
             currentGenre: genre,
         });
-    };
+    }, [moviesGenresConfig]);
 
     const deleteMovie: TVoidWithNoArgs = () => {
         const movieIdx: number = movies

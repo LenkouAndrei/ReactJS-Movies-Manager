@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import './delete-modal.component.scss';
 
 const blockName = 'delete-modal';
@@ -11,6 +11,8 @@ interface IDeletModalProps {
 type TDeletModal = (props: IDeletModalProps) => JSX.Element;
 
 export const DeleteModal: TDeletModal = ({ title, onDeleteConfirm }: IDeletModalProps): JSX.Element => {
+    const confirmDelete = useCallback(() => onDeleteConfirm(), []);
+
     return <div className={blockName}>
         <h2 className={`${blockName}__headline`}>Delet Movie</h2>
         <span className={`${blockName}__warning`}>
@@ -18,6 +20,6 @@ export const DeleteModal: TDeletModal = ({ title, onDeleteConfirm }: IDeletModal
         </span>
         <button
             className={`${blockName}__btn--confirm`}
-            onClick={onDeleteConfirm}>Confirm</button>
+            onClick={confirmDelete}>Confirm</button>
     </div>;
 };

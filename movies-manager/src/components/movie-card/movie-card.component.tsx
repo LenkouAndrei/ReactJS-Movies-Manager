@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { faAlignJustify, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IMovie } from '../../types/types';
+import useOutsideClick from '../../hooks/useOutsideClick';
 import './movie-card.component.scss';
 
 const blockName = 'movie';
@@ -17,26 +18,20 @@ export function MovieCard({ movie, onClickMovie }: IMovieCardProps): JSX.Element
     const [ isEditMenuVisible, setIsEditMenuVisible ] = useState(false);
     const wrapperRef: React.RefObject<HTMLInputElement> = React.createRef();
 
-    const handleClickOutside: (event: Event) => void = (event: Event) => {
-        if (wrapperRef && !wrapperRef.current.contains(event.target as Node)) {
-            hideEditMenu();
-        }
-    };
-
-    const hideEditMenu: () => void = () => {
+    const hideEditMenu: () => void = useCallback(() => {
         setIsEditMenuVisible(false);
-        document.removeEventListener('mousedown', handleClickOutside);
-    };
+    }, []);
 
-    const showEditMenu: () => void = () => {
+    useOutsideClick(wrapperRef, hideEditMenu);
+
+    const showEditMenu: () => void = useCallback(() => {
         setIsEditMenuVisible(true);
-        document.addEventListener('mousedown', handleClickOutside);
-    };
+    }, []);
 
-    const passInfo: (itemTitle: string) => void = (itemTitle: string) => {
+    const passInfo: (itemTitle: string) => void = useCallback((itemTitle: string) => {
         onClickMovie(itemTitle, movie.id, true);
         hideEditMenu();
-    };
+    }, []);
 
     const listItems: JSX.Element[] = menuItemTitles.map((itemTitle: string) => {
         return <li

@@ -11,7 +11,7 @@ module.exports = {
     compress: true,
     port: 9000,
     watchContentBase: true,
-    progress: true
+    progress: true,
   },
   watch: true,
   devtool: 'inline-source-map',

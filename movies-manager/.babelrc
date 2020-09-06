@@ -1,0 +1,14 @@
+{
+    "presets": [
+      [
+        "@babel/env",
+        {
+          "modules": false,
+          "useBuildIns": "entry",
+          "corejs": "3.6"
+        }
+      ],
+      "@babel/react"
+    ],
+    "plugins": ["babel-plugin-styled-components"]
+}

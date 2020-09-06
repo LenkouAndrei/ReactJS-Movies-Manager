@@ -3,7 +3,8 @@ const webpack = require('webpack');
 
 module.exports = {
   output: {
-    filename: 'main.js',
+    filename: 'main.[hash].js',
+    chunkFilename: '[id].[hash].js'
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
@@ -13,7 +14,7 @@ module.exports = {
     progress: true
   },
   watch: true,
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
   ],

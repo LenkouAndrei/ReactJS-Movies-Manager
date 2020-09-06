@@ -97,4 +97,4 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
             </figcaption>
         </figure>
     }
-};
+}

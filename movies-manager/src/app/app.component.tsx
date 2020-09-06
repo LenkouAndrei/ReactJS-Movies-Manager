@@ -3,7 +3,6 @@ import {
   Footer,
   Header,
   PageName,
-  IHeaderProps,
   Main,
   ErrorBoundary,
   FormPage
@@ -63,7 +62,6 @@ class AppComponent extends Component<{}, IAppState> {
         <ErrorBoundary>
           <Header onAddBtnClick={this.updateNewMovie.bind(this)} pageName={this.state.pageName}/>
           { mainContent }
-          {/* <DeleteModal /> */}
           <Footer />
         </ErrorBoundary>
       </React.StrictMode>

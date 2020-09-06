@@ -82,7 +82,7 @@ export class Main extends Component<IMainProps, IMainState> {
             isFormDialogOpen: modalType === 'Edit',
             isDeleteDialogOpen: modalType === 'Delete',
         });
-        document.body.classList.add('overflow-hidden');
+        document.getElementById('root').classList.add('overflow-hidden');
     };
 
     hideModal = () => {
@@ -90,7 +90,7 @@ export class Main extends Component<IMainProps, IMainState> {
             isFormDialogOpen: false,
             isDeleteDialogOpen: false,
         });
-        document.body.classList.remove('overflow-hidden');
+        document.getElementById('root').classList.remove('overflow-hidden');
     };
 
     handleMovieToEditChange(modalDialogType: string, id: number) {

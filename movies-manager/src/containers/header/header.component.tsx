@@ -43,7 +43,7 @@ export class Header extends Component<IHeaderProps, IMainState> {
 	    document.body.classList.remove('overflow-hidden');
     };
 
-	createNewMovie(newMovie: IMovie) {
+	createNewMovie = (newMovie: IMovie) => {
 	    this.props.onAddBtnClick(newMovie);
         this.hideModal();
     };
@@ -56,7 +56,7 @@ export class Header extends Component<IHeaderProps, IMainState> {
                         className={'add-btn'}
                         onClick={this.showModal}>+ Add Movie</button>
                     <Modal isOpen={this.state.isDialogOpen} handleClose={this.hideModal}>
-                        <FormPage onSaveChanges={this.createNewMovie.bind(this)} movie={null}/>
+                        <FormPage onSaveChanges={this.createNewMovie} movie={null}/>
                     </Modal>
                 </>;
             default:

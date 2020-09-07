@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAlignJustify, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { IMovie } from "../../types/types";
+import { menuItemTitles } from "./mockMenuTitles";
 import "./movie-card.component.scss";
 
 const blockName = 'movie';
@@ -15,37 +16,34 @@ interface IMovieCardProps {
     onClickMovie: (modalDialogType: any, id: number, isOpen: boolean) => void
 }
 
-const menuItemTitles = ['Edit', 'Delete'];
-
 export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
     private wrapperRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: IMovieCardProps) {
         super(props);
         this.wrapperRef = React.createRef();
-        this.handleClickOutside = this.handleClickOutside.bind(this);
         this.state = {
             isEditMenuVisible: false,
         };
     }
 
-    handleClickOutside(event: Event) {
+    handleClickOutside = (event: Event) => {
         if (this.wrapperRef && !this.wrapperRef.current.contains(event.target as Node)) {
             this.hideEditMenu();
         }
     }
 
-    showEditMenu() {
+    showEditMenu = () => {
         this.setState({ isEditMenuVisible: true });
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 
-    hideEditMenu() {
+    hideEditMenu = () => {
         this.setState({ isEditMenuVisible: false });
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
-    passInfo(itemTitle: string) {
+    passInfo = (itemTitle: string) => () => {
         this.props.onClickMovie(itemTitle, this.props.movie.id, true);
         this.hideEditMenu();
     }
@@ -55,7 +53,7 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
             return <li
                 key={itemTitle}
                 className={'menu__list-item'}
-                onClick={this.passInfo.bind(this, itemTitle)}>{ itemTitle }</li>
+                onClick={this.passInfo(itemTitle)}>{ itemTitle }</li>
         });
     
         const menu = <div
@@ -63,7 +61,7 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
             ref={this.wrapperRef}>
             <button
                 className={'menu__btn--close'}
-                onClick={this.hideEditMenu.bind(this)}>
+                onClick={this.hideEditMenu}>
                 <FontAwesomeIcon
                     className={'menu__icon'}
                     icon={faTimes}/>
@@ -75,7 +73,7 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
 
         const icon = <div
             className={`${blockName}__icon-container`}
-            onClick={this.showEditMenu.bind(this)}>
+            onClick={this.showEditMenu}>
             <FontAwesomeIcon
                 className={`${blockName}__icon`}
                 icon={faAlignJustify} />

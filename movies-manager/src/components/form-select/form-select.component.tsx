@@ -1,6 +1,7 @@
 import React, { Component, ChangeEvent } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { allGenres } from './mockGenres';
 import "./form-select.component.scss";
 
 interface ISelectFormState {
@@ -13,15 +14,6 @@ interface ISelectFormProps {
     onApplyGenres: (newGenres: string[]) => void;
     genres: string[];
 }
-
-const allGenres = [
-    'Adventure',
-    'Horror',
-    'Comedy',
-    'Family',
-    'Drama',
-    'Romance',
-];
 
 const blockName = 'form-select';
 
@@ -37,12 +29,12 @@ export class FormSelect extends Component<ISelectFormProps, ISelectFormState> {
 
     toggleSelectDropdown = (event: any): void => {
 	    event.preventDefault();
-	    event.stopPropagation();
-        if (!this.state.isOpen) {
-            this.setState({ isOpen: true });
-        } else {
+        event.stopPropagation();
+        if (this.state.isOpen) {
             this.setState({ isOpen: false });
             this.props.onApplyGenres(this.state.selectedGenres);
+        } else {
+            this.setState({ isOpen: true });
         }
     }
 

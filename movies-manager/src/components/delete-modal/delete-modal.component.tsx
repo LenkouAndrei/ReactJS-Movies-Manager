@@ -3,12 +3,12 @@ import "./delete-modal.component.scss";
 
 const blockName = 'delete-modal';
 
-interface IDeletModalProps {
+interface IDeleteModalProps {
     title: string;
     onDeleteConfirm(): void;
 }
 
-export const DeleteModal = (props: IDeletModalProps): JSX.Element => {
+export const DeleteModal = (props: IDeleteModalProps): JSX.Element => {
     return <div className={blockName}>
         <h2 className={`${blockName}__headline`}>Delet Movie</h2>
         <span className={`${blockName}__warning`}>

@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 
 interface IErrorState {
     error: any;
     errorInfo: any;
 };
 
-export class ErrorBoundary extends React.Component<{}, IErrorState> {
+export class ErrorBoundary extends Component<{}, IErrorState> {
     constructor(props: any) {
       super(props);
       this.state = { error: null, errorInfo: null };

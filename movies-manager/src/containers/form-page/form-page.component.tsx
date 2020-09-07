@@ -1,8 +1,9 @@
-import React, { Component, ChangeEvent } from "react";
+import React, { Component, ChangeEvent, FormEvent } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { IMovie } from "../../types/types";
 import { FormSelect } from "../../components";
+import { defaultMovie } from "./mockDefaultMovie";
 import "./form-page.component.scss";
 
 interface ISaveChanges {
@@ -11,20 +12,6 @@ interface ISaveChanges {
 }
 
 const blockName = 'form';
-
-const defaultMovie: IMovie = {
-    title: 'Title here',
-    tagline: '',
-    vote_average: 0,
-    vote_count: 0,
-    release_date: 'Select date',
-    poster_path: '',
-    overview: 'Overview here',
-    budget: 0,
-    revenue: 0,
-    genres: [],
-    runtime: 0,
-};
 
 const url: string = '';
 
@@ -36,7 +23,7 @@ export class FormPage extends Component<ISaveChanges, any> {
         this.state = { ...defaultMovie, ...this.props.movie};
     }
 
-    handleChange(event: ChangeEvent<HTMLInputElement>) {
+    handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         const name = event.target.name as keyof IMovie | 'url';
         if (name === 'url') {
@@ -47,26 +34,20 @@ export class FormPage extends Component<ISaveChanges, any> {
         this.setState({ [name]: value });
     }
 
-    updateGenres(newGenres: string[]) {
+    updateGenres = (newGenres: string[]) => {
         this.setState({ genres: newGenres });
     }
 
-    handleSubmit(event: Event) {
+    handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         this.props.onSaveChanges(this.state as IMovie);
     }
 
-    resetState() {
+    resetState = () => {
         this.setState({ ...this.startState });
     }
 
     render() {
-        const genres: JSX.Element[] = this.state.genres.map((genre: string) => {
-            return <option
-                key={genre}
-                value={genre}>{ genre }</option>
-        });
-
         const movieIdField = this.state.id && <div className={`${blockName}__field-wrapper`}>
             <div className={`${blockName}__title`}>movie id</div>
             <div className={`${blockName}__text`}>{this.state.id}</div>
@@ -74,7 +55,7 @@ export class FormPage extends Component<ISaveChanges, any> {
 
         return <form
             className={blockName}
-            onSubmit={this.handleSubmit.bind(this)}>
+            onSubmit={this.handleSubmit}>
             <h2 className={`${blockName}__headline`}>Edit Movie</h2>
             { movieIdField }
             <div className={`${blockName}__field-wrapper`}>
@@ -87,7 +68,7 @@ export class FormPage extends Component<ISaveChanges, any> {
                     name="title"
                     type="text"
                     value={this.state.title}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <label
@@ -99,7 +80,7 @@ export class FormPage extends Component<ISaveChanges, any> {
                     name="release_date"
                     type="text"
                     value={this.state.release_date}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
                 <FontAwesomeIcon
                     className={`${blockName}__icon--bright`}
                     icon={faCalendar}/>
@@ -114,12 +95,12 @@ export class FormPage extends Component<ISaveChanges, any> {
                     name="url"
                     type="text"
                     value={url || 'Url here'}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <div className={`${blockName}__title`}>genre</div>
                 <FormSelect
-                    onApplyGenres={this.updateGenres.bind(this)}
+                    onApplyGenres={this.updateGenres}
                     genres={this.state.genres}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
@@ -132,7 +113,7 @@ export class FormPage extends Component<ISaveChanges, any> {
                     name="overview"
                     type="text"
                     value={this.state.overview}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
             </div>
             <div className={`${blockName}__field-wrapper`}>
                 <label
@@ -144,11 +125,11 @@ export class FormPage extends Component<ISaveChanges, any> {
                     name="runtime"
                     type="text"
                     value={this.state.runtime}
-                    onChange={this.handleChange.bind(this)}/>
+                    onChange={this.handleChange}/>
             </div>
             <div className={`${blockName}__btn-wrapper`}>
                 <button
-                    onClick={this.resetState.bind(this)}
+                    onClick={this.resetState}
                     className={`${blockName}__btn--reset`}>
                         Reset
                 </button>

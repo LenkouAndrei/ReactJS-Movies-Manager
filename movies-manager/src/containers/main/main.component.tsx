@@ -12,10 +12,10 @@ import {
 	TGenresListItem,
 	TNullable
 } from "../../types/types";
+import { moviesSortList } from "./mockMoviesSortList";
 
 const movies = require('../../data.json');
 const blockName = 'result';
-const moviesSortList: TSortListItem[] = [ 'vote average', 'vote count', 'release date', 'revenue' ];
 
 interface IMainState {
     isFormDialogOpen: boolean;
@@ -185,6 +185,3 @@ export class Main extends Component<IMainProps, IMainState> {
             </main>
     }
 };
-
-const container = document.createElement("div");
-document.body.appendChild(container);

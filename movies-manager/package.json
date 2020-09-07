@@ -6,7 +6,6 @@
   "scripts": {
     "start:dev": "cross-env NODE_ENV=development webpack-dev-server",
     "build:dev": "cross-env NODE_ENV=development webpack",
-    "start:prod": "cross-env NODE_ENV=production webpack-dev-server",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "stat": "webpack --json --profile >stats.json",
     "lint": "tslint --config ./tslint.json --project ./tsconfig.json",

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAlignJustify, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { IMovie } from "../../types/types";
 import { menuItemTitles } from "./mockMenuTitles";
+import {OutsideClickContext, OverflowContext} from "../../context";
 import "./movie-card.component.scss";
 
 const blockName = 'movie';
@@ -17,6 +18,7 @@ interface IMovieCardProps {
 }
 
 export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
+    static contextType = OutsideClickContext;
     private wrapperRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: IMovieCardProps) {
@@ -35,12 +37,12 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
 
     showEditMenu = () => {
         this.setState({ isEditMenuVisible: true });
-        document.addEventListener('mousedown', this.handleClickOutside);
+        this.context.setOutsideClickHandler(this.handleClickOutside);
     }
 
     hideEditMenu = () => {
         this.setState({ isEditMenuVisible: false });
-        document.removeEventListener('mousedown', this.handleClickOutside);
+        this.context.setOutsideClickHandler(null);
     }
 
     passInfo = (itemTitle: string) => () => {
@@ -66,9 +68,13 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
                     className={'menu__icon'}
                     icon={faTimes}/>
             </button>
-            <ul className={'menu__list'}>
-                { listItems }
-            </ul>
+            <OverflowContext.Consumer>
+                {() =>
+                    <ul className={'menu__list'}>
+                        { listItems }
+                    </ul>
+                }
+            </OverflowContext.Consumer>
         </div>;
 
         const icon = <div

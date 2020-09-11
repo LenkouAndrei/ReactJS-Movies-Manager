@@ -25,9 +25,6 @@ interface IMainState {
     pageName: PageName;
 }
 
-type TCtxCallback = (className: string) => string;
-
-
 export class Header extends Component<IHeaderProps, IMainState> {
     static contextType = OverflowContext;
     constructor(props: any) {

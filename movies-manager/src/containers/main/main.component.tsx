@@ -13,6 +13,7 @@ import {
 	TNullable
 } from "../../types/types";
 import { moviesSortList } from "./mockMoviesSortList";
+import {OverflowContext} from "../../context";
 
 const movies = require('../../data.json');
 const blockName = 'result';
@@ -32,6 +33,7 @@ interface IMainProps {
 }
 
 export class Main extends Component<IMainProps, IMainState> {
+    static contextType = OverflowContext;
     constructor(props: IMainProps) {
         super(props);
 
@@ -82,7 +84,7 @@ export class Main extends Component<IMainProps, IMainState> {
             isFormDialogOpen: modalType === 'Edit',
             isDeleteDialogOpen: modalType === 'Delete',
         });
-        document.getElementById('root').classList.add('overflow-hidden');
+        this.context.setOverflow('overflow-hidden');
     };
 
     hideModal = () => {
@@ -90,7 +92,7 @@ export class Main extends Component<IMainProps, IMainState> {
             isFormDialogOpen: false,
             isDeleteDialogOpen: false,
         });
-        document.getElementById('root').classList.remove('overflow-hidden');
+        this.context.setOverflow('');
     };
 
     handleMovieToEditChange(modalDialogType: string, id: number) {
@@ -158,12 +160,16 @@ export class Main extends Component<IMainProps, IMainState> {
                 </li>
             });
             return <main className={blockName}>
-                <Modal isOpen={this.state.isFormDialogOpen} handleClose={() => this.hideModal()}>
-                    <FormPage onSaveChanges={this.updateMoviesSet.bind(this)} movie={ this.state.movieToEdit }/>
-                </Modal>   
-                <Modal isOpen={this.state.isDeleteDialogOpen} handleClose={() => this.hideModal()}>
-                    <DeleteModal  onDeleteConfirm={this.deleteMovie.bind(this)} title={this.state.movieToEdit.title}/>
-                </Modal>  
+                <OverflowContext.Consumer>
+                    {() => <>
+                        <Modal isOpen={this.state.isFormDialogOpen} handleClose={() => this.hideModal()}>
+                            <FormPage onSaveChanges={this.updateMoviesSet.bind(this)} movie={ this.state.movieToEdit }/>
+                        </Modal>
+                        <Modal isOpen={this.state.isDeleteDialogOpen} handleClose={() => this.hideModal()}>
+                            <DeleteModal  onDeleteConfirm={this.deleteMovie.bind(this)} title={this.state.movieToEdit.title}/>
+                        </Modal>
+                    </>}
+                </OverflowContext.Consumer>
                 <Wrapper>
                     <Search/>
                 </Wrapper>

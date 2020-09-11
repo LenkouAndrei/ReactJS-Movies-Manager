@@ -7,35 +7,48 @@ import {
   ErrorBoundary,
   FormPage
 } from "../containers";
-import { TNullable, IMovie } from '../types/types';
-import { OverflowContext, overflows } from "../context";
+import { TNullable, IMovie, TOutsideClick } from '../types/types';
+import { OverflowContext, OutsideClickContext } from "../context";
 import "./app.component.scss";
 
 interface IAppState {
 	pageName: PageName;
 	newMovie: TNullable<IMovie>;
-    overflowName: string;
+	overflowName: string;
+    outsideClickHandler: TNullable<TOutsideClick>
 }
 
 class AppComponent extends Component<{}, IAppState> {
-  setOverflow = (overflowName: string) => {
-    this.setState({ overflowName });
-  }
   overflowCtx = {
-    overflow: overflows.inherit,
-    setOverflow: this.setOverflow,
+    setOverflow: (overflowName: string) => {
+      this.setState({ overflowName });
+    },
   }
+  outsideClickCtx = {
+    setOutsideClickHandler: (outsideClickHandler: TOutsideClick) => {
+      this.setState({ outsideClickHandler });
+    },
+  }
+
   constructor(props: any) {
     super(props);
     this.state = {
       pageName: PageName.Main,
       newMovie: null,
       overflowName: '',
+      outsideClickHandler: null,
     };
   }
 
   updateNewMovie = (newMovie: IMovie) => {
     this.setState({ newMovie });
+  }
+
+  handleOutsideClick = (event: any) => {
+    if (this.state.outsideClickHandler === null) {
+      return;
+    }
+    this.state.outsideClickHandler(event);
   }
 
   render() {
@@ -53,11 +66,15 @@ class AppComponent extends Component<{}, IAppState> {
       <React.StrictMode>
         <ErrorBoundary>
           <OverflowContext.Provider value={this.overflowCtx}>
-            <div className={this.state.overflowName}>
-              <Header onAddBtnClick={this.updateNewMovie} pageName={this.state.pageName}/>
-              { mainContent }
-              <Footer />
-            </div>
+            <OutsideClickContext.Provider value={this.outsideClickCtx}>
+              <div
+                  className={this.state.overflowName}
+                  onClick={this.handleOutsideClick}>
+                <Header onAddBtnClick={this.updateNewMovie} pageName={this.state.pageName}/>
+                { mainContent }
+                <Footer />
+              </div>
+            </OutsideClickContext.Provider>
           </OverflowContext.Provider>
         </ErrorBoundary>
       </React.StrictMode>

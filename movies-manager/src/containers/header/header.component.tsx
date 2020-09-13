@@ -4,7 +4,6 @@ import { Wrapper } from "../wrapper/wrapper.component";
 import { Modal } from "../modal/modal.component";
 import { FormPage } from "../form-page/form-page.component";
 import { IMovie, TNullable } from "../../types/types";
-import { OverflowContext } from "../../context";
 import "./header.component.scss";
 
 export interface IHeaderProps {
@@ -26,7 +25,6 @@ interface IMainState {
 }
 
 export class Header extends Component<IHeaderProps, IMainState> {
-    static contextType = OverflowContext;
     constructor(props: any) {
         super(props);
         this.state = {
@@ -37,12 +35,10 @@ export class Header extends Component<IHeaderProps, IMainState> {
 
     showModal = () => {
         this.setState({ isDialogOpen: true });
-        this.context.setOverflow('overflow-hidden');
     };
 
     hideModal = () => {
         this.setState({ isDialogOpen: false });
-        this.context.setOverflow('');
     };
 
 	createNewMovie = (newMovie: IMovie) => {
@@ -53,16 +49,14 @@ export class Header extends Component<IHeaderProps, IMainState> {
     getHeaderElement(): TNullable<JSX.Element> {
         switch (this.props.pageName) {
             case PageName.Main:
-                return  <OverflowContext.Consumer>
-                    {() => <>
-                        <button
-                            className={'add-btn'}
-                            onClick={this.showModal}>+ Add Movie</button>
-                        <Modal isOpen={this.state.isDialogOpen} handleClose={this.hideModal}>
-                            <FormPage onSaveChanges={this.createNewMovie} movie={null}/>
-                        </Modal>
-                    </>}
-                    </OverflowContext.Consumer>;
+                return  <>
+                    <button
+                        className={'add-btn'}
+                        onClick={this.showModal}>+ Add Movie</button>
+                    <Modal isOpen={this.state.isDialogOpen} handleClose={this.hideModal}>
+                        <FormPage onSaveChanges={this.createNewMovie} movie={null}/>
+                    </Modal>
+                </>;
             default:
                 return null;
         }

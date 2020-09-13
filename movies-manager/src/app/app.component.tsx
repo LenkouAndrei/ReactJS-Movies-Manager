@@ -8,22 +8,16 @@ import {
   FormPage
 } from "../containers";
 import { TNullable, IMovie, TOutsideClick } from '../types/types';
-import { OverflowContext, OutsideClickContext } from "../context";
+import { OutsideClickContext } from "../context";
 import "./app.component.scss";
 
 interface IAppState {
 	pageName: PageName;
 	newMovie: TNullable<IMovie>;
-	overflowName: string;
     outsideClickHandler: TNullable<TOutsideClick>
 }
 
 class AppComponent extends Component<{}, IAppState> {
-  overflowCtx = {
-    setOverflow: (overflowName: string) => {
-      this.setState({ overflowName });
-    },
-  }
   outsideClickCtx = {
     setOutsideClickHandler: (outsideClickHandler: TOutsideClick) => {
       this.setState({ outsideClickHandler });
@@ -35,7 +29,6 @@ class AppComponent extends Component<{}, IAppState> {
     this.state = {
       pageName: PageName.Main,
       newMovie: null,
-      overflowName: '',
       outsideClickHandler: null,
     };
   }
@@ -65,17 +58,13 @@ class AppComponent extends Component<{}, IAppState> {
     return (
       <React.StrictMode>
         <ErrorBoundary>
-          <OverflowContext.Provider value={this.overflowCtx}>
-            <OutsideClickContext.Provider value={this.outsideClickCtx}>
-              <div
-                  className={this.state.overflowName}
-                  onClick={this.handleOutsideClick}>
-                <Header onAddBtnClick={this.updateNewMovie} pageName={this.state.pageName}/>
-                { mainContent }
-                <Footer />
-              </div>
-            </OutsideClickContext.Provider>
-          </OverflowContext.Provider>
+          <OutsideClickContext.Provider value={this.outsideClickCtx}>
+            <div onClick={this.handleOutsideClick}>
+              <Header onAddBtnClick={this.updateNewMovie} pageName={this.state.pageName}/>
+              { mainContent }
+              <Footer />
+            </div>
+          </OutsideClickContext.Provider>
         </ErrorBoundary>
       </React.StrictMode>
     );

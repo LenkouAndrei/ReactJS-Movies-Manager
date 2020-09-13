@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAlignJustify, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { IMovie } from "../../types/types";
 import { menuItemTitles } from "./mockMenuTitles";
-import {OutsideClickContext, OverflowContext} from "../../context";
+import { OutsideClickContext } from "../../context";
 import "./movie-card.component.scss";
 
 const blockName = 'movie';
@@ -68,13 +68,13 @@ export class MovieCard extends Component<IMovieCardProps, IMovieCardState> {
                     className={'menu__icon'}
                     icon={faTimes}/>
             </button>
-            <OverflowContext.Consumer>
+            <OutsideClickContext.Consumer>
                 {() =>
                     <ul className={'menu__list'}>
                         { listItems }
                     </ul>
                 }
-            </OverflowContext.Consumer>
+            </OutsideClickContext.Consumer>
         </div>;
 
         const icon = <div

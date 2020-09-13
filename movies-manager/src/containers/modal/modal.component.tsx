@@ -35,5 +35,5 @@ export const Modal = ({ handleClose, isOpen, children }: IModalProps): JSX.Eleme
       </aside>
     );
 
-    return ReactDOM.createPortal(content, document.body);
+    return ReactDOM.createPortal(content, document.getElementById('root'));
   };

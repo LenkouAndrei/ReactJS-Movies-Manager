@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent, FormEvent } from "react";
+import React, { Component, ChangeEvent, FormEvent, MouseEvent } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { IMovie } from "../../types/types";
@@ -43,7 +43,8 @@ export class FormPage extends Component<ISaveChanges, any> {
         this.props.onSaveChanges(this.state as IMovie);
     }
 
-    resetState = () => {
+    resetState = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
         this.setState({ ...this.startState });
     }
 

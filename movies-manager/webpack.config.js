@@ -9,6 +9,10 @@ module.exports = () => {
     entry: {
       index: './src/index.tsx'
     },
+    output: {
+      filename: 'main.[hash].js',
+      chunkFilename: '[id].[hash].js',
+    },
     module: {
       rules: [
         {

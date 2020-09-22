@@ -1,4 +1,4 @@
-@import "../../styles/variables.scss";
+@import "../../styles/colors-vars";
 
 .result {
     background-color: $black;
@@ -27,8 +27,4 @@
         height: 0;
         border: 1px solid $white;
     }
-}
-
-.overflow-hidden {
-    overflow: hidden;
 }

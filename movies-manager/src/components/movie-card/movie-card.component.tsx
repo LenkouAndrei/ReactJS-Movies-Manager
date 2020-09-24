@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IMovie } from '../../types/types';
 import useOutsideClick from '../../hooks/useOutsideClick';
 import './movie-card.component.scss';
+import { menuItemTitles } from "./mockMenuTitles";
 
 const blockName = 'movie';
 
@@ -11,8 +12,6 @@ interface IMovieCardProps {
     movie: IMovie;
     onClickMovie: (modalDialogType: string, id: number, isOpen: boolean) => void;
 }
-
-const menuItemTitles: string[] = ['Edit', 'Delete'];
 
 export function MovieCard({ movie, onClickMovie }: IMovieCardProps): JSX.Element {
     const [ isEditMenuVisible, setIsEditMenuVisible ] = useState(false);

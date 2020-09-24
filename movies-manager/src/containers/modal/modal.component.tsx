@@ -39,5 +39,5 @@ export const Modal: TModal = ({ handleClose, isOpen, children }: IModalProps): J
       </aside>
     );
 
-    return ReactDOM.createPortal(content, document.body);
+    return ReactDOM.createPortal(content, document.querySelector('#root'));
   };

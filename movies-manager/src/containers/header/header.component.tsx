@@ -27,12 +27,10 @@ export function Header({ pageName, onAddBtnClick }: IHeaderProps): JSX.Element {
 
     const showModal: TModalToggler = () => {
         setIsDialogOpen(true);
-        document.body.classList.add( 'overflow-hidden' );
     };
 
     const hideModal: TModalToggler = () => {
         setIsDialogOpen(false);
-        document.body.classList.remove( 'overflow-hidden' );
     };
 
     const createNewMovie: TCreateMovie = (newMovie: IMovie) => {

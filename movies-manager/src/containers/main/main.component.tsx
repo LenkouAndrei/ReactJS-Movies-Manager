@@ -83,13 +83,11 @@ export function Main(props: IMainProps): JSX.Element {
     const showModal: TShowModal = (modalType: string) => {
         setIsFormDialogOpen(modalType === 'Edit');
         setIsDeleteDialogOpen(modalType === 'Delete');
-        document.body.classList.add('overflow-hidden');
     };
 
     const hideModal: TVoidWithNoArgs = () => {
         setIsFormDialogOpen(false);
         setIsDeleteDialogOpen(false);
-        document.body.classList.remove('overflow-hidden');
     };
 
     const handleMovieToEditChange: THandleMovie = (modalDialogType: string, id: number) => {
@@ -195,6 +193,3 @@ export function Main(props: IMainProps): JSX.Element {
         </Wrapper>
     </main>;
 }
-
-const container: HTMLDivElement = document.createElement('div');
-document.body.appendChild(container);

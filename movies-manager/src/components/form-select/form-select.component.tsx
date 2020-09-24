@@ -2,6 +2,7 @@ import React, { ChangeEvent, MouseEvent, useState, useCallback } from 'react';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './form-select.component.scss';
+import { allGenres } from "./mockGenres";
 
 interface ISelectFormProps {
     onApplyGenres: (newGenres: string[]) => void;
@@ -10,15 +11,6 @@ interface ISelectFormProps {
 
 type TMouseClick = (event: MouseEvent) => void;
 type TChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
-
-const allGenres: string[] = [
-    'Adventure',
-    'Horror',
-    'Comedy',
-    'Family',
-    'Drama',
-    'Romance',
-];
 
 const blockName = 'form-select';
 

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormSelect } from '../../components';
 import { IMovie } from '../../types/types';
 import './form-page.component.scss';
+import { defaultMovie } from "./mockDefaultMovie";
 
 interface ISaveChanges {
     movie: IMovie;
@@ -16,20 +17,6 @@ type TUpdateGenres = (newGenres: string[]) => void;
 type TResetState = () => void;
 
 const blockName = 'form';
-
-const defaultMovie: IMovie = {
-    title: 'Title here',
-    tagline: '',
-    vote_average: 0,
-    vote_count: 0,
-    release_date: 'Select date',
-    poster_path: '',
-    overview: 'Overview here',
-    budget: 0,
-    revenue: 0,
-    genres: [],
-    runtime: 0,
-};
 
 const url = '';
 

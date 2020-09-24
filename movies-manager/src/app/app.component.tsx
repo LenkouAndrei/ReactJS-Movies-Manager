@@ -18,7 +18,6 @@ function AppComponent(): JSX.Element {
       <ErrorBoundary>
         <Header onAddBtnClick={setNewMovie} pageName={PageName.Main}/>
         <Main movieToAdd={newMovie}/>
-        <Details {...movie}/>
         <Footer />
       </ErrorBoundary>
     </React.StrictMode>

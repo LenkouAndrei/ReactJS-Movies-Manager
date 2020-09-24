@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { Details } from '../components';
-import { movie } from '../components/details/mockMovie';
 import {
   ErrorBoundary,
   Footer,
@@ -16,7 +14,7 @@ function AppComponent(): JSX.Element {
   return (
     <React.StrictMode>
       <ErrorBoundary>
-        <Header onAddBtnClick={setNewMovie} pageName={PageName.Main}/>
+        <Header onAddBtnClick={setNewMovie} pageName={PageName.Details}/>
         <Main movieToAdd={newMovie}/>
         <Footer />
       </ErrorBoundary>

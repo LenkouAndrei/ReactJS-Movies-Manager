@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Logo } from '../../components';
 import { IMovie, TNullable } from '../../types/types';
 import { FormPage, Modal, Wrapper } from '../';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './header.component.scss';
 
 export interface IHeaderProps {
@@ -11,8 +13,7 @@ export interface IHeaderProps {
 
 export enum PageName {
     Main = 'Main',
-    AddForm = 'AddForm',
-    EditForm = 'EditForm',
+    Details = 'Details',
 }
 
 type TModalToggler = () => void;
@@ -47,6 +48,12 @@ export function Header({ pageName, onAddBtnClick }: IHeaderProps): JSX.Element {
                         <FormPage onSaveChanges={createNewMovie} movie={null}/>
                     </Modal>
                 </>;
+          case PageName.Details:
+            return <button className={'search-btn'}>
+              <FontAwesomeIcon
+                className={`${blockName}__icon`}
+                icon={faSearch}/>
+            </button>;
             default:
                 return null;
         }

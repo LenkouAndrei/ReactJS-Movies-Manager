@@ -16,6 +16,8 @@ const blockName = 'result';
 
 interface IMainProps {
     movieToAdd: TNullable<IMovie>;
+    areDetailsVisible: boolean;
+    onChangePage: () => void;
 }
 
 type TVoidWithNoArgs = () => void;
@@ -147,6 +149,7 @@ export function Main(props: IMainProps): JSX.Element {
             return;
         }
         setMovieWithDetails( movie );
+        props.onChangePage();
     };
 
     const { currentGenre } = moviesGenresConfig;
@@ -170,7 +173,7 @@ export function Main(props: IMainProps): JSX.Element {
             <DeleteModal  onDeleteConfirm={deleteMovie} title={movieToEdit.title}/>
         </Modal>
         <Wrapper>
-            { movieWithDetails ?
+            { props.areDetailsVisible && movieWithDetails ?
                 <Details { ...movieWithDetails }/> : <Search/> }
         </Wrapper>
         <div className={`${blockName}__separator`} />

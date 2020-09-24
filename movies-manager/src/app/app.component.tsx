@@ -10,12 +10,31 @@ import './app.component.scss';
 
 function AppComponent(): JSX.Element {
   const [newMovie, setNewMovie] = useState(null);
+  const [pageName, setPageName] = useState(PageName.Main);
+  const [areDetailsVisible, setAreDetailsVisible] = useState(false);
+
+  const changePage = () => {
+    setPageName(PageName.Details);
+    setAreDetailsVisible(true);
+  };
+
+  const clickSearchBtn = () => {
+    setPageName(PageName.Main);
+    setAreDetailsVisible(false);
+  };
 
   return (
     <React.StrictMode>
       <ErrorBoundary>
-        <Header onAddBtnClick={setNewMovie} pageName={PageName.Details}/>
-        <Main movieToAdd={newMovie}/>
+        <Header
+          onAddBtnClick={setNewMovie}
+          onSearchBtnClick={clickSearchBtn}
+          pageName={pageName}/>
+        <Main
+          movieToAdd={newMovie}
+          areDetailsVisible={areDetailsVisible}
+          onChangePage={changePage}
+        />
         <Footer />
       </ErrorBoundary>
     </React.StrictMode>

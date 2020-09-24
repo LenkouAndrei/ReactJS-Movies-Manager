@@ -9,6 +9,7 @@ import './header.component.scss';
 export interface IHeaderProps {
     pageName: PageName;
     onAddBtnClick: (newMovie: IMovie) => void;
+    onSearchBtnClick: () => void;
 }
 
 export enum PageName {
@@ -16,25 +17,29 @@ export enum PageName {
     Details = 'Details',
 }
 
-type TModalToggler = () => void;
+type TVoidFunc = () => void;
 type TCreateMovie = (newMovie: IMovie) => void;
 
 const blockName = 'header';
 
-export function Header({ pageName, onAddBtnClick }: IHeaderProps): JSX.Element {
+export function Header({ pageName, onAddBtnClick, onSearchBtnClick }: IHeaderProps): JSX.Element {
     const [ isDialogOpen, setIsDialogOpen ] = useState(false);
 
-    const showModal: TModalToggler = () => {
+    const showModal: TVoidFunc = () => {
         setIsDialogOpen(true);
     };
 
-    const hideModal: TModalToggler = () => {
+    const hideModal: TVoidFunc = () => {
         setIsDialogOpen(false);
     };
 
     const createNewMovie: TCreateMovie = (newMovie: IMovie) => {
         onAddBtnClick(newMovie);
         hideModal();
+    };
+
+    const navigateToMainPage: TVoidFunc = () => {
+        onSearchBtnClick();
     };
 
     const getHeaderElement: () => TNullable<JSX.Element> = () => {
@@ -49,7 +54,9 @@ export function Header({ pageName, onAddBtnClick }: IHeaderProps): JSX.Element {
                     </Modal>
                 </>;
           case PageName.Details:
-            return <button className={'search-btn'}>
+            return <button
+              className={'search-btn'}
+              onClick={navigateToMainPage}>
               <FontAwesomeIcon
                 className={`${blockName}__icon`}
                 icon={faSearch}/>

@@ -1,4 +1,4 @@
-import { IMovie } from "../../types/types";
+import { IMovie } from '../../types/types';
 
 export const movie: IMovie = {
   'id': 337167,

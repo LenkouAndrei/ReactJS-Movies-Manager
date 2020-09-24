@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Logo } from '../../components';
 import { IMovie, TNullable } from '../../types/types';
-import { FormPage } from '../form-page/form-page.component';
-import { Modal } from '../modal/modal.component';
-import { Wrapper } from '../wrapper/wrapper.component';
+import { FormPage, Modal, Wrapper } from '../';
 import './header.component.scss';
 
 export interface IHeaderProps {

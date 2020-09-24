@@ -1,7 +1,5 @@
 import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
-import { FormPage } from '../form-page/form-page.component';
-import { Modal } from '../modal/modal.component';
-import { Wrapper } from '../wrapper/wrapper.component';
+import { FormPage, Modal, Wrapper } from '../';
 import { DeleteModal, Details, MovieCard, ResultFilter, ResultSort, Search } from '../../components';
 import {
     IMovie,
@@ -11,10 +9,10 @@ import {
     TSortListItem
 } from '../../types/types';
 import './main.component.scss';
+import { moviesSortList } from './mockMoviesSortList';
 
 const defaultMovies: IMovie[] = require('../../data.json');
 const blockName = 'result';
-const moviesSortList: TSortListItem[] = [ 'vote average', 'vote count', 'release date', 'revenue' ];
 
 interface IMainProps {
     movieToAdd: TNullable<IMovie>;
@@ -125,12 +123,15 @@ export function Main(props: IMainProps): JSX.Element {
         hideModal();
     };
 
-    const setCurrentGenre: TSetGenre = useCallback((genre: TGenresListItem) => {
+    const setCurrentGenre: TSetGenre = useCallback(
+      (genre: TGenresListItem) => {
         setMoviesGenresConfig({
             ...moviesGenresConfig,
             currentGenre: genre,
         });
-    }, [moviesGenresConfig]);
+      },
+      [moviesGenresConfig]
+    );
 
     const deleteMovie: TVoidWithNoArgs = () => {
         const movieIdx: number = movies

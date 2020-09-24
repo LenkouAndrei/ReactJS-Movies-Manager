@@ -1,5 +1,4 @@
 export type TNullable<T> = T | null;
-export type TOutsideClick = (event: Event) => {}
 
 export interface IMovieInfo {
     title: string;

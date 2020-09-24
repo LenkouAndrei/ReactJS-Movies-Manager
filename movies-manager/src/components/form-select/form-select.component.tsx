@@ -2,7 +2,7 @@ import React, { ChangeEvent, MouseEvent, useState, useCallback } from 'react';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './form-select.component.scss';
-import { allGenres } from "./mockGenres";
+import { allGenres } from './mockGenres';
 
 interface ISelectFormProps {
     onApplyGenres: (newGenres: string[]) => void;
@@ -19,24 +19,30 @@ export function FormSelect({ genres, onApplyGenres }: ISelectFormProps): JSX.Ele
     const [ isOpen , setIsOpen ] = useState(false);
     const genresOptions = Array.from(new Set([ ...allGenres, ...genres ]));
 
-    const toggleSelectDropdown: TMouseClick = useCallback(() => {
-        event.preventDefault();
-        event.stopPropagation();
+    const toggleSelectDropdown: TMouseClick = useCallback(
+      () => {
+          event.preventDefault();
+          event.stopPropagation();
 
-        if ( !isOpen ) {
+          if ( !isOpen ) {
             setIsOpen(true);
-        } else {
+          } else {
             setIsOpen(false);
             onApplyGenres(selectedGenres);
-        }
-    }, [event]);
+          }
+        },
+      [event]
+    );
 
-    const handleCheckboxChange: TChangeEventHandler = useCallback(() => {
+    const handleCheckboxChange: TChangeEventHandler = useCallback(
+      () => {
         const { checked, name } = event.target as HTMLInputElement;
         const chosenGenres: string[] = checked ? [ ...selectedGenres, name ] :
             selectedGenres.filter(genre => genre !== name);
         setSelectedGenres(chosenGenres);
-    }, [event]);
+      },
+      [event]
+    );
 
     const genresList: JSX.Element[] = genresOptions.map(genre => {
         return <li

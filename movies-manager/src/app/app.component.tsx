@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Details } from "../components";
-import { movie } from "../components/details/mockMovie";
+import { Details } from '../components';
+import { movie } from '../components/details/mockMovie';
 import {
   ErrorBoundary,
   Footer,

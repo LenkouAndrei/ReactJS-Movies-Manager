@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormSelect } from '../../components';
 import { IMovie } from '../../types/types';
 import './form-page.component.scss';
-import { defaultMovie } from "./mockDefaultMovie";
+import { defaultMovie } from './mockDefaultMovie';
 
 interface ISaveChanges {
     movie: IMovie;
@@ -45,12 +45,6 @@ export function FormPage({ movie, onSaveChanges }: ISaveChanges): JSX.Element {
     const resetState: TResetState = () => {
         setMovieInfo({ ...startState });
     };
-
-    const genres: JSX.Element[] = movieInfo.genres.map((genre: string) => {
-        return <option
-            key={genre}
-            value={genre}>{ genre }</option>;
-    });
 
     const movieIdField: JSX.Element | undefined = movieInfo.id && <div className={`${blockName}__field-wrapper`}>
         <div className={`${blockName}__title`}>movie id</div>

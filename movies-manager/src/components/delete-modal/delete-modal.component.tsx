@@ -8,9 +8,9 @@ interface IDeletModalProps {
     onDeleteConfirm(): void;
 }
 
-type TDeletModal = (props: IDeletModalProps) => JSX.Element;
+type TDeleteModal = (props: IDeletModalProps) => JSX.Element;
 
-export const DeleteModal: TDeletModal = ({ title, onDeleteConfirm }: IDeletModalProps): JSX.Element => {
+export const DeleteModal: TDeleteModal = ({ title, onDeleteConfirm }: IDeletModalProps): JSX.Element => {
     const confirmDelete = useCallback(() => onDeleteConfirm(), []);
 
     return <div className={blockName}>

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IMovie } from '../../types/types';
 import useOutsideClick from '../../hooks/useOutsideClick';
 import './movie-card.component.scss';
-import { menuItemTitles } from "./mockMenuTitles";
+import { menuItemTitles } from './mockMenuTitles';
 
 const blockName = 'movie';
 
@@ -17,20 +17,29 @@ export function MovieCard({ movie, onClickMovie }: IMovieCardProps): JSX.Element
     const [ isEditMenuVisible, setIsEditMenuVisible ] = useState(false);
     const wrapperRef: React.RefObject<HTMLInputElement> = React.createRef();
 
-    const hideEditMenu: () => void = useCallback(() => {
+    const hideEditMenu: () => void = useCallback(
+      () => {
         setIsEditMenuVisible(false);
-    }, []);
+      },
+      []
+    );
 
     useOutsideClick(wrapperRef, hideEditMenu);
 
-    const showEditMenu: () => void = useCallback(() => {
+    const showEditMenu: () => void = useCallback(
+      () => {
         setIsEditMenuVisible(true);
-    }, []);
+      },
+      []
+    );
 
-    const passInfo: (itemTitle: string) => void = useCallback((itemTitle: string) => {
+    const passInfo: (itemTitle: string) => void = useCallback(
+      (itemTitle: string) => {
         onClickMovie(itemTitle, movie.id, true);
         hideEditMenu();
-    }, []);
+      },
+      []
+    );
 
     const listItems: JSX.Element[] = menuItemTitles.map((itemTitle: string) => {
         return <li

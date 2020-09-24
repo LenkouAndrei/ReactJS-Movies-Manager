@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import './delete-modal.component.scss';
+import './delete-modal.scss';
 
 const blockName = 'delete-modal';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import './logo.component.scss';
+import './logo.scss';
 
 const blockName = 'logo';
 

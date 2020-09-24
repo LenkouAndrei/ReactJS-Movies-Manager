@@ -1,7 +1,7 @@
 import React, { ChangeEvent, MouseEvent, useState, useCallback } from 'react';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './form-select.component.scss';
+import './form-select.scss';
 import { allGenres } from './mockGenres';
 
 interface ISelectFormProps {

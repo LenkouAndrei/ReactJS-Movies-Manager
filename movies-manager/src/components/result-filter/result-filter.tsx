@@ -1,6 +1,6 @@
 import React from 'react';
 import { IMoviesGenresConfig, TGenresListItem } from '../../types/types';
-import './result-filter.component.scss';
+import './result-filter.scss';
 
 interface IResultFilterProps extends IMoviesGenresConfig {
     onGenreClick: (genre: TGenresListItem) => void;

@@ -1,5 +1,5 @@
 import React, { ReactChild } from 'react';
-import './wrapper.component.scss';
+import './wrapper.scss';
 
 interface IWrapperProps {
     children: ReactChild;

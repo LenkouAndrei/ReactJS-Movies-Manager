@@ -3,7 +3,7 @@ import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormSelect } from '../../components';
 import { IMovie } from '../../types/types';
-import './form-page.component.scss';
+import './form-page.scss';
 import { defaultMovie } from './mockDefaultMovie';
 
 interface ISaveChanges {

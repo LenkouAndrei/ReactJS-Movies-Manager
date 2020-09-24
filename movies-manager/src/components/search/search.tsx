@@ -1,5 +1,5 @@
 import React from 'react';
-import './search.component.scss';
+import './search.scss';
 
 const blockName = 'search';
 

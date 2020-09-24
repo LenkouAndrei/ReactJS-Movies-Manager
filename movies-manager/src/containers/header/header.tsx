@@ -4,7 +4,7 @@ import { IMovie, TNullable } from '../../types/types';
 import { FormPage, Modal, Wrapper } from '../';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './header.component.scss';
+import './header.scss';
 
 export interface IHeaderProps {
     pageName: PageName;

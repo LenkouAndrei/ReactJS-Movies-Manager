@@ -2,7 +2,7 @@ import React, { MouseEvent } from 'react';
 import ReactDOM from 'react-dom';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './modal.component.scss';
+import './modal.scss';
 
 interface IModalProps {
     handleClose: () => void;

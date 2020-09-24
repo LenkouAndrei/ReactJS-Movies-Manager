@@ -2,7 +2,7 @@ import React from 'react';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ISelectConfig, TSortListItem } from '../../types/types';
-import './result-sort.component.scss';
+import './result-sort.scss';
 
 const blockName = 'result-sort';
 

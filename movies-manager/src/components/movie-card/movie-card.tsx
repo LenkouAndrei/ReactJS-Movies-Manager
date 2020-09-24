@@ -3,7 +3,7 @@ import { faAlignJustify, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IMovie } from '../../types/types';
 import useOutsideClick from '../../hooks/useOutsideClick';
-import './movie-card.component.scss';
+import './movie-card.scss';
 import { menuItemTitles } from './mockMenuTitles';
 
 const blockName = 'movie';

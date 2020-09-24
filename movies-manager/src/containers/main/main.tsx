@@ -8,7 +8,7 @@ import {
     TNullable,
     TSortListItem
 } from '../../types/types';
-import './main.component.scss';
+import './main.scss';
 import { moviesSortList } from './mockMoviesSortList';
 
 const defaultMovies: IMovie[] = require('../../data.json');

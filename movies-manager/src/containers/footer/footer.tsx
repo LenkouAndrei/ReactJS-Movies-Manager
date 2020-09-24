@@ -1,6 +1,6 @@
 import React from 'react';
 import { Logo } from '../../components';
-import './footer.component.scss';
+import './footer.scss';
 
 type TFooter = () => JSX.Element;
 

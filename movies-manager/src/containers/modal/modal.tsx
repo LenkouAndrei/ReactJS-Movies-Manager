@@ -1,8 +1,8 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import "./modal.component.scss";
+import React, { MouseEvent } from 'react';
+import ReactDOM from 'react-dom';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './modal.scss';
 
 interface IModalProps {
     handleClose: () => void;
@@ -10,10 +10,14 @@ interface IModalProps {
     children: JSX.Element;
 }
 
-const blockName = 'modal';
+type TModal = (props: IModalProps) => JSX.Element;
+type TStopProppagation = (event: MouseEvent) => void;
 
-export const Modal = ({ handleClose, isOpen, children }: IModalProps): JSX.Element => { 
-    const content = (
+const blockName = 'modal';
+const stopPropagation: TStopProppagation = (event: MouseEvent) => event.stopPropagation();
+
+export const Modal: TModal = ({ handleClose, isOpen, children }: IModalProps): JSX.Element => {
+    const content: JSX.Element = (
       isOpen && <aside
         className={`${blockName}__overlay`}
         onClick={handleClose}>
@@ -28,12 +32,12 @@ export const Modal = ({ handleClose, isOpen, children }: IModalProps): JSX.Eleme
           </button>
           <section
             className={`${blockName}__content`}
-            onClick={event => event.stopPropagation()}>
+            onClick={stopPropagation}>
             {children}
           </section>
         </div>
       </aside>
     );
 
-    return ReactDOM.createPortal(content, document.getElementById('root'));
+    return ReactDOM.createPortal(content, document.querySelector('#root'));
   };

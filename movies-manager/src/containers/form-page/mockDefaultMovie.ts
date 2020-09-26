@@ -1,4 +1,4 @@
-import { IMovie } from "../../types/types";
+import { IMovie } from '../../types/types';
 
 export const defaultMovie: IMovie = {
     title: 'Title here',
@@ -12,4 +12,4 @@ export const defaultMovie: IMovie = {
     revenue: 0,
     genres: [],
     runtime: 0,
-};;
+};

@@ -17,7 +17,6 @@ export const ResultFilter: TResultFilter = ({ genres, currentGenre, onGenreClick
             key={title}>
                 <button
                     className={`${blockName}__btn  ${currentGenre === title ? 'highlight' : ''}`}
-                    // tslint:disable-next-line jsx-no-lambda
                     onClick={() => onGenreClick(title)}>{title}</button>
             </li>;
     });

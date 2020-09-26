@@ -45,7 +45,6 @@ export function MovieCard({ movie, onClickMovie }: IMovieCardProps): JSX.Element
         return <li
             key={itemTitle}
             className={'menu__list-item'}
-            // tslint:disable-next-line jsx-no-lambda
             onClick={() => passInfo(itemTitle)}>{ itemTitle }</li>;
     });
 

@@ -145,9 +145,6 @@ export function Main(props: IMainProps): JSX.Element {
     };
 
     const showDetails: TShowDetails = (event: MouseEvent, movie: IMovie) => {
-        if (!event.ctrlKey) {
-            return;
-        }
         setMovieWithDetails( movie );
         props.onChangePage();
     };
@@ -159,7 +156,6 @@ export function Main(props: IMainProps): JSX.Element {
             return <li
                 className={`${blockName}__movies-card`}
                 key={movie.id}
-                // tslint:disable-next-line jsx-no-lambda
                 onClick={(event) => showDetails(event, movie)}>
                 <MovieCard onClickMovie={handleMovieToEditChange} movie={movie}/>
             </li>;

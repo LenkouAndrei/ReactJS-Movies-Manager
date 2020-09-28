@@ -32,3 +32,8 @@ export interface IMoviesGenresConfig {
     genres: TGenresListItem[];
     currentGenre: TGenresListItem;
 }
+
+export interface IAction<T> {
+   type: T;
+   payload?: any; 
+}

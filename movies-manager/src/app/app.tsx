@@ -3,10 +3,14 @@ import {
   ErrorBoundary,
   Footer,
   Header,
-  Main,
+  MainWithState,
   PageName,
 } from '../containers';
+import { IMovie } from '../types/types';
 import './app.scss';
+import { getMoviesFromServer } from '../service/movies.servce';
+
+getMoviesFromServer();
 
 function App(): JSX.Element {
   const [newMovie, setNewMovie] = useState(null);
@@ -23,6 +27,8 @@ function App(): JSX.Element {
     setAreDetailsVisible(false);
   };
 
+  const defaultMovies: IMovie[] = require('../data.json');
+
   return (
     <React.StrictMode>
       <ErrorBoundary>
@@ -30,7 +36,8 @@ function App(): JSX.Element {
           onAddBtnClick={setNewMovie}
           onSearchBtnClick={clickSearchBtn}
           pageName={pageName}/>
-        <Main
+        <MainWithState
+          moviesStore={defaultMovies}
           movieToAdd={newMovie}
           areDetailsVisible={areDetailsVisible}
           onChangePage={changePage}

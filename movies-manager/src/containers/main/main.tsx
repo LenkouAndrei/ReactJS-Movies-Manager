@@ -1,4 +1,5 @@
 import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { FormPage, Modal, Wrapper } from '../';
 import { DeleteModal, Details, MovieCard, ResultFilter, ResultSort, Search } from '../../components';
 import {
@@ -9,15 +10,20 @@ import {
     TSortListItem
 } from '../../types/types';
 import './main.scss';
+import { store } from '../../redux/store/store';
+import { getMovies } from '../../redux/actions/movies.action';
 import { moviesSortList } from './mockMoviesSortList';
 
-const defaultMovies: IMovie[] = require('../../data.json');
 const blockName = 'result';
 
 interface IMainProps {
     movieToAdd: TNullable<IMovie>;
     areDetailsVisible: boolean;
     onChangePage: () => void;
+}
+
+interface IStoredMainProps extends IMainProps {
+    moviesStore: IMovie[];
 }
 
 type TVoidWithNoArgs = () => void;
@@ -29,9 +35,9 @@ type TUpdateMoviesSortConfig = (isOpen: boolean, title?: TSortListItem) => void;
 type TSortMoviesByField = (field: keyof IMovie) => void;
 type TShowDetails = (event: MouseEvent, movieWithDetails: IMovie) => void;
 
-export function Main(props: IMainProps): JSX.Element {
+function Main({ moviesStore, ...props }: IStoredMainProps): JSX.Element {
     const allMoviesGenres: TGenresListItem[] =
-        defaultMovies.reduce(
+        moviesStore.reduce(
             (allGenres: TGenresListItem[], { genres }: IMovie) => {
                 allGenres.push(...genres as TGenresListItem[]);
                 return allGenres;
@@ -40,7 +46,7 @@ export function Main(props: IMainProps): JSX.Element {
         );
 
     const moviesGenres: TGenresListItem[] = Array.from(new Set(allMoviesGenres));
-    const initGreatestId: number = defaultMovies.reduce(
+    const initGreatestId: number = moviesStore.reduce(
         (accum: number, curr: IMovie) => {
             return curr.id > accum ? curr.id : accum;
         },
@@ -48,18 +54,18 @@ export function Main(props: IMainProps): JSX.Element {
     );
 
     if ( props.movieToAdd ) {
-        defaultMovies.push(props.movieToAdd);
+        moviesStore.push(props.movieToAdd);
     }
 
     const [ isFormDialogOpen, setIsFormDialogOpen ] = useState(false);
     const [ isDeleteDialogOpen, setIsDeleteDialogOpen ] = useState(false);
-    const [ movieToEdit, setMovieToEdit ] = useState(defaultMovies[0]);
+    const [ movieToEdit, setMovieToEdit ] = useState(moviesStore[0]);
     const [ moviesSortConfig, setMoviesSortConfig ] = useState({
         showOptionList: false,
         options: moviesSortList,
         chosenOption: moviesSortList[0],
     });
-    const [ movies, setMovies ] = useState(defaultMovies);
+    const [ movies, setMovies ] = useState(moviesStore);
     const [ moviesGenresConfig, setMoviesGenresConfig ] = useState({
         genres: moviesGenres,
         currentGenre: moviesGenres[0],
@@ -81,6 +87,7 @@ export function Main(props: IMainProps): JSX.Element {
     );
 
     const showModal: TShowModal = (modalType: string) => {
+        store.dispatch(getMovies());
         setIsFormDialogOpen(modalType === 'Edit');
         setIsDeleteDialogOpen(modalType === 'Delete');
     };
@@ -193,3 +200,14 @@ export function Main(props: IMainProps): JSX.Element {
         </Wrapper>
     </main>;
 }
+
+const mapStateToProps = (state: any, ownProps: IMainProps) => {
+    return {
+      ...ownProps,
+      moviesStore: state.movies
+    }
+}
+  
+const MainWithState = connect(mapStateToProps)(Main);
+
+export { MainWithState };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ErrorBoundary,
   Footer,
@@ -6,16 +6,21 @@ import {
   MainWithState,
   PageName,
 } from '../containers';
-import { IMovie } from '../types/types';
 import './app.scss';
-import { getMoviesFromServer } from '../service/movies.servce';
 
-getMoviesFromServer();
-
+const md = require('../../server/src/data/movies.json');
 function App(): JSX.Element {
   const [newMovie, setNewMovie] = useState(null);
   const [pageName, setPageName] = useState(PageName.Main);
   const [areDetailsVisible, setAreDetailsVisible] = useState(false);
+  const [isInit, setIsInit] = useState(false);
+
+  useEffect(
+    () => {
+      
+    }, [isInit]
+  );
+  console.log(md.length);
 
   const changePage = () => {
     setPageName(PageName.Details);
@@ -27,8 +32,6 @@ function App(): JSX.Element {
     setAreDetailsVisible(false);
   };
 
-  const defaultMovies: IMovie[] = require('../data.json');
-
   return (
     <React.StrictMode>
       <ErrorBoundary>
@@ -37,7 +40,6 @@ function App(): JSX.Element {
           onSearchBtnClick={clickSearchBtn}
           pageName={pageName}/>
         <MainWithState
-          moviesStore={defaultMovies}
           movieToAdd={newMovie}
           areDetailsVisible={areDetailsVisible}
           onChangePage={changePage}

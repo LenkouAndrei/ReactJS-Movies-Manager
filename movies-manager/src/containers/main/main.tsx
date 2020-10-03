@@ -4,7 +4,10 @@ import { FormPage, Modal, Wrapper } from '../';
 import { DeleteModal, Details, MovieCard, ResultFilter, ResultSort, Search } from '../../components';
 import {
     IMovie,
+    IMoviesGenresConfig,
+    IMoviesSortByConfig,
     ISelectConfig,
+    IQueryParams,
     TGenresListItem,
     TNullable,
     TSortListItem
@@ -13,6 +16,8 @@ import './main.scss';
 import { store } from '../../redux/store/store';
 import { getMovies } from '../../redux/actions/movies.action';
 import { moviesSortList } from './mockMoviesSortList';
+import { getMoviesFromServer, deleteMoviesFromServer } from '../../service/movies.service';
+import { setGenreFilter, setSortByFilter } from '../../redux/actions/filter.action';
 
 const blockName = 'result';
 
@@ -24,28 +29,32 @@ interface IMainProps {
 
 interface IStoredMainProps extends IMainProps {
     moviesStore: IMovie[];
+    storeGenresConfig: IMoviesGenresConfig;
+    moviesSortConfig: IMoviesSortByConfig;
+    loadData(params: TNullable<IQueryParams>): void;
+    deleteMovie(id: number): void;
+    setCurrentGenre(genre: TGenresListItem): void;
+    setCurrentSortBy(sortByOption: TSortListItem): void;
 }
 
 type TVoidWithNoArgs = () => void;
 type TShowModal = (modalType: string) => void;
 type THandleMovie = (modalDialogType: string, id: number) => void;
-type TSetGenre = (genre: TGenresListItem) => void;
 type TUpdateMovieSet = (editableMovie: IMovie) => void;
-type TUpdateMoviesSortConfig = (isOpen: boolean, title?: TSortListItem) => void;
-type TSortMoviesByField = (field: keyof IMovie) => void;
+type TUpdateMoviesSortConfig = (isOpen: boolean, sortOption?: TSortListItem) => void;
 type TShowDetails = (event: MouseEvent, movieWithDetails: IMovie) => void;
+type TSetCurrentGenre = (genre: TGenresListItem) => void;
 
-function Main({ moviesStore, ...props }: IStoredMainProps): JSX.Element {
-    const allMoviesGenres: TGenresListItem[] =
-        moviesStore.reduce(
-            (allGenres: TGenresListItem[], { genres }: IMovie) => {
-                allGenres.push(...genres as TGenresListItem[]);
-                return allGenres;
-            },
-            ['All']
-        );
-
-    const moviesGenres: TGenresListItem[] = Array.from(new Set(allMoviesGenres));
+function Main({
+    moviesStore,
+    storeGenresConfig,
+    moviesSortConfig,
+    deleteMovie,
+    loadData,
+    setCurrentGenre,
+    setCurrentSortBy,
+    ...props
+}: IStoredMainProps): JSX.Element {
     const initGreatestId: number = moviesStore.reduce(
         (accum: number, curr: IMovie) => {
             return curr.id > accum ? curr.id : accum;
@@ -60,30 +69,26 @@ function Main({ moviesStore, ...props }: IStoredMainProps): JSX.Element {
     const [ isFormDialogOpen, setIsFormDialogOpen ] = useState(false);
     const [ isDeleteDialogOpen, setIsDeleteDialogOpen ] = useState(false);
     const [ movieToEdit, setMovieToEdit ] = useState(moviesStore[0]);
-    const [ moviesSortConfig, setMoviesSortConfig ] = useState({
-        showOptionList: false,
-        options: moviesSortList,
-        chosenOption: moviesSortList[0],
-    });
-    const [ movies, setMovies ] = useState(moviesStore);
-    const [ moviesGenresConfig, setMoviesGenresConfig ] = useState({
-        genres: moviesGenres,
-        currentGenre: moviesGenres[0],
-    });
     const [ greatestId, setGreatestId ] = useState(initGreatestId);
     const [ movieWithDetails, setMovieWithDetails ] = useState(null);
+    const [ isInit, setIsInit ] = useState(false);
+    const [ isSortByOpen, setIsSortByOpen ] = useState(false);
 
     useEffect(
         () => {
+            if (!isInit) {
+                loadData(null);
+                setIsInit(true);
+                return;
+            }
             if (!props.movieToAdd) {
                 return;
             }
             const currentId: number = greatestId + 1;
             props.movieToAdd.id = currentId;
-            setMovies([ ...movies, props.movieToAdd]);
+            // setMovies([ ...movies, props.movieToAdd]);
             setGreatestId(currentId);
-        },
-        [props.movieToAdd]
+        }, [props.movieToAdd, isInit]
     );
 
     const showModal: TShowModal = (modalType: string) => {
@@ -98,56 +103,44 @@ function Main({ moviesStore, ...props }: IStoredMainProps): JSX.Element {
     };
 
     const handleMovieToEditChange: THandleMovie = (modalDialogType: string, id: number) => {
-        setMovieToEdit(movies.find((movie: IMovie) => movie.id === id));
+        setMovieToEdit(moviesStore.find((movie: IMovie) => movie.id === id));
         showModal(modalDialogType);
     };
 
-    const sortMoviesByField: TSortMoviesByField = (field: keyof IMovie) => {
-        const moviesCopy: IMovie[] = [ ...movies ];
-        if (field === 'release_date') {
-            moviesCopy.sort((movieA, movieB) => +new Date(movieA[field]) - +new Date(movieB[field]));
-        } else {
-            moviesCopy.sort((movieA, movieB) => (movieA[field] as number) - (movieB[field] as number));
+    // const sortMoviesByField: TSortMoviesByField = (field: keyof IMovie) => {
+    //     const moviesCopy: IMovie[] = [ ...movies ];
+    //     if (field === 'release_date') {
+    //         moviesCopy.sort((movieA, movieB) => +new Date(movieA[field]) - +new Date(movieB[field]));
+    //     } else {
+    //         moviesCopy.sort((movieA, movieB) => (movieA[field] as number) - (movieB[field] as number));
+    //     }
+    //     setMovies( moviesCopy );
+    // };
+
+    const sortMoviesByField: TUpdateMoviesSortConfig = (isOpen: boolean, sortOption?: TSortListItem) => {
+        setIsSortByOpen(isOpen);
+        if (!isOpen) {
+            setCurrentSortBy(sortOption);
+            loadData({ sortBy: sortOption });
         }
-        setMovies( moviesCopy );
     };
 
-    const updateMoviesSortConfig: TUpdateMoviesSortConfig = (isOpen: boolean, title?: TSortListItem) => {
-        const newSortConfig: Partial<ISelectConfig> = {
-            showOptionList: isOpen,
-            chosenOption: title,
-        };
-        setMoviesSortConfig({ ...moviesSortConfig, ...newSortConfig });
-        if (title) {
-            sortMoviesByField(title.replace(' ', '_') as keyof IMovie);
-        }
-    };
+    const sortMoviesByGenre: TSetCurrentGenre = (genre: TGenresListItem) => {
+        setCurrentGenre(genre);
+        loadData({ filter: genre });
+    }
 
     const updateMoviesSet: TUpdateMovieSet = (editableMovie: IMovie) => {
-        const movieIdx: number = movies
+        const movieIdx: number = moviesStore
             .findIndex(({ id }: IMovie) => id === movieToEdit.id);
-        const newMovies: IMovie[] = [ ...movies ];
+        const newMovies: IMovie[] = [ ...moviesStore ];
         newMovies.splice(movieIdx, 1, editableMovie);
-        setMovies( newMovies );
+        // setMovies( newMovies );
         hideModal();
     };
 
-    const setCurrentGenre: TSetGenre = useCallback(
-      (genre: TGenresListItem) => {
-        setMoviesGenresConfig({
-            ...moviesGenresConfig,
-            currentGenre: genre,
-        });
-      },
-      [moviesGenresConfig]
-    );
-
-    const deleteMovie: TVoidWithNoArgs = () => {
-        const movieIdx: number = movies
-            .findIndex(({ id }: IMovie) => id === movieToEdit.id);
-        const newMovies: IMovie[] = [ ...movies ];
-        newMovies.splice(movieIdx, 1);
-        setMovies( newMovies );
+    const onDeleteMovie: TVoidWithNoArgs = () => {
+        deleteMovie(movieToEdit.id);
         hideModal();
     };
 
@@ -156,10 +149,7 @@ function Main({ moviesStore, ...props }: IStoredMainProps): JSX.Element {
         props.onChangePage();
     };
 
-    const { currentGenre } = moviesGenresConfig;
-    const moviesCards: JSX.Element[] = movies.filter((movie: IMovie) =>  (
-            currentGenre === 'All' || movie.genres.includes(currentGenre))
-        ).map((movie: IMovie) => {
+    const moviesCards: JSX.Element[] = moviesStore.map((movie: IMovie) => {
             return <li
                 className={`${blockName}__movies-card`}
                 key={movie.id}
@@ -173,7 +163,7 @@ function Main({ moviesStore, ...props }: IStoredMainProps): JSX.Element {
             <FormPage onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
         </Modal>
         <Modal isOpen={isDeleteDialogOpen} handleClose={hideModal}>
-            <DeleteModal  onDeleteConfirm={deleteMovie} title={movieToEdit.title}/>
+            <DeleteModal onDeleteConfirm={onDeleteMovie} title={movieToEdit.title}/>
         </Modal>
         <Wrapper>
             { props.areDetailsVisible && movieWithDetails ?
@@ -184,14 +174,15 @@ function Main({ moviesStore, ...props }: IStoredMainProps): JSX.Element {
             <>
                 <section className={`${blockName}__filter`}>
                     <ResultFilter
-                        onGenreClick={setCurrentGenre}
-                        { ...moviesGenresConfig }/>
+                        onGenreClick={sortMoviesByGenre}
+                        { ...storeGenresConfig }/>
                     <ResultSort
-                        onSortClick={updateMoviesSortConfig}
+                        onSortClick={sortMoviesByField}
+                        showOptionList={isSortByOpen}
                         {...moviesSortConfig}/>
                 </section>
                 <div className={`${blockName}__amount`}>
-                    <strong className='strong'>{movies.length}</strong> movies found
+                    <strong className='strong'>{moviesStore.length}</strong> movies found
                 </div>
                 <ul className={`${blockName}__cards-list`}>
                     {moviesCards}
@@ -204,10 +195,21 @@ function Main({ moviesStore, ...props }: IStoredMainProps): JSX.Element {
 const mapStateToProps = (state: any, ownProps: IMainProps) => {
     return {
       ...ownProps,
-      moviesStore: state.movies
+      moviesStore: state.movies,
+      storeGenresConfig: state.filters.genresConfig,
+      moviesSortConfig: state.filters.sortByConfig,
     }
 }
+
+const dispatchToProps = ((dispatch: any) => {
+    return {
+        loadData: (params: TNullable<IQueryParams>) => { dispatch(getMoviesFromServer(params)) },
+        deleteMovie: (id: number) => { dispatch(deleteMoviesFromServer(id)) },
+        setCurrentGenre: (genre: TGenresListItem) => { dispatch(setGenreFilter(genre)) },
+        setCurrentSortBy: (sortByOption: TGenresListItem) => { dispatch(setSortByFilter(sortByOption)) },
+    }
+});
   
-const MainWithState = connect(mapStateToProps)(Main);
+const MainWithState = connect(mapStateToProps, dispatchToProps)(Main);
 
 export { MainWithState };

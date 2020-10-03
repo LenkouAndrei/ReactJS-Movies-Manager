@@ -24,16 +24,29 @@ export interface ISelectConfig {
     chosenOption: TSortListItem;
 }
 
-export type TSortListItem = 'vote average' | 'vote count' | 'release date' | 'revenue';
+export type TSortListItem = 'vote_average' | 'vote_count' | 'release_date' | 'revenue' | 'runtime' | 'budget';
 
-export type TGenresListItem = keyof IMovie | 'All';
+export type TGenresListItem = '' | 'Drama' | 'Fantasy' | 'Adventure' | 'Comedy' | 'Animation';
 
 export interface IMoviesGenresConfig {
     genres: TGenresListItem[];
     currentGenre: TGenresListItem;
 }
 
+export interface IMoviesSortByConfig {
+    options: TSortListItem[],
+    chosenOption: TSortListItem,
+}
+
 export interface IAction<T> {
    type: T;
    payload?: any; 
+}
+
+export interface IQueryParams {
+    filter?: string;
+    sortBy?: string;
+    sortOrder?: 'desc' | 'asc';
+    offset?: string;
+    limit?: string;
 }

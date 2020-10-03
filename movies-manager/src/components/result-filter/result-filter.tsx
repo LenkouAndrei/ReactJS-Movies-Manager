@@ -17,7 +17,7 @@ export const ResultFilter: TResultFilter = ({ genres, currentGenre, onGenreClick
             key={title}>
                 <button
                     className={`${blockName}__btn  ${currentGenre === title ? 'highlight' : ''}`}
-                    onClick={() => onGenreClick(title)}>{title}</button>
+                    onClick={() => onGenreClick(title)}>{title || 'All'}</button>
             </li>;
     });
     return <ul className={`${blockName}__list`}>{listItems}</ul>;

@@ -23,7 +23,7 @@ export const ResultSort: TResultSort = ({
             key={option}>
                 <button
                     className={`${blockName}__btn`}
-                    onClick={() => onSortClick(!showOptionList, option) }>{option}</button>
+                    onClick={() => onSortClick(!showOptionList, option) }>{option.replace('_', ' ')}</button>
             </li>;
     });
 
@@ -33,7 +33,7 @@ export const ResultSort: TResultSort = ({
                 <button
                     className={`${blockName}__btn untracked`}
                     onClick={() => onSortClick(!showOptionList, chosenOption) }>
-                    <span>{ chosenOption }</span>
+                    <span>{ chosenOption.replace('_', ' ') }</span>
                     <FontAwesomeIcon
                         className={`${blockName}__icon--bright`}
                         icon={ showOptionList ? faAngleUp : faAngleDown }/>

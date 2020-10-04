@@ -6,3 +6,5 @@ export * from './movie-card/movie-card';
 export * from './form-select/form-select';
 export * from './delete-modal/delete-modal';
 export * from './details/details';
+export * from './spinner/spinner';
+export * from './error-handler/error-handler';

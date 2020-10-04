@@ -1,14 +1,18 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { connect } from 'react-redux';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormSelect } from '../../components';
 import { IMovie } from '../../types/types';
+import { createMoviesFromServer, editMoviesFromServer } from '../../service/movies.service';
 import './form-page.scss';
 import { defaultMovie } from './mockDefaultMovie';
 
 interface ISaveChanges {
     movie: IMovie;
-    onSaveChanges: (editableMovie: IMovie) => void;
+    onSaveChanges: () => void;
+    createMovie(movie: IMovie): void;
+    editMovie(movie: IMovie): void;
 }
 
 type THandleSubmit = (event: FormEvent) => void;
@@ -18,20 +22,21 @@ type TResetState = () => void;
 
 const blockName = 'form';
 
-const url = '';
+const url = 'https://image.tmdb.org/t/p/w500/ylXCdC106IKiarftHkcacasaAcb.jpg';
 
-export function FormPage({ movie, onSaveChanges }: ISaveChanges): JSX.Element {
+function FormPage({ movie, onSaveChanges, createMovie, editMovie }: ISaveChanges): JSX.Element {
     const startState: IMovie = { ...defaultMovie, ...movie};
     const [ movieInfo, setMovieInfo ] = useState({ ...defaultMovie, ...movie});
 
     const handleChange: THandleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = target;
-        if (name === 'url') {
-            return;
-        }
-
         setMovieInfo({ ...movieInfo, [name]: value });
     };
+
+    const handleNumberChange: THandleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = target;
+        setMovieInfo({ ...movieInfo, [name]: +value });
+    }
 
     const updateGenres: TUpdateGenres = (newGenres: string[]) => {
         setMovieInfo({ ...movieInfo, genres: newGenres });
@@ -39,7 +44,11 @@ export function FormPage({ movie, onSaveChanges }: ISaveChanges): JSX.Element {
 
     const handleSubmit: THandleSubmit = (event: FormEvent) => {
         event.preventDefault();
-        onSaveChanges(movieInfo);
+        movieInfo.tagline = movieInfo.tagline || movieInfo.title;
+        movieInfo.poster_path = movieInfo.poster_path || url;
+        const method = movieInfo.id ? editMovie : createMovie;
+        method(movieInfo);
+        onSaveChanges();
     };
 
     const resetState: TResetState = () => {
@@ -90,9 +99,9 @@ export function FormPage({ movie, onSaveChanges }: ISaveChanges): JSX.Element {
             <input
                 id='movieUrl'
                 className={`${blockName}__input`}
-                name='url'
+                name='poster_path'
                 type='text'
-                value={url || 'Url here'}
+                value={movieInfo.poster_path || url}
                 onChange={handleChange}/>
         </div>
         <div className={`${blockName}__field-wrapper`}>
@@ -123,7 +132,7 @@ export function FormPage({ movie, onSaveChanges }: ISaveChanges): JSX.Element {
                 name='runtime'
                 type='text'
                 value={movieInfo.runtime}
-                onChange={handleChange}/>
+                onChange={handleNumberChange}/>
         </div>
         <div className={`${blockName}__btn-wrapper`}>
             <button
@@ -138,3 +147,20 @@ export function FormPage({ movie, onSaveChanges }: ISaveChanges): JSX.Element {
         </div>
     </form>;
 }
+
+const mapStateToProps = (_state: any, ownProps: ISaveChanges) => {
+    return {
+      ...ownProps,
+    }
+}
+
+const dispatchToProps = ((dispatch: any) => {
+    return {
+        createMovie: (movie: IMovie) => { dispatch(createMoviesFromServer(movie)) },
+        editMovie: (movie: IMovie) => { dispatch(editMoviesFromServer(movie)) },
+    }
+});
+  
+const FormPageWithState = connect(mapStateToProps, dispatchToProps)(FormPage);
+
+export { FormPageWithState };

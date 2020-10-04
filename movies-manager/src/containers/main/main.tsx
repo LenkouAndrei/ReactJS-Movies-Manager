@@ -1,23 +1,20 @@
-import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { FormPage, Modal, Wrapper } from '../';
-import { DeleteModal, Details, MovieCard, ResultFilter, ResultSort, Search } from '../../components';
+import { FormPageWithState, Modal, Wrapper } from '../';
+import { DeleteModal, DetailsWithState, MovieCard, ResultFilter, ResultSort, Search, LoadingIndicator, ErrorHandler } from '../../components';
 import {
     IMovie,
     IMoviesGenresConfig,
     IMoviesSortByConfig,
-    ISelectConfig,
     IQueryParams,
     TGenresListItem,
     TNullable,
     TSortListItem
 } from '../../types/types';
 import './main.scss';
-import { store } from '../../redux/store/store';
-import { getMovies } from '../../redux/actions/movies.action';
-import { moviesSortList } from './mockMoviesSortList';
 import { getMoviesFromServer, deleteMoviesFromServer } from '../../service/movies.service';
 import { setGenreFilter, setSortByFilter } from '../../redux/actions/filter.action';
+import { setDetails } from '../../redux/actions/details.actions';
 
 const blockName = 'result';
 
@@ -31,46 +28,43 @@ interface IStoredMainProps extends IMainProps {
     moviesStore: IMovie[];
     storeGenresConfig: IMoviesGenresConfig;
     moviesSortConfig: IMoviesSortByConfig;
+    loadConfig: {
+        isLoaded: boolean;
+        isLoading: boolean;
+    };
+    errorInfo: TNullable<Error>;
     loadData(params: TNullable<IQueryParams>): void;
     deleteMovie(id: number): void;
     setCurrentGenre(genre: TGenresListItem): void;
     setCurrentSortBy(sortByOption: TSortListItem): void;
+    setDetailsToStore(movie: IMovie): void;
 }
 
 type TVoidWithNoArgs = () => void;
 type TShowModal = (modalType: string) => void;
 type THandleMovie = (modalDialogType: string, id: number) => void;
-type TUpdateMovieSet = (editableMovie: IMovie) => void;
+type TUpdateMovieSet = () => void;
 type TUpdateMoviesSortConfig = (isOpen: boolean, sortOption?: TSortListItem) => void;
 type TShowDetails = (event: MouseEvent, movieWithDetails: IMovie) => void;
 type TSetCurrentGenre = (genre: TGenresListItem) => void;
+type TSearchMovies = (text: string) => void;
 
 function Main({
     moviesStore,
+    loadConfig,
+    errorInfo,
     storeGenresConfig,
     moviesSortConfig,
     deleteMovie,
     loadData,
     setCurrentGenre,
     setCurrentSortBy,
+    setDetailsToStore,
     ...props
 }: IStoredMainProps): JSX.Element {
-    const initGreatestId: number = moviesStore.reduce(
-        (accum: number, curr: IMovie) => {
-            return curr.id > accum ? curr.id : accum;
-        },
-        0
-    );
-
-    if ( props.movieToAdd ) {
-        moviesStore.push(props.movieToAdd);
-    }
-
     const [ isFormDialogOpen, setIsFormDialogOpen ] = useState(false);
     const [ isDeleteDialogOpen, setIsDeleteDialogOpen ] = useState(false);
     const [ movieToEdit, setMovieToEdit ] = useState(moviesStore[0]);
-    const [ greatestId, setGreatestId ] = useState(initGreatestId);
-    const [ movieWithDetails, setMovieWithDetails ] = useState(null);
     const [ isInit, setIsInit ] = useState(false);
     const [ isSortByOpen, setIsSortByOpen ] = useState(false);
 
@@ -81,20 +75,12 @@ function Main({
                 setIsInit(true);
                 return;
             }
-            if (!props.movieToAdd) {
-                return;
-            }
-            const currentId: number = greatestId + 1;
-            props.movieToAdd.id = currentId;
-            // setMovies([ ...movies, props.movieToAdd]);
-            setGreatestId(currentId);
-        }, [props.movieToAdd, isInit]
+        }, [isInit]
     );
 
     const showModal: TShowModal = (modalType: string) => {
-        store.dispatch(getMovies());
-        setIsFormDialogOpen(modalType === 'Edit');
-        setIsDeleteDialogOpen(modalType === 'Delete');
+        const openMethod = (modalType === 'Edit') ? setIsFormDialogOpen : setIsDeleteDialogOpen;
+        openMethod(true);
     };
 
     const hideModal: TVoidWithNoArgs = () => {
@@ -107,35 +93,20 @@ function Main({
         showModal(modalDialogType);
     };
 
-    // const sortMoviesByField: TSortMoviesByField = (field: keyof IMovie) => {
-    //     const moviesCopy: IMovie[] = [ ...movies ];
-    //     if (field === 'release_date') {
-    //         moviesCopy.sort((movieA, movieB) => +new Date(movieA[field]) - +new Date(movieB[field]));
-    //     } else {
-    //         moviesCopy.sort((movieA, movieB) => (movieA[field] as number) - (movieB[field] as number));
-    //     }
-    //     setMovies( moviesCopy );
-    // };
-
     const sortMoviesByField: TUpdateMoviesSortConfig = (isOpen: boolean, sortOption?: TSortListItem) => {
         setIsSortByOpen(isOpen);
         if (!isOpen) {
             setCurrentSortBy(sortOption);
-            loadData({ sortBy: sortOption });
+            loadData({ sortBy: sortOption, filter: storeGenresConfig.currentGenre });
         }
     };
 
     const sortMoviesByGenre: TSetCurrentGenre = (genre: TGenresListItem) => {
         setCurrentGenre(genre);
-        loadData({ filter: genre });
+        loadData({ filter: genre, sortBy: moviesSortConfig.chosenOption });
     }
 
-    const updateMoviesSet: TUpdateMovieSet = (editableMovie: IMovie) => {
-        const movieIdx: number = moviesStore
-            .findIndex(({ id }: IMovie) => id === movieToEdit.id);
-        const newMovies: IMovie[] = [ ...moviesStore ];
-        newMovies.splice(movieIdx, 1, editableMovie);
-        // setMovies( newMovies );
+    const updateMoviesSet: TUpdateMovieSet = () => {
         hideModal();
     };
 
@@ -145,9 +116,17 @@ function Main({
     };
 
     const showDetails: TShowDetails = (event: MouseEvent, movie: IMovie) => {
-        setMovieWithDetails( movie );
+        setDetailsToStore( movie );
         props.onChangePage();
     };
+
+    const searchMovies: TSearchMovies = (text: string) => {
+        loadData({
+            sortBy: moviesSortConfig.chosenOption,
+            filter: storeGenresConfig.currentGenre,
+            search: text,
+        })
+    }
 
     const moviesCards: JSX.Element[] = moviesStore.map((movie: IMovie) => {
             return <li
@@ -158,16 +137,17 @@ function Main({
             </li>;
         });
 
-    return <main className={blockName}>
+    return loadConfig.isLoading ? <LoadingIndicator /> :
+        !loadConfig.isLoaded && <ErrorHandler errorMessage={errorInfo.message}/>
+        || <main className={blockName}>
         <Modal isOpen={isFormDialogOpen} handleClose={hideModal}>
-            <FormPage onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
+            <FormPageWithState onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
         </Modal>
         <Modal isOpen={isDeleteDialogOpen} handleClose={hideModal}>
             <DeleteModal onDeleteConfirm={onDeleteMovie} title={movieToEdit.title}/>
         </Modal>
         <Wrapper>
-            { props.areDetailsVisible && movieWithDetails ?
-                <Details { ...movieWithDetails }/> : <Search/> }
+            { props.areDetailsVisible ? <DetailsWithState /> : <Search onSearchClick={searchMovies} /> }
         </Wrapper>
         <div className={`${blockName}__separator`} />
         <Wrapper>
@@ -195,7 +175,12 @@ function Main({
 const mapStateToProps = (state: any, ownProps: IMainProps) => {
     return {
       ...ownProps,
-      moviesStore: state.movies,
+      moviesStore: state.moviesConfig.movies,
+      loadConfig: {
+          isLoaded: state.moviesConfig.isLoaded,
+          isLoading: state.moviesConfig.isLoading,
+      },
+      errorInfo: state.moviesConfig.error,
       storeGenresConfig: state.filters.genresConfig,
       moviesSortConfig: state.filters.sortByConfig,
     }
@@ -207,6 +192,7 @@ const dispatchToProps = ((dispatch: any) => {
         deleteMovie: (id: number) => { dispatch(deleteMoviesFromServer(id)) },
         setCurrentGenre: (genre: TGenresListItem) => { dispatch(setGenreFilter(genre)) },
         setCurrentSortBy: (sortByOption: TGenresListItem) => { dispatch(setSortByFilter(sortByOption)) },
+        setDetailsToStore: (movie: IMovie) => { dispatch(setDetails(movie)) },
     }
 });
   

@@ -45,6 +45,7 @@ export interface IAction<T> {
 
 export interface IQueryParams {
     filter?: string;
+    search?: string;
     sortBy?: string;
     sortOrder?: 'desc' | 'asc';
     offset?: string;

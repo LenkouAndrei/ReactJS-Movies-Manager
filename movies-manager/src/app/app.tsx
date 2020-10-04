@@ -8,19 +8,9 @@ import {
 } from '../containers';
 import './app.scss';
 
-const md = require('../../server/src/data/movies.json');
 function App(): JSX.Element {
-  const [newMovie, setNewMovie] = useState(null);
   const [pageName, setPageName] = useState(PageName.Main);
   const [areDetailsVisible, setAreDetailsVisible] = useState(false);
-  const [isInit, setIsInit] = useState(false);
-
-  useEffect(
-    () => {
-      
-    }, [isInit]
-  );
-  console.log(md.length);
 
   const changePage = () => {
     setPageName(PageName.Details);
@@ -36,11 +26,9 @@ function App(): JSX.Element {
     <React.StrictMode>
       <ErrorBoundary>
         <Header
-          onAddBtnClick={setNewMovie}
           onSearchBtnClick={clickSearchBtn}
           pageName={pageName}/>
         <MainWithState
-          movieToAdd={newMovie}
           areDetailsVisible={areDetailsVisible}
           onChangePage={changePage}
         />

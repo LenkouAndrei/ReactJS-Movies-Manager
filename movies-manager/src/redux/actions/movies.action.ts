@@ -1,4 +1,4 @@
-import { IMovie } from "../../types/types";
+import { IMovie } from '../../types/types';
 
 export enum MoviesAction {
     ADD_MOVIE = 'ADD_MOVIE',
@@ -16,63 +16,68 @@ export enum MoviesAction {
     GET_MOVIES_FAIL = 'GET_MOVIES_FAIL',
 }
 
-export const getMovies = () => ({
+export type TMovieActionCreator<T> = (arg?: T) => {
+    type: MoviesAction,
+    payload?: T;
+};
+
+export interface IMovieAction<T> {
+    type: MoviesAction;
+    payload?: T;
+}
+
+export const getMovies: TMovieActionCreator<undefined> = () => ({
     type: MoviesAction.GET_MOVIES,
 });
 
-export const getMoviesSuccess = (movies: IMovie[]) => ({
+export const getMoviesSuccess: TMovieActionCreator<IMovie[]> = (movies: IMovie[]) => ({
     type: MoviesAction.GET_MOVIES_SUCCESS,
     payload: movies,
 });
 
-export const getMoviesFail = (error: Error) => ({
+export const getMoviesFail: TMovieActionCreator<Error> = (error: Error) => ({
     type: MoviesAction.GET_MOVIES_FAIL,
     payload: error
 });
 
-export const deleteMovie = () => ({
+export const deleteMovie: TMovieActionCreator<undefined> = () => ({
     type: MoviesAction.DELETE_MOVIE,
 });
 
-export const deleteMovieFail = (error: Error) => ({
+export const deleteMovieFail: TMovieActionCreator<Error> = (error: Error) => ({
     type: MoviesAction.DELETE_MOVIE_FAIL,
     payload: error
 });
 
-export const deleteMovieSuccess = (id: number) => ({
+export const deleteMovieSuccess: TMovieActionCreator<number> = (id: number) => ({
     type: MoviesAction.DELETE_MOVIE_SUCCESS,
     payload: id
 });
 
-export const addMovie = () => ({
+export const addMovie: TMovieActionCreator<undefined> = () => ({
     type: MoviesAction.ADD_MOVIE
 });
 
-export const addMovieFail = (error: Error) => ({
+export const addMovieFail: TMovieActionCreator<Error> = (error: Error) => ({
     type: MoviesAction.ADD_MOVIE_FAIL,
     payload: error
 });
 
-export const addMovieSuccess = (movie: any) => ({
+export const addMovieSuccess: TMovieActionCreator<IMovie> = (movie: IMovie) => ({
     type: MoviesAction.ADD_MOVIE_SUCCESS,
     payload: movie
 });
 
-export const updateMovie = () => ({
+export const updateMovie: TMovieActionCreator<undefined> = () => ({
     type: MoviesAction.UPDATE_MOVIE,
 });
 
-export const updateMovieSuccess = (movie: any) => ({
+export const updateMovieSuccess: TMovieActionCreator<IMovie> = (movie: IMovie) => ({
     type: MoviesAction.UPDATE_MOVIE_SUCCESS,
     payload: movie
 });
 
-export const updateMovieFail = (error: Error) => ({
+export const updateMovieFail: TMovieActionCreator<Error> = (error: Error) => ({
     type: MoviesAction.UPDATE_MOVIE_FAIL,
     payload: error
-});
-
-export const toggleMovieMenuVisibilty = (id: string) => ({
-    type: MoviesAction.TOGGLE_MOVIE_MENU_VISIBILITY,
-    payload: id
 });

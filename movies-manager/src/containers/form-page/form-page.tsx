@@ -1,9 +1,9 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, Dispatch, FormEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormSelect } from '../../components';
-import { IMovie } from '../../types/types';
+import { IMovie, IStoreState } from '../../types/types';
 import { createMoviesFromServer, editMoviesFromServer } from '../../service/movies.service';
 import './form-page.scss';
 import { defaultMovie } from './mockDefaultMovie';
@@ -36,7 +36,7 @@ function FormPage({ movie, onSaveChanges, createMovie, editMovie }: ISaveChanges
     const handleNumberChange: THandleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = target;
         setMovieInfo({ ...movieInfo, [name]: +value });
-    }
+    };
 
     const updateGenres: TUpdateGenres = (newGenres: string[]) => {
         setMovieInfo({ ...movieInfo, genres: newGenres });
@@ -148,19 +148,19 @@ function FormPage({ movie, onSaveChanges, createMovie, editMovie }: ISaveChanges
     </form>;
 }
 
-const mapStateToProps = (_state: any, ownProps: ISaveChanges) => {
+const mapStateToProps = (_state: IStoreState, ownProps: ISaveChanges) => {
     return {
       ...ownProps,
-    }
-}
+    };
+};
 
-const dispatchToProps = ((dispatch: any) => {
+const dispatchToProps = ((dispatch: Dispatch<any>) => {
     return {
-        createMovie: (movie: IMovie) => { dispatch(createMoviesFromServer(movie)) },
-        editMovie: (movie: IMovie) => { dispatch(editMoviesFromServer(movie)) },
-    }
+        createMovie: (movie: IMovie) => { dispatch(createMoviesFromServer(movie)); },
+        editMovie: (movie: IMovie) => { dispatch(editMoviesFromServer(movie)); },
+    };
 });
-  
+
 const FormPageWithState = connect(mapStateToProps, dispatchToProps)(FormPage);
 
 export { FormPageWithState };

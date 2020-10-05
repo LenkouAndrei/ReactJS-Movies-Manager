@@ -3,8 +3,8 @@ import { faAlignJustify, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IMovie } from '../../types/types';
 import useOutsideClick from '../../hooks/useOutsideClick';
-import './movie-card.scss';
 import { menuItemTitles } from './mockMenuTitles';
+import './movie-card.scss';
 
 const blockName = 'movie';
 
@@ -27,7 +27,7 @@ export function MovieCard({ movie, onClickMovie }: IMovieCardProps): JSX.Element
     const hideMenuWithPropagation: (event: React.MouseEvent) => void = (event: React.MouseEvent) => {
       event.stopPropagation();
       hideEditMenu();
-    }
+    };
 
     useOutsideClick(wrapperRef, hideEditMenu);
 

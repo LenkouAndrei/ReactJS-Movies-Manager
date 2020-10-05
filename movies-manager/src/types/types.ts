@@ -34,13 +34,25 @@ export interface IMoviesGenresConfig {
 }
 
 export interface IMoviesSortByConfig {
-    options: TSortListItem[],
-    chosenOption: TSortListItem,
+    options: TSortListItem[];
+    chosenOption: TSortListItem;
+}
+
+export interface IStoreFilters {
+    sortByConfig: IMoviesSortByConfig;
+    genresConfig: IMoviesGenresConfig;
+}
+
+export interface IMoviesStoreConfig {
+    movies: IMovie[];
+    isLoading: boolean;
+    isLoaded: boolean;
+    error: TNullable<Error>;
 }
 
 export interface IAction<T> {
    type: T;
-   payload?: any; 
+   payload?: any;
 }
 
 export interface IQueryParams {
@@ -50,4 +62,10 @@ export interface IQueryParams {
     sortOrder?: 'desc' | 'asc';
     offset?: string;
     limit?: string;
+}
+
+export interface IStoreState {
+    filters: IStoreFilters;
+    moviesConfig: IMoviesStoreConfig;
+    details: IMovieInfo;
 }

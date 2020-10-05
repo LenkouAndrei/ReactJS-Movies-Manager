@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { IMovie, TNullable } from '../../types/types';
+import { IMovie, IStoreState, TNullable } from '../../types/types';
 import './details.scss';
 
 const blockName = 'details';
@@ -20,7 +20,9 @@ const Details: TDetails = ({ movie }: { movie: TNullable<IMovie> }) => {
             </h2>
             <div className={`${blockName}__tag`}>{ movie.tagline }</div>
             <div className={`${blockName}__terms-container`}>
-                <span className={`${blockName}__release`}>{ new Date(movie.release_date).getFullYear() }</span>
+                <span className={`${blockName}__release`}>
+                    { new Date(movie.release_date).getFullYear() }
+                </span>
                 <span className={`${blockName}__duration`}>{ `${movie.runtime} min` }</span>
             </div>
             <p className={`${blockName}__description`}>{ movie.overview }</p>
@@ -28,12 +30,12 @@ const Details: TDetails = ({ movie }: { movie: TNullable<IMovie> }) => {
     </article>;
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
     return {
       movie: state.details,
-    }
-}
-  
+    };
+};
+
 const DetailsWithState = connect(mapStateToProps)(Details);
 
 export { DetailsWithState };

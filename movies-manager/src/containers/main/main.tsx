@@ -1,12 +1,22 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { FormPageWithState, Modal, Wrapper } from '../';
-import { DeleteModal, DetailsWithState, MovieCard, ResultFilter, ResultSort, Search, LoadingIndicator, ErrorHandler } from '../../components';
+import {
+    DeleteModal,
+    DetailsWithState,
+    MovieCard,
+    ResultFilter,
+    ResultSort,
+    Search,
+    LoadingIndicator,
+    ErrorHandler,
+} from '../../components';
 import {
     IMovie,
     IMoviesGenresConfig,
     IMoviesSortByConfig,
     IQueryParams,
+    IStoreState,
     TGenresListItem,
     TNullable,
     TSortListItem
@@ -75,7 +85,8 @@ function Main({
                 setIsInit(true);
                 return;
             }
-        }, [isInit]
+        },
+        [isInit]
     );
 
     const showModal: TShowModal = (modalType: string) => {
@@ -104,7 +115,7 @@ function Main({
     const sortMoviesByGenre: TSetCurrentGenre = (genre: TGenresListItem) => {
         setCurrentGenre(genre);
         loadData({ filter: genre, sortBy: moviesSortConfig.chosenOption });
-    }
+    };
 
     const updateMoviesSet: TUpdateMovieSet = () => {
         hideModal();
@@ -125,8 +136,8 @@ function Main({
             sortBy: moviesSortConfig.chosenOption,
             filter: storeGenresConfig.currentGenre,
             search: text,
-        })
-    }
+        });
+    };
 
     const moviesCards: JSX.Element[] = moviesStore.map((movie: IMovie) => {
             return <li
@@ -172,7 +183,7 @@ function Main({
     </main>;
 }
 
-const mapStateToProps = (state: any, ownProps: IMainProps) => {
+const mapStateToProps = (state: IStoreState, ownProps: IMainProps) => {
     return {
       ...ownProps,
       moviesStore: state.moviesConfig.movies,
@@ -183,19 +194,19 @@ const mapStateToProps = (state: any, ownProps: IMainProps) => {
       errorInfo: state.moviesConfig.error,
       storeGenresConfig: state.filters.genresConfig,
       moviesSortConfig: state.filters.sortByConfig,
-    }
-}
+    };
+};
 
 const dispatchToProps = ((dispatch: any) => {
     return {
-        loadData: (params: TNullable<IQueryParams>) => { dispatch(getMoviesFromServer(params)) },
-        deleteMovie: (id: number) => { dispatch(deleteMoviesFromServer(id)) },
-        setCurrentGenre: (genre: TGenresListItem) => { dispatch(setGenreFilter(genre)) },
-        setCurrentSortBy: (sortByOption: TGenresListItem) => { dispatch(setSortByFilter(sortByOption)) },
-        setDetailsToStore: (movie: IMovie) => { dispatch(setDetails(movie)) },
-    }
+        loadData: (params: TNullable<IQueryParams>) => { dispatch(getMoviesFromServer(params)); },
+        deleteMovie: (id: number) => { dispatch(deleteMoviesFromServer(id)); },
+        setCurrentGenre: (genre: TGenresListItem) => { dispatch(setGenreFilter(genre)); },
+        setCurrentSortBy: (sortByOption: TGenresListItem) => { dispatch(setSortByFilter(sortByOption)); },
+        setDetailsToStore: (movie: IMovie) => { dispatch(setDetails(movie)); },
+    };
 });
-  
+
 const MainWithState = connect(mapStateToProps, dispatchToProps)(Main);
 
 export { MainWithState };

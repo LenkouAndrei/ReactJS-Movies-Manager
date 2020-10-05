@@ -1,22 +1,18 @@
 import { MoviesAction } from '../actions/movies.action';
-import { IAction, IMovie, TNullable } from '../../types/types';
+import { IAction, IMovie, IMoviesStoreConfig } from '../../types/types';
 const dataMovies = require('../../data.json');
 
-interface IMoviesState {
-    movies: IMovie[];
-    isLoading: boolean;
-    isLoaded: boolean;
-    error: TNullable<Error>;
-}
-
-const initMoviesState: IMoviesState = {
+const initMoviesState: IMoviesStoreConfig = {
     movies: dataMovies,
     isLoading: true,
     isLoaded: false,
     error: null,
-}
+};
 
-export function moviesReducer(state = initMoviesState, action: IAction<MoviesAction>) {
+export function moviesReducer(
+    state: IMoviesStoreConfig = initMoviesState,
+    action: IAction<MoviesAction>
+): IMoviesStoreConfig {
     switch (action.type) {
         case MoviesAction.ADD_MOVIE_SUCCESS:
             return {
@@ -25,7 +21,7 @@ export function moviesReducer(state = initMoviesState, action: IAction<MoviesAct
                 isLoading: false,
                 isLoaded: true,
                 error: null,
-            } as IMoviesState;
+            };
         case MoviesAction.GET_MOVIES_SUCCESS:
             return {
                 ...state,
@@ -33,7 +29,7 @@ export function moviesReducer(state = initMoviesState, action: IAction<MoviesAct
                 isLoading: false,
                 isLoaded: true,
                 error: null,
-            } as IMoviesState;
+            };
         case MoviesAction.DELETE_MOVIE_SUCCESS:
             return {
                 ...state,
@@ -76,4 +72,4 @@ export function moviesReducer(state = initMoviesState, action: IAction<MoviesAct
         default:
             return state;
     }
-};
+}

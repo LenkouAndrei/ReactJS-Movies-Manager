@@ -5,7 +5,7 @@ const blockName = 'search';
 
 interface ISearchProps {
     onSearchClick(text: string): void;
-};
+}
 
 type TSearch = (props: ISearchProps) => JSX.Element;
 
@@ -31,5 +31,5 @@ export const Search: TSearch = ({ onSearchClick }: ISearchProps) => {
                 className={`${blockName}__btn`}
                 onClick={searchText}>Search</button>
         </div>
-    </section>
+    </section>;
 };

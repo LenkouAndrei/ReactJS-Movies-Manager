@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Logo } from '../../components';
-import { IMovie, TNullable } from '../../types/types';
+import { TNullable } from '../../types/types';
 import { FormPageWithState, Modal, Wrapper } from '../';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

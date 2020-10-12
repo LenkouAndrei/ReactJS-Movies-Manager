@@ -46,7 +46,6 @@ export interface IStoreFilters {
 export interface IMoviesStoreConfig {
     movies: IMovie[];
     isLoading: boolean;
-    isLoaded: boolean;
     error: TNullable<Error>;
 }
 
@@ -62,6 +61,7 @@ export interface IQueryParams {
     sortOrder?: 'desc' | 'asc';
     offset?: string;
     limit?: string;
+    searchBy?: 'title' | 'genres';
 }
 
 export interface IStoreState {

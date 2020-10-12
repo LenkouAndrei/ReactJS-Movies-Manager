@@ -22,7 +22,7 @@ import {
     TSortListItem
 } from '../../types/types';
 import './main.scss';
-import { getMoviesFromServer, deleteMoviesFromServer } from '../../service/movies.service';
+import { getMoviesFromServer, deleteMoviesFromServer } from '../../redux/thunks/movies-thunks';
 import { setGenreFilter, setSortByFilter } from '../../redux/actions/filter.action';
 import { setDetails } from '../../redux/actions/details.actions';
 
@@ -38,16 +38,13 @@ interface IStoredMainProps extends IMainProps {
     moviesStore: IMovie[];
     storeGenresConfig: IMoviesGenresConfig;
     moviesSortConfig: IMoviesSortByConfig;
-    loadConfig: {
-        isLoaded: boolean;
-        isLoading: boolean;
-    };
+    isLoading: boolean;
     errorInfo: TNullable<Error>;
     loadData(params: TNullable<IQueryParams>): void;
     deleteMovie(id: number): void;
     setCurrentGenre(genre: TGenresListItem): void;
     setCurrentSortBy(sortByOption: TSortListItem): void;
-    setDetailsToStore(movie: IMovie): void;
+    setMovieDetails(movie: IMovie): void;
 }
 
 type TVoidWithNoArgs = () => void;
@@ -61,7 +58,7 @@ type TSearchMovies = (text: string) => void;
 
 function Main({
     moviesStore,
-    loadConfig,
+    isLoading,
     errorInfo,
     storeGenresConfig,
     moviesSortConfig,
@@ -69,7 +66,7 @@ function Main({
     loadData,
     setCurrentGenre,
     setCurrentSortBy,
-    setDetailsToStore,
+    setMovieDetails,
     ...props
 }: IStoredMainProps): JSX.Element {
     const [ isFormDialogOpen, setIsFormDialogOpen ] = useState(false);
@@ -127,7 +124,7 @@ function Main({
     };
 
     const showDetails: TShowDetails = (event: MouseEvent, movie: IMovie) => {
-        setDetailsToStore( movie );
+        setMovieDetails( movie );
         props.onChangePage();
     };
 
@@ -148,8 +145,8 @@ function Main({
             </li>;
         });
 
-    return loadConfig.isLoading ? <LoadingIndicator /> :
-        !loadConfig.isLoaded && <ErrorHandler errorMessage={errorInfo.message}/>
+    return isLoading ? <LoadingIndicator /> :
+        errorInfo && errorInfo.message && <ErrorHandler errorMessage={errorInfo.message}/>
         || <main className={blockName}>
         <Modal isOpen={isFormDialogOpen} handleClose={hideModal}>
             <FormPageWithState onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
@@ -187,10 +184,7 @@ const mapStateToProps = (state: IStoreState, ownProps: IMainProps) => {
     return {
       ...ownProps,
       moviesStore: state.moviesConfig.movies,
-      loadConfig: {
-          isLoaded: state.moviesConfig.isLoaded,
-          isLoading: state.moviesConfig.isLoading,
-      },
+      isLoading: state.moviesConfig.isLoading,
       errorInfo: state.moviesConfig.error,
       storeGenresConfig: state.filters.genresConfig,
       moviesSortConfig: state.filters.sortByConfig,
@@ -203,7 +197,7 @@ const dispatchToProps = ((dispatch: any) => {
         deleteMovie: (id: number) => { dispatch(deleteMoviesFromServer(id)); },
         setCurrentGenre: (genre: TGenresListItem) => { dispatch(setGenreFilter(genre)); },
         setCurrentSortBy: (sortByOption: TGenresListItem) => { dispatch(setSortByFilter(sortByOption)); },
-        setDetailsToStore: (movie: IMovie) => { dispatch(setDetails(movie)); },
+        setMovieDetails: (movie: IMovie) => { dispatch(setDetails(movie)); },
     };
 });
 

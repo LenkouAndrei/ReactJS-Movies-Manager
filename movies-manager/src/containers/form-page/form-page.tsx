@@ -4,7 +4,7 @@ import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormSelect } from '../../components';
 import { IMovie, IStoreState } from '../../types/types';
-import { createMoviesFromServer, editMoviesFromServer } from '../../service/movies.service';
+import { createMovieFromServer, editMovieFromServer } from '../../redux/thunks/movies-thunks';
 import './form-page.scss';
 import { defaultMovie } from './mockDefaultMovie';
 
@@ -156,8 +156,8 @@ const mapStateToProps = (_state: IStoreState, ownProps: ISaveChanges) => {
 
 const dispatchToProps = ((dispatch: Dispatch<any>) => {
     return {
-        createMovie: (movie: IMovie) => { dispatch(createMoviesFromServer(movie)); },
-        editMovie: (movie: IMovie) => { dispatch(editMoviesFromServer(movie)); },
+        createMovie: (movie: IMovie) => { dispatch(createMovieFromServer(movie)); },
+        editMovie: (movie: IMovie) => { dispatch(editMovieFromServer(movie)); },
     };
 });
 

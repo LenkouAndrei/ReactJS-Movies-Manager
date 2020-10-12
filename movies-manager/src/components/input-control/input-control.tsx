@@ -6,7 +6,7 @@ import './input-control.scss';
 interface IInputControlProps {
     label: string;
     name: string;
-    id?: string; 
+    id?: string;
     isWrapped?: boolean;
     icon?: TNullable<JSX.Element>;
     type?: string;
@@ -14,7 +14,13 @@ interface IInputControlProps {
 
 const blockName = 'input-control';
 
-const InputControl = ({ label, isWrapped = true, icon = null, type="text", ...props }: IInputControlProps) => {
+const InputControl = ({
+    label,
+    isWrapped = true,
+    icon = null,
+    type = 'text',
+    ...props
+}: IInputControlProps) => {
     const [field, meta] = useField(props.name);
     const inputControl: JSX.Element = <>
         <label
@@ -36,4 +42,4 @@ const InputControl = ({ label, isWrapped = true, icon = null, type="text", ...pr
     </>;
 };
 
-export { InputControl }
+export { InputControl };

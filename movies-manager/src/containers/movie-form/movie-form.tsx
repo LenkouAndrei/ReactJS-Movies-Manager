@@ -1,11 +1,11 @@
-import React, { Dispatch } from 'react';
+import React, { Dispatch, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import './movie-form.scss';
-import { IMovie, IStoreState } from '../../types/types';
+import { ICheckboxGenre, IMovie, IStoreState, IMovieInfo } from '../../types/types';
 import { InputControl } from '../../components/input-control/input-control';
 import { SelectControl } from '../../components/select-control/select-control';
 import { createMoviesFromServer, editMoviesFromServer } from '../../service/movies.service';
@@ -20,27 +20,34 @@ interface ISaveChanges {
 }
 
 type THandleSubmit = (movieInfo: IMovie) => void;
+type TResetForm = () => void;
+type TResetHandlerWrapper = (resetForm: TResetForm) => (e: MouseEvent) => void;
 
 const blockName = 'form-test';
 
 enum FORM_HEADLINES {
     EDIT_MOVIE = 'Edit Movie',
     ADD_MOVIE = 'Add Movie',
-};
+}
 
-function MovieForm({ movie = defaultMovie, onSaveChanges, createMovie, editMovie }: ISaveChanges): JSX.Element {
+function MovieForm({
+    movie = defaultMovie,
+    onSaveChanges,
+    createMovie,
+    editMovie
+}: ISaveChanges): JSX.Element {
     const handleSubmit: THandleSubmit = (movieInfo: IMovie) => {
         const method = movieInfo.id ? editMovie : createMovie;
         method(movieInfo);
         onSaveChanges();
     };
 
-    const resetMovieForm: any = (resetForm: any) => (e: any) => {
+    const resetMovieForm: TResetHandlerWrapper = (resetForm: TResetForm) => (e: MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         resetForm();
-    }
-    
+    };
+
     const availableGenres = Array.from(new Set([...allGenres, ...movie.genres]));
     const genres = availableGenres.map((genre: string) => ({
         label: genre,
@@ -53,7 +60,7 @@ function MovieForm({ movie = defaultMovie, onSaveChanges, createMovie, editMovie
     </div>;
 
     const icoCalendar: JSX.Element = <FontAwesomeIcon
-        className="input-control__icon--bright"
+        className='input-control__icon--bright'
         icon={faCalendar}/>;
 
     return <Formik
@@ -65,6 +72,7 @@ function MovieForm({ movie = defaultMovie, onSaveChanges, createMovie, editMovie
             release_date: Yup.string()
                 .matches(
                     /(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])/,
+                    // tslint:disable-next-line
                     'Must be in a "YYYY-MM-DD" format'
                 )
                 .required('Required'),
@@ -85,21 +93,23 @@ function MovieForm({ movie = defaultMovie, onSaveChanges, createMovie, editMovie
                         isChecked: Yup.boolean(),
                     })
                 )
-                .compact((v: any) => !v.isChecked)
+                .compact((v: ICheckboxGenre) => !v.isChecked)
                 .min(1, 'Must be chosen 1 genre or more')
                 .required('Required'),
             runtime: Yup.number()
                 .integer('Must be integer')
                 .required('Required'),
         })}
-        onSubmit={(values: any) => {
-            setTimeout(() => {
-                const chosenGenres = values.genres
-                    .filter((genre: any) => genre.isChecked)
-                    .map(({ label }: any) => label);
-                values.genres = chosenGenres;
-                handleSubmit(values);
-              }, 400);
+        onSubmit={(values: IMovieInfo<ICheckboxGenre[]>) => {
+            setTimeout(
+                () => {
+                    const chosenGenres = values.genres
+                        .filter((genre: ICheckboxGenre) => genre.isChecked)
+                        .map(({ label }: ICheckboxGenre) => label);
+                    handleSubmit({...values, genres: chosenGenres});
+                },
+                400
+            );
         }}
     >
     {formik => (
@@ -111,34 +121,34 @@ function MovieForm({ movie = defaultMovie, onSaveChanges, createMovie, editMovie
             </h2>
             { movieIdField }
             <InputControl
-                label="Title"
-                name="title"
+                label='Title'
+                name='title'
             />
             <InputControl
-                label="release date"
-                name="release_date"
+                label='release date'
+                name='release_date'
                 icon={icoCalendar}
             />
             <InputControl
-                label="movie url"
-                name="poster_path"
+                label='movie url'
+                name='poster_path'
             />
             <SelectControl
-                label="genres"
-                name="genres"/>
+                headline='genres'
+                name='genres'/>
             <InputControl
-                label="overview"
-                name="overview"
+                label='overview'
+                name='overview'
             />
             <InputControl
-                label="runtime"
-                name="runtime"
-                type="number"
+                label='runtime'
+                name='runtime'
+                type='number'
             />
             <div className={`${blockName}__btn-wrapper`}>
                 <button
                     className={`${blockName}__btn--reset`}
-                    type="reset"
+                    type='reset'
                     onClick={resetMovieForm(formik.resetForm)}> Reset </button>
                 <input
                     className={`${blockName}__btn--save`}
@@ -147,7 +157,7 @@ function MovieForm({ movie = defaultMovie, onSaveChanges, createMovie, editMovie
                     disabled={!formik.dirty || !formik.isValid}/>
             </div>
         </Form>)}
-    </Formik>
+    </Formik>;
 }
 
 const mapStateToProps = (_state: IStoreState, ownProps: ISaveChanges) => {

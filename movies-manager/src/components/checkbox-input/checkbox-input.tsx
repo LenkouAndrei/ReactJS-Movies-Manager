@@ -2,18 +2,18 @@ import React from 'react';
 import { useField } from 'formik';
 
 interface ITextInputProps {
-    onChange?: any;
     name: string;
-    id?: string;
     label: string;
     checked: boolean;
+    id?: string;
+    onChange?(): void;
 }
 
 const CheckboxInput = (props: ITextInputProps) => {
     const [field] = useField(props.name);
     return <>
-        <input 
-            type="checkbox"
+        <input
+            type='checkbox'
             {...field}
             {...props}
             id={props.id || props.name}
@@ -22,4 +22,4 @@ const CheckboxInput = (props: ITextInputProps) => {
     </>;
 };
 
-export { CheckboxInput }
+export { CheckboxInput };

@@ -3,32 +3,37 @@ import { FieldArray, useField } from 'formik';
 import { CheckboxInput } from '../checkbox-input/checkbox-input';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ICheckboxGenre } from '../../types/types';
 import './select-control.scss';
 
 interface ISelectControlProps {
     name: string;
-    label: string;
+    headline: string;
     blockName?: string;
+}
+
+interface IArrayHelpers {
+    replace(index: number, value: object): void;
 }
 
 type TMouseClick = (event: MouseEvent) => void;
 
-const SelectControl = ({ name, blockName='form-select', label }: ISelectControlProps) => {
+const SelectControl = ({ name, blockName = 'form-select', headline }: ISelectControlProps) => {
     const [ isOpen , setIsOpen ] = useState(false);
     const [field, meta] = useField(name);
 
-    const toggleSelectDropdown: TMouseClick = (e: any) => {
+    const toggleSelectDropdown: TMouseClick = (e: MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         setIsOpen(!isOpen);
-    }
+    };
 
-    const dropdownList: JSX.Element = <FieldArray name={name}>{(arrayHelpers: any) => {
-            const onCheckboxChange = (idx: number, { label, isChecked }: any) => () => {
+    const dropdownList: JSX.Element = <FieldArray name={name}>{(arrayHelpers: IArrayHelpers) => {
+            const onCheckboxChange = (idx: number, { label, isChecked }: ICheckboxGenre) => () => {
                 arrayHelpers.replace(idx, { label, isChecked: !isChecked });
-            }
+            };
             return <>
-                {field.value.map(({ label, isChecked }: any, index: number) => {
+                {field.value.map(({ label, isChecked }: ICheckboxGenre, index: number) => {
                     return (<li
                         className={`${blockName}__item`}
                         key={label}>
@@ -39,19 +44,19 @@ const SelectControl = ({ name, blockName='form-select', label }: ISelectControlP
                             checked={isChecked}/>
                     </li>);
                 })}
-            </>
+            </>;
         }}</FieldArray>;
 
     return <>
             <div className={`${blockName}__field-wrapper`}>
-            <div className={`${blockName}__headline`}>{label}</div>
+            <div className={`${blockName}__headline`}>{headline}</div>
             <button
                 className={`${blockName}__btn`}
                 onClick={toggleSelectDropdown}>
                 <span className={`${blockName}__chosen-items`}>
                     { field.value
-                        .filter(({ isChecked }: any) => isChecked)
-                        .map(({ label }: any) => label).join(', ') || 'Select Genre' }
+                        .filter(({ isChecked }: ICheckboxGenre) => isChecked)
+                        .map(({ label }: ICheckboxGenre) => label).join(', ') || 'Select Genre' }
                 </span>
                 <FontAwesomeIcon
                     className={`${blockName}__icon`}
@@ -66,6 +71,6 @@ const SelectControl = ({ name, blockName='form-select', label }: ISelectControlP
             ) : null}
         </div>
     </>;
-}
+};
 
 export { SelectControl };

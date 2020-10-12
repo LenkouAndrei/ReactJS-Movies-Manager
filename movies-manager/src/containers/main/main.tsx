@@ -1,6 +1,6 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { FormPageWithState, Modal, Wrapper } from '../';
+import { MovieFormWithState, Modal, Wrapper } from '../';
 import {
     DeleteModal,
     DetailsWithState,
@@ -152,7 +152,7 @@ function Main({
         !loadConfig.isLoaded && <ErrorHandler errorMessage={errorInfo.message}/>
         || <main className={blockName}>
         <Modal isOpen={isFormDialogOpen} handleClose={hideModal}>
-            <FormPageWithState onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
+            <MovieFormWithState onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
         </Modal>
         <Modal isOpen={isDeleteDialogOpen} handleClose={hideModal}>
             <DeleteModal onDeleteConfirm={onDeleteMovie} title={movieToEdit.title}/>

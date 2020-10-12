@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Logo } from '../../components';
-import { IMovie, TNullable } from '../../types/types';
-import { FormPageWithState, Modal, Wrapper } from '../';
+import { TNullable } from '../../types/types';
+import { MovieFormWithState, Modal, Wrapper } from '../';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './header.scss';
@@ -43,7 +43,7 @@ export function Header({ pageName, onSearchBtnClick }: IHeaderProps): JSX.Elemen
                         className={'add-btn'}
                         onClick={showModal}>+ Add Movie</button>
                     <Modal isOpen={isDialogOpen} handleClose={hideModal}>
-                        <FormPageWithState onSaveChanges={hideModal} movie={null}/>
+                        <MovieFormWithState onSaveChanges={hideModal}/>
                     </Modal>
                 </>;
           case PageName.Details:

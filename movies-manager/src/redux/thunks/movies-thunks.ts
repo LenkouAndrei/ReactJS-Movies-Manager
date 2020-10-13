@@ -44,8 +44,15 @@ export const getMoviesFromServer =
     (queryParams: IQueryParams = {}) =>
     (dispatch: Dispatch<IMovieAction<Error | undefined | IMovie[]>>) => {
     dispatch(getMovies());
+    const { filters } = store.getState();
+    const { sortByConfig: { chosenOption }, genresConfig: { currentGenre } } = filters;
 
-    const requestQuery = new URLSearchParams({ ...defaultQueryParams, ...queryParams });
+    const requestQuery = new URLSearchParams({
+        ...defaultQueryParams,
+        sortBy: chosenOption,
+        filter: currentGenre,
+        ...queryParams,
+    });
 
     fetch(`${url}/movies?${requestQuery.toString()}`)
         .then(handleResponse)

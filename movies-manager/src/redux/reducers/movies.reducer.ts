@@ -1,10 +1,9 @@
 import { MoviesAction } from '../actions/movies.action';
 import { IAction, IMovie, IMoviesStoreConfig } from '../../types/types';
-const dataMovies = require('../../data.json');
 
 const initMoviesState: IMoviesStoreConfig = {
-    movies: dataMovies,
-    isLoading: true,
+    movies: [],
+    isLoading: false,
     error: null,
 };
 

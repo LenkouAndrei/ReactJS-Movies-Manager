@@ -3,9 +3,12 @@ import './wrapper.scss';
 
 interface IWrapperProps {
     children: ReactChild;
+    postfix?: string;
 }
 
 type TWrapper = (props: IWrapperProps) => JSX.Element;
-export const Wrapper: TWrapper = ({ children }: IWrapperProps) => <div className='wrapper'>
-    {children}
-</div>;
+export const Wrapper: TWrapper = ({ children, postfix }: IWrapperProps) => (
+    <div className={`wrapper ${postfix || ''}`}>
+        {children}
+    </div>
+);

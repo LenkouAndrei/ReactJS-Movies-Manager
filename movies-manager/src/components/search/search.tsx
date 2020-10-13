@@ -1,22 +1,21 @@
 import React, { useRef } from 'react';
+import { connect } from 'react-redux';
+import { getMoviesFromServer } from '../../redux/thunks/movies-thunks';
 import './search.scss';
 
 const blockName = 'search';
 
 interface ISearchProps {
-    onSearchClick(text: string): void;
+    loadData(text: string): void;
 }
 
 type TSearch = (props: ISearchProps) => JSX.Element;
 
-export const Search: TSearch = ({ onSearchClick }: ISearchProps) => {
+const Search: TSearch = ({ loadData }: ISearchProps) => {
     const inputEl = useRef(null);
     const searchText = () => {
         const trimmedText = inputEl.current.value.trim();
-        if (!trimmedText) {
-            return;
-        }
-        onSearchClick(trimmedText);
+        loadData(trimmedText);
     };
 
     return <section className={blockName}>
@@ -33,3 +32,13 @@ export const Search: TSearch = ({ onSearchClick }: ISearchProps) => {
         </div>
     </section>;
 };
+
+const dispatchToProps = ((dispatch: any) => {
+    return {
+        loadData: (text: string) => { dispatch(getMoviesFromServer({ search: text })); },
+    };
+});
+
+const SearchWithState = connect(null, dispatchToProps)(Search);
+
+export { SearchWithState };

@@ -1,9 +1,9 @@
 import { IMovie } from '../../types/types';
 
 export enum MoviesAction {
-    ADD_MOVIE = 'ADD_MOVIE',
-    ADD_MOVIE_SUCCESS = 'ADD_MOVIE_SUCCESS',
-    ADD_MOVIE_FAIL = 'ADD_MOVIE_FAIL',
+    CREATE_MOVIE = 'CREATE_MOVIE',
+    CREATE_MOVIE_SUCCESS = 'CREATE_MOVIE_SUCCESS',
+    CREATE_MOVIE_FAIL = 'CREATE_MOVIE_FAIL',
     DELETE_MOVIE = 'DELETE_MOVIE',
     DELETE_MOVIE_SUCCESS = 'DELETE_MOVIE_SUCCESS',
     DELETE_MOVIE_FAIL = 'DELETE_MOVIE_FAIL',
@@ -54,17 +54,17 @@ export const deleteMovieSuccess: TMovieActionCreator<number> = (id: number) => (
     payload: id
 });
 
-export const addMovie: TMovieActionCreator<undefined> = () => ({
-    type: MoviesAction.ADD_MOVIE
+export const createMovie: TMovieActionCreator<undefined> = () => ({
+    type: MoviesAction.CREATE_MOVIE
 });
 
-export const addMovieFail: TMovieActionCreator<Error> = (error: Error) => ({
-    type: MoviesAction.ADD_MOVIE_FAIL,
+export const createMovieFail: TMovieActionCreator<Error> = (error: Error) => ({
+    type: MoviesAction.CREATE_MOVIE_FAIL,
     payload: error
 });
 
-export const addMovieSuccess: TMovieActionCreator<IMovie> = (movie: IMovie) => ({
-    type: MoviesAction.ADD_MOVIE_SUCCESS,
+export const createMovieSuccess: TMovieActionCreator<IMovie> = (movie: IMovie) => ({
+    type: MoviesAction.CREATE_MOVIE_SUCCESS,
     payload: movie
 });
 

@@ -8,14 +8,14 @@ import {
     updateMovie,
     updateMovieSuccess,
     updateMovieFail,
-    addMovie,
-    addMovieSuccess,
-    addMovieFail,
+    createMovie,
+    createMovieSuccess,
+    createMovieFail,
     IMovieAction,
-} from '../redux/actions/movies.action';
-import { IDetailsAction, setDetails } from '../redux/actions/details.actions';
-import { store } from '../redux/store/store';
-import { IMovie, IQueryParams, TNullable } from '../types/types';
+} from '../actions/movies.action';
+import { IDetailsAction, setDetails } from '../actions/details.actions';
+import { store } from '../store/store';
+import { IMovie, IQueryParams, TNullable } from '../../types/types';
 import { Dispatch } from 'react';
 
 const url = 'http://localhost:4000';
@@ -25,6 +25,12 @@ const defaultQueryParams: IQueryParams = {
     sortOrder: 'desc',
     offset: '0',
     limit: '20',
+    searchBy: 'title',
+};
+
+const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
 };
 
 function handleResponse(res: Response): Promise<any> | never {
@@ -38,8 +44,15 @@ export const getMoviesFromServer =
     (queryParams: IQueryParams = {}) =>
     (dispatch: Dispatch<IMovieAction<Error | undefined | IMovie[]>>) => {
     dispatch(getMovies());
+    const { filters } = store.getState();
+    const { sortByConfig: { chosenOption }, genresConfig: { currentGenre } } = filters;
 
-    const requestQuery = new URLSearchParams({ ...defaultQueryParams, ...queryParams });
+    const requestQuery = new URLSearchParams({
+        ...defaultQueryParams,
+        sortBy: chosenOption,
+        filter: currentGenre,
+        ...queryParams,
+    });
 
     fetch(`${url}/movies?${requestQuery.toString()}`)
         .then(handleResponse)
@@ -63,35 +76,29 @@ export const deleteMoviesFromServer = (id: number) =>
         .catch((err: Error) => dispatch(deleteMovieFail(err)));
 };
 
-export const createMoviesFromServer =
+export const createMovieFromServer =
     (movie: IMovie) =>
     (dispatch: Dispatch<IMovieAction<Error | undefined | IMovie>>) => {
-    dispatch(addMovie());
+    dispatch(createMovie());
 
     const initRequest: RequestInit = {
         method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(movie),
     };
 
     fetch(`${url}/movies`, initRequest)
         .then(handleResponse)
-        .then((res: IMovie) => dispatch(addMovieSuccess(res)))
-        .catch((err: Error) => dispatch(addMovieFail(err)));
+        .then((res: IMovie) => dispatch(createMovieSuccess(res)))
+        .catch((err: Error) => dispatch(createMovieFail(err)));
 };
 
-export const editMoviesFromServer = (movie: IMovie) =>
+export const editMovieFromServer = (movie: IMovie) =>
 (dispatch: Dispatch<IMovieAction<Error | undefined | IMovie> | IDetailsAction<TNullable<IMovie>>>) => {
     dispatch(updateMovie());
     const initRequest: RequestInit = {
         method: 'PUT',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify({
             ...movie,
             runtime: +movie.runtime,

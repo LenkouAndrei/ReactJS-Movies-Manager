@@ -7,7 +7,7 @@ const filtersInitState: IStoreFilters = {
         options: ['vote_average', 'vote_count', 'release_date', 'revenue', 'runtime', 'budget'],
     },
     genresConfig: {
-        currentGenre: '',
+        currentGenre: null,
         genres: ['', 'Drama', 'Fantasy', 'Adventure', 'Comedy', 'Animation'],
     },
 };

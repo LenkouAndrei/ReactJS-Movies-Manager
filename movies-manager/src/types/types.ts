@@ -30,7 +30,7 @@ export type TGenresListItem = '' | 'Drama' | 'Fantasy' | 'Adventure' | 'Comedy' 
 
 export interface IMoviesGenresConfig {
     genres: TGenresListItem[];
-    currentGenre: TGenresListItem;
+    currentGenre: TNullable<TGenresListItem>;
 }
 
 export interface IMoviesSortByConfig {

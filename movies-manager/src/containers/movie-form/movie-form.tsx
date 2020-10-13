@@ -8,7 +8,7 @@ import './movie-form.scss';
 import { ICheckboxGenre, IMovie, IStoreState, IMovieInfo } from '../../types/types';
 import { InputControl } from '../../components/input-control/input-control';
 import { SelectControl } from '../../components/select-control/select-control';
-import { createMoviesFromServer, editMoviesFromServer } from '../../service/movies.service';
+import { createMovieFromServer, editMovieFromServer } from '../../redux/thunks/movies-thunks';
 import { defaultMovie } from './mockDefaultMovie';
 import { allGenres } from '../../utils/variables';
 
@@ -168,8 +168,8 @@ const mapStateToProps = (_state: IStoreState, ownProps: ISaveChanges) => {
 
 const dispatchToProps = ((dispatch: Dispatch<any>) => {
     return {
-        createMovie: (movie: IMovie) => { dispatch(createMoviesFromServer(movie)); },
-        editMovie: (movie: IMovie) => { dispatch(editMoviesFromServer(movie)); },
+        createMovie: (movie: IMovie) => { dispatch(createMovieFromServer(movie)); },
+        editMovie: (movie: IMovie) => { dispatch(editMovieFromServer(movie)); },
     };
 });
 

@@ -1,29 +1,46 @@
-import React from 'react';
+import React, { useState, MouseEvent } from 'react';
+import { connect } from 'react-redux';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ISelectConfig, TSortListItem } from '../../types/types';
+import { IStoreState, TSortListItem, IMoviesSortByConfig } from '../../types/types';
+import { getMoviesFromServer } from '../../redux/thunks/movies-thunks';
+import { setSortByFilter } from '../../redux/actions/filter.action';
 import './result-sort.scss';
 
 const blockName = 'result-sort';
 
-interface ISelectProps extends ISelectConfig {
-    onSortClick: (isOpen: boolean, title?: TSortListItem) => void;
+interface ISelectProps extends IMoviesSortByConfig {
+    loadData(): void;
+    setCurrentSortBy(sortByOption: TSortListItem): void;
 }
 
 type TResultSort = (props: ISelectProps) => JSX.Element;
 
-export const ResultSort: TResultSort = ({
-    showOptionList,
+const ResultSort: TResultSort = ({
     options,
     chosenOption,
-    onSortClick}: ISelectProps) => {
+    loadData,
+    setCurrentSortBy}: ISelectProps) => {
+
+    const [showOptionList, setShowOptionList] = useState(false);
+
+    const optionClickHandlerWrapper = (option: TSortListItem) => (_event: MouseEvent) => {
+        setShowOptionList(false);
+        setCurrentSortBy(option);
+        loadData();
+    };
+
+    const openList = (_event: MouseEvent) => {
+        setShowOptionList(true);
+    };
+
     const listItems: JSX.Element[] = options.map(option => {
         return <li
             className={`${blockName}__item`}
             key={option}>
                 <button
                     className={`${blockName}__btn`}
-                    onClick={() => onSortClick(!showOptionList, option) }>{option}</button>
+                    onClick={optionClickHandlerWrapper(option) }>{option.replace('_', ' ')}</button>
             </li>;
     });
 
@@ -32,8 +49,8 @@ export const ResultSort: TResultSort = ({
             <div className={`${blockName}__container--btn`}>
                 <button
                     className={`${blockName}__btn untracked`}
-                    onClick={() => onSortClick(!showOptionList, chosenOption) }>
-                    <span>{ chosenOption }</span>
+                    onClick={openList}>
+                    <span>{ chosenOption.replace('_', ' ') }</span>
                     <FontAwesomeIcon
                         className={`${blockName}__icon--bright`}
                         icon={ showOptionList ? faAngleUp : faAngleDown }/>
@@ -46,3 +63,19 @@ export const ResultSort: TResultSort = ({
             </div>
         </div>;
 };
+
+const mapStateToProps = (state: IStoreState) => {
+    const { chosenOption, options } = state.filters.sortByConfig;
+    return { chosenOption, options };
+};
+
+const dispatchToProps = ((dispatch: any) => {
+    return {
+        loadData: () => { dispatch(getMoviesFromServer({})); },
+        setCurrentSortBy: (sortByOption: TSortListItem) => { dispatch(setSortByFilter(sortByOption)); },
+    };
+});
+
+const ResultSortWithState = connect(mapStateToProps, dispatchToProps)(ResultSort);
+
+export { ResultSortWithState };

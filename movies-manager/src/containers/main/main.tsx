@@ -1,17 +1,25 @@
-import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
-import { FormPage, Modal, Wrapper } from '../';
-import { DeleteModal, Details, MovieCard, ResultFilter, ResultSort, Search } from '../../components';
+import React, { MouseEvent, useState } from 'react';
+import { connect } from 'react-redux';
+import { FormPageWithState, Modal, Wrapper } from '../';
+import {
+    DeleteModal,
+    DetailsWithState,
+    MovieCard,
+    ResultFilterWithState,
+    ResultSortWithState,
+    SearchWithState,
+    LoadingIndicator,
+    ErrorHandler,
+} from '../../components';
 import {
     IMovie,
-    ISelectConfig,
-    TGenresListItem,
+    IStoreState,
     TNullable,
-    TSortListItem
 } from '../../types/types';
 import './main.scss';
-import { moviesSortList } from './mockMoviesSortList';
+import { deleteMoviesFromServer } from '../../redux/thunks/movies-thunks';
+import { setDetails } from '../../redux/actions/details.actions';
 
-const defaultMovies: IMovie[] = require('../../data.json');
 const blockName = 'result';
 
 interface IMainProps {
@@ -20,69 +28,34 @@ interface IMainProps {
     onChangePage: () => void;
 }
 
+interface IStoredMainProps extends IMainProps {
+    moviesStore: IMovie[];
+    isLoading: boolean;
+    errorInfo: TNullable<Error>;
+    deleteMovie(id: number): void;
+    setMovieDetails(movie: IMovie): void;
+}
+
 type TVoidWithNoArgs = () => void;
 type TShowModal = (modalType: string) => void;
 type THandleMovie = (modalDialogType: string, id: number) => void;
-type TSetGenre = (genre: TGenresListItem) => void;
-type TUpdateMovieSet = (editableMovie: IMovie) => void;
-type TUpdateMoviesSortConfig = (isOpen: boolean, title?: TSortListItem) => void;
-type TSortMoviesByField = (field: keyof IMovie) => void;
-type TShowDetails = (event: MouseEvent, movieWithDetails: IMovie) => void;
+type TUpdateMovieSet = () => void;
 
-export function Main(props: IMainProps): JSX.Element {
-    const allMoviesGenres: TGenresListItem[] =
-        defaultMovies.reduce(
-            (allGenres: TGenresListItem[], { genres }: IMovie) => {
-                allGenres.push(...genres as TGenresListItem[]);
-                return allGenres;
-            },
-            ['All']
-        );
-
-    const moviesGenres: TGenresListItem[] = Array.from(new Set(allMoviesGenres));
-    const initGreatestId: number = defaultMovies.reduce(
-        (accum: number, curr: IMovie) => {
-            return curr.id > accum ? curr.id : accum;
-        },
-        0
-    );
-
-    if ( props.movieToAdd ) {
-        defaultMovies.push(props.movieToAdd);
-    }
-
+function Main({
+    moviesStore,
+    isLoading,
+    errorInfo,
+    deleteMovie,
+    setMovieDetails,
+    ...props
+}: IStoredMainProps): JSX.Element {
     const [ isFormDialogOpen, setIsFormDialogOpen ] = useState(false);
     const [ isDeleteDialogOpen, setIsDeleteDialogOpen ] = useState(false);
-    const [ movieToEdit, setMovieToEdit ] = useState(defaultMovies[0]);
-    const [ moviesSortConfig, setMoviesSortConfig ] = useState({
-        showOptionList: false,
-        options: moviesSortList,
-        chosenOption: moviesSortList[0],
-    });
-    const [ movies, setMovies ] = useState(defaultMovies);
-    const [ moviesGenresConfig, setMoviesGenresConfig ] = useState({
-        genres: moviesGenres,
-        currentGenre: moviesGenres[0],
-    });
-    const [ greatestId, setGreatestId ] = useState(initGreatestId);
-    const [ movieWithDetails, setMovieWithDetails ] = useState(null);
-
-    useEffect(
-        () => {
-            if (!props.movieToAdd) {
-                return;
-            }
-            const currentId: number = greatestId + 1;
-            props.movieToAdd.id = currentId;
-            setMovies([ ...movies, props.movieToAdd]);
-            setGreatestId(currentId);
-        },
-        [props.movieToAdd]
-    );
+    const [ movieToEdit, setMovieToEdit ] = useState(null);
 
     const showModal: TShowModal = (modalType: string) => {
-        setIsFormDialogOpen(modalType === 'Edit');
-        setIsDeleteDialogOpen(modalType === 'Delete');
+        const openMethod = (modalType === 'Edit') ? setIsFormDialogOpen : setIsDeleteDialogOpen;
+        openMethod(true);
     };
 
     const hideModal: TVoidWithNoArgs = () => {
@@ -91,105 +64,90 @@ export function Main(props: IMainProps): JSX.Element {
     };
 
     const handleMovieToEditChange: THandleMovie = (modalDialogType: string, id: number) => {
-        setMovieToEdit(movies.find((movie: IMovie) => movie.id === id));
+        setMovieToEdit(moviesStore.find((movie: IMovie) => movie.id === id));
         showModal(modalDialogType);
     };
 
-    const sortMoviesByField: TSortMoviesByField = (field: keyof IMovie) => {
-        const moviesCopy: IMovie[] = [ ...movies ];
-        if (field === 'release_date') {
-            moviesCopy.sort((movieA, movieB) => +new Date(movieA[field]) - +new Date(movieB[field]));
-        } else {
-            moviesCopy.sort((movieA, movieB) => (movieA[field] as number) - (movieB[field] as number));
-        }
-        setMovies( moviesCopy );
-    };
-
-    const updateMoviesSortConfig: TUpdateMoviesSortConfig = (isOpen: boolean, title?: TSortListItem) => {
-        const newSortConfig: Partial<ISelectConfig> = {
-            showOptionList: isOpen,
-            chosenOption: title,
-        };
-        setMoviesSortConfig({ ...moviesSortConfig, ...newSortConfig });
-        if (title) {
-            sortMoviesByField(title.replace(' ', '_') as keyof IMovie);
-        }
-    };
-
-    const updateMoviesSet: TUpdateMovieSet = (editableMovie: IMovie) => {
-        const movieIdx: number = movies
-            .findIndex(({ id }: IMovie) => id === movieToEdit.id);
-        const newMovies: IMovie[] = [ ...movies ];
-        newMovies.splice(movieIdx, 1, editableMovie);
-        setMovies( newMovies );
+    const updateMoviesSet: TUpdateMovieSet = () => {
         hideModal();
     };
 
-    const setCurrentGenre: TSetGenre = useCallback(
-      (genre: TGenresListItem) => {
-        setMoviesGenresConfig({
-            ...moviesGenresConfig,
-            currentGenre: genre,
-        });
-      },
-      [moviesGenresConfig]
-    );
-
-    const deleteMovie: TVoidWithNoArgs = () => {
-        const movieIdx: number = movies
-            .findIndex(({ id }: IMovie) => id === movieToEdit.id);
-        const newMovies: IMovie[] = [ ...movies ];
-        newMovies.splice(movieIdx, 1);
-        setMovies( newMovies );
+    const onDeleteMovie: TVoidWithNoArgs = () => {
+        deleteMovie(movieToEdit.id);
         hideModal();
     };
 
-    const showDetails: TShowDetails = (event: MouseEvent, movie: IMovie) => {
-        setMovieWithDetails( movie );
+    const showDetails = (movie: IMovie) => (_event: MouseEvent) => {
+        setMovieDetails( movie );
         props.onChangePage();
     };
 
-    const { currentGenre } = moviesGenresConfig;
-    const moviesCards: JSX.Element[] = movies.filter((movie: IMovie) =>  (
-            currentGenre === 'All' || movie.genres.includes(currentGenre))
-        ).map((movie: IMovie) => {
+    const moviesCards: JSX.Element[] = moviesStore.map((movie: IMovie) => {
             return <li
                 className={`${blockName}__movies-card`}
                 key={movie.id}
-                onClick={(event) => showDetails(event, movie)}>
+                onClick={showDetails(movie)}>
                 <MovieCard onClickMovie={handleMovieToEditChange} movie={movie}/>
             </li>;
         });
 
+    const wrappedSpinner: JSX.Element = <Wrapper postfix={'vertically-filled'}>
+        <LoadingIndicator />
+    </Wrapper>;
+
+    const wrappedNotFoundResult: JSX.Element = <Wrapper postfix={'vertically-filled'}>
+        <span className={`${blockName}__not-found`}>No movies found</span>
+    </Wrapper>;
+
+    const wrappedErrorHandler: JSX.Element = <Wrapper>
+        <ErrorHandler errorMessage={errorInfo && errorInfo.message || ''}/>
+    </Wrapper>;
+
+    const wrappedList: JSX.Element = <Wrapper>
+        <ul className={`${blockName}__cards-list`}>
+            {moviesCards}
+        </ul>
+    </Wrapper>;
+
     return <main className={blockName}>
-        <Modal isOpen={isFormDialogOpen} handleClose={hideModal}>
-            <FormPage onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
-        </Modal>
-        <Modal isOpen={isDeleteDialogOpen} handleClose={hideModal}>
-            <DeleteModal  onDeleteConfirm={deleteMovie} title={movieToEdit.title}/>
-        </Modal>
-        <Wrapper>
-            { props.areDetailsVisible && movieWithDetails ?
-                <Details { ...movieWithDetails }/> : <Search/> }
-        </Wrapper>
-        <div className={`${blockName}__separator`} />
+            <Modal isOpen={isFormDialogOpen} handleClose={hideModal}>
+                <FormPageWithState onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
+            </Modal>
+            <Modal isOpen={isDeleteDialogOpen} handleClose={hideModal}>
+                {movieToEdit && <DeleteModal onDeleteConfirm={onDeleteMovie} title={movieToEdit.title}/>}
+            </Modal>
+            <div className={`${blockName}__separator`} />
         <Wrapper>
             <>
+                { props.areDetailsVisible ? <DetailsWithState /> : <SearchWithState /> }
                 <section className={`${blockName}__filter`}>
-                    <ResultFilter
-                        onGenreClick={setCurrentGenre}
-                        { ...moviesGenresConfig }/>
-                    <ResultSort
-                        onSortClick={updateMoviesSortConfig}
-                        {...moviesSortConfig}/>
+                    <ResultFilterWithState />
+                    <ResultSortWithState />
                 </section>
                 <div className={`${blockName}__amount`}>
-                    <strong className='strong'>{movies.length}</strong> movies found
+                    <strong className='strong'>{moviesStore.length}</strong> movies found
                 </div>
-                <ul className={`${blockName}__cards-list`}>
-                    {moviesCards}
-                </ul>
             </>
         </Wrapper>
+        { isLoading ? wrappedSpinner :
+            errorInfo && errorInfo.message && wrappedErrorHandler
+            || moviesStore.length !== 0 && wrappedList
+            || wrappedNotFoundResult }
     </main>;
 }
+
+const mapStateToProps = (state: IStoreState, ownProps: IMainProps) => {
+    const { movies: moviesStore, isLoading, error: errorInfo } = state.moviesConfig;
+    return { ...ownProps, moviesStore, isLoading, errorInfo };
+};
+
+const dispatchToProps = ((dispatch: any) => {
+    return {
+        deleteMovie: (id: number) => { dispatch(deleteMoviesFromServer(id)); },
+        setMovieDetails: (movie: IMovie) => { dispatch(setDetails(movie)); },
+    };
+});
+
+const MainWithState = connect(mapStateToProps, dispatchToProps)(Main);
+
+export { MainWithState };

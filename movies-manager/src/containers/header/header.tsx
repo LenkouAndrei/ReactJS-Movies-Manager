@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Logo } from '../../components';
-import { IMovie, TNullable } from '../../types/types';
-import { FormPage, Modal, Wrapper } from '../';
+import { TNullable } from '../../types/types';
+import { FormPageWithState, Modal, Wrapper } from '../';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './header.scss';
 
 export interface IHeaderProps {
     pageName: PageName;
-    onAddBtnClick: (newMovie: IMovie) => void;
     onSearchBtnClick: () => void;
 }
 
@@ -18,11 +17,10 @@ export enum PageName {
 }
 
 type TVoidFunc = () => void;
-type TCreateMovie = (newMovie: IMovie) => void;
 
 const blockName = 'header';
 
-export function Header({ pageName, onAddBtnClick, onSearchBtnClick }: IHeaderProps): JSX.Element {
+export function Header({ pageName, onSearchBtnClick }: IHeaderProps): JSX.Element {
     const [ isDialogOpen, setIsDialogOpen ] = useState(false);
 
     const showModal: TVoidFunc = () => {
@@ -31,11 +29,6 @@ export function Header({ pageName, onAddBtnClick, onSearchBtnClick }: IHeaderPro
 
     const hideModal: TVoidFunc = () => {
         setIsDialogOpen(false);
-    };
-
-    const createNewMovie: TCreateMovie = (newMovie: IMovie) => {
-        onAddBtnClick(newMovie);
-        hideModal();
     };
 
     const navigateToMainPage: TVoidFunc = () => {
@@ -50,7 +43,7 @@ export function Header({ pageName, onAddBtnClick, onSearchBtnClick }: IHeaderPro
                         className={'add-btn'}
                         onClick={showModal}>+ Add Movie</button>
                     <Modal isOpen={isDialogOpen} handleClose={hideModal}>
-                        <FormPage onSaveChanges={createNewMovie} movie={null}/>
+                        <FormPageWithState onSaveChanges={hideModal} movie={null}/>
                     </Modal>
                 </>;
           case PageName.Details:

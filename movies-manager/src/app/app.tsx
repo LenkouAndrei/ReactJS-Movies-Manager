@@ -3,13 +3,12 @@ import {
   ErrorBoundary,
   Footer,
   Header,
-  Main,
+  MainWithState,
   PageName,
 } from '../containers';
 import './app.scss';
 
 function App(): JSX.Element {
-  const [newMovie, setNewMovie] = useState(null);
   const [pageName, setPageName] = useState(PageName.Main);
   const [areDetailsVisible, setAreDetailsVisible] = useState(false);
 
@@ -27,11 +26,9 @@ function App(): JSX.Element {
     <React.StrictMode>
       <ErrorBoundary>
         <Header
-          onAddBtnClick={setNewMovie}
           onSearchBtnClick={clickSearchBtn}
           pageName={pageName}/>
-        <Main
-          movieToAdd={newMovie}
+        <MainWithState
           areDetailsVisible={areDetailsVisible}
           onChangePage={changePage}
         />

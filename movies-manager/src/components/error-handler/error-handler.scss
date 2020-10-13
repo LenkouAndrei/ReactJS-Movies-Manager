@@ -1,0 +1,17 @@
+@import "../../styles/colors-vars";
+
+.error-handler {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+
+    &__headline {
+        font-weight: 600;
+        font-size: 26px;
+        color: $solmon;
+        margin-bottom: 15px;
+    }
+}

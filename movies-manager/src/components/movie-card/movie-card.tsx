@@ -3,8 +3,8 @@ import { faAlignJustify, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IMovie } from '../../types/types';
 import useOutsideClick from '../../hooks/useOutsideClick';
-import './movie-card.scss';
 import { menuItemTitles } from './mockMenuTitles';
+import './movie-card.scss';
 
 const blockName = 'movie';
 
@@ -24,17 +24,24 @@ export function MovieCard({ movie, onClickMovie }: IMovieCardProps): JSX.Element
       []
     );
 
+    const hideMenuWithPropagation: (event: React.MouseEvent) => void = (event: React.MouseEvent) => {
+      event.stopPropagation();
+      hideEditMenu();
+    };
+
     useOutsideClick(wrapperRef, hideEditMenu);
 
-    const showEditMenu: () => void = useCallback(
-      () => {
+    const showEditMenu: (event: React.MouseEvent) => void = useCallback(
+      (event: React.MouseEvent) => {
+        event.stopPropagation();
         setIsEditMenuVisible(true);
       },
       []
     );
 
-    const passInfo: (itemTitle: string) => void = useCallback(
-      (itemTitle: string) => {
+    const passInfo: (event: React.MouseEvent, itemTitle: string) => void = useCallback(
+      (event: React.MouseEvent, itemTitle: string) => {
+        event.stopPropagation();
         onClickMovie(itemTitle, movie.id, true);
         hideEditMenu();
       },
@@ -45,7 +52,7 @@ export function MovieCard({ movie, onClickMovie }: IMovieCardProps): JSX.Element
         return <li
             key={itemTitle}
             className={'menu__list-item'}
-            onClick={() => passInfo(itemTitle)}>{ itemTitle }</li>;
+            onClick={(event: React.MouseEvent) => passInfo(event, itemTitle)}>{ itemTitle }</li>;
     });
 
     const menu: JSX.Element = <div
@@ -53,7 +60,7 @@ export function MovieCard({ movie, onClickMovie }: IMovieCardProps): JSX.Element
         ref={wrapperRef}>
         <button
             className={'menu__btn--close'}
-            onClick={hideEditMenu}>
+            onClick={hideMenuWithPropagation}>
             <FontAwesomeIcon
                 className={'menu__icon'}
                 icon={faTimes}/>

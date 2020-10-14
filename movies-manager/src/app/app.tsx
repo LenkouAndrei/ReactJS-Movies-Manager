@@ -1,40 +1,15 @@
-import React, { useState } from 'react';
-import {
-  ErrorBoundary,
-  Footer,
-  Header,
-  MainWithState,
-  PageName,
-} from '../containers';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import { ErrorBoundary, SearchPage, DetailsPage, NotFoundPage } from '../containers';
 import './app.scss';
 
 function App(): JSX.Element {
-  const [pageName, setPageName] = useState(PageName.Main);
-  const [areDetailsVisible, setAreDetailsVisible] = useState(false);
-
-  const changePage = () => {
-    setPageName(PageName.Details);
-    setAreDetailsVisible(true);
-  };
-
-  const clickSearchBtn = () => {
-    setPageName(PageName.Main);
-    setAreDetailsVisible(false);
-  };
-
   return (
-    <React.StrictMode>
-      <ErrorBoundary>
-        <Header
-          onSearchBtnClick={clickSearchBtn}
-          pageName={pageName}/>
-        <MainWithState
-          areDetailsVisible={areDetailsVisible}
-          onChangePage={changePage}
-        />
-        <Footer />
-      </ErrorBoundary>
-    </React.StrictMode>
+    <Switch>
+      <Route exact path="/" component={SearchPage} />
+      <Route path="/film" component={DetailsPage} />
+      <Route path="*" component={NotFoundPage} />
+    </Switch>
   );
 }
 

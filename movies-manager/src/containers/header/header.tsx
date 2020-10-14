@@ -8,7 +8,6 @@ import './header.scss';
 
 export interface IHeaderProps {
     pageName: PageName;
-    onSearchBtnClick: () => void;
 }
 
 export enum PageName {
@@ -20,7 +19,7 @@ type TVoidFunc = () => void;
 
 const blockName = 'header';
 
-export function Header({ pageName, onSearchBtnClick }: IHeaderProps): JSX.Element {
+export function Header({ pageName }: IHeaderProps): JSX.Element {
     const [ isDialogOpen, setIsDialogOpen ] = useState(false);
 
     const showModal: TVoidFunc = () => {
@@ -29,10 +28,6 @@ export function Header({ pageName, onSearchBtnClick }: IHeaderProps): JSX.Elemen
 
     const hideModal: TVoidFunc = () => {
         setIsDialogOpen(false);
-    };
-
-    const navigateToMainPage: TVoidFunc = () => {
-        onSearchBtnClick();
     };
 
     const getHeaderElement: () => TNullable<JSX.Element> = () => {
@@ -48,8 +43,7 @@ export function Header({ pageName, onSearchBtnClick }: IHeaderProps): JSX.Elemen
                 </>;
           case PageName.Details:
             return <button
-              className={'search-btn'}
-              onClick={navigateToMainPage}>
+              className={'search-btn'}>
               <FontAwesomeIcon
                 className={`${blockName}__icon`}
                 icon={faSearch}/>

@@ -1,24 +1,21 @@
 import React from 'react';
+import { Header, PageName } from '../';
+import { Wrapper } from '../wrapper/wrapper';
+import { Link } from "react-router-dom";
 import './not-found-page.scss';
 
+const blockName = 'not-found';
 export const NotFoundPage = () => {
-    return (
-      <div>
-        <svg className={'svg'} viewBox="2000 1000 6000 4000">
-          <symbol id="s-text">
-            <text className={'text'} textAnchor="middle" x="50%" y="80%">
-              404
-            </text>
-          </symbol>
-  
-          <g className={'g-ants'}>
-            <use xlinkHref="#s-text" className={'text-copy'} />
-            <use xlinkHref="#s-text" className={'text-copy'} />
-            <use xlinkHref="#s-text" className={'text-copy'} />
-            <use xlinkHref="#s-text" className={'text-copy'} />
-            <use xlinkHref="#s-text" className={'text-copy'} />
-          </g>
-        </svg>
-      </div>
-    );
+    return <>
+        <Header pageName={PageName.NotFound}/>
+        <main className={`${blockName}__main`}>
+            <Wrapper postfix={`${blockName}__wrapper`}>
+                <>
+                    <h2 className={`${blockName}__headline`}>Page Not Found</h2>
+                    <div className={`${blockName}__error`}>404</div>
+                    <Link to='/search/' className={`${blockName}__link`}>Go back to home</Link>
+                </>
+            </Wrapper>
+        </main>
+    </>
 };

@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { getMoviesFromServer } from '../../redux/thunks/movies-thunks';
 import './search.scss';
 
@@ -12,9 +13,20 @@ interface ISearchProps {
 type TSearch = (props: ISearchProps) => JSX.Element;
 
 const Search: TSearch = ({ loadData }: ISearchProps) => {
+    const [isInit, setIsInit] = useState(false);
+    const { query } = useParams();
+    const history = useHistory();
     const inputEl = useRef(null);
+    useEffect(() => {
+        if (isInit || !query) {
+            return;
+        }
+        setIsInit(true);
+        loadData(query);
+      }, [isInit]);
     const searchText = () => {
         const trimmedText = inputEl.current.value.trim();
+        history.push(`/search/${inputEl.current.value}`)
         loadData(trimmedText);
     };
 

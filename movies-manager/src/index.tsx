@@ -6,10 +6,10 @@ import { store } from './redux/store/store';
 import App from './app/app';
 
 ReactDom.render(
-    <Router>
-        <Provider store={store}>
+    <Provider store={store}>
+        <Router>
             <App />
-        </Provider>
-    </Router>,
+        </Router>
+    </Provider>,
     document.querySelector('#root')
 );

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    Footer,
     Header,
     MainWithState,
     PageName,
@@ -11,7 +10,6 @@ type TDetailsPage = () => JSX.Element;
 export const DetailsPage: TDetailsPage = () => {
     return <>
         <Header pageName={PageName.Details} />
-        <MainWithState />
-        <Footer />
+        <MainWithState areDetailsVisible={true}/>
     </>;
 };

@@ -1,56 +1,39 @@
-.text {
-    font-size: 14.5em;
-  
-    &-copy {
-        fill: none;
-        stroke: #fff;
-        stroke-dasharray: 6% 29%;
-        stroke-width: 5px;
-        stroke-dashoffset: 0%;
-        animation: stroke-offset 5.5s infinite linear;
-    
-        &:nth-child(1) {
-            stroke: #0f349b;
-            animation-delay: -1;
-        }
-    
-        &:nth-child(2) {
-            stroke: #3d72d4;
-            animation-delay: -2s;
-        }
-    
-        &:nth-child(3) {
-            stroke: #00b7bd;
-            animation-delay: -3s;
-        }
-    
-        &:nth-child(4) {
-            stroke: #8bcfb8;
-            animation-delay: -4s;
-        }
-    
-        &:nth-child(5) {
-            stroke: #6cd8d8;
-            animation-delay: -5s;
-        }
-    }
-}
-  
-.svg {
-    display: block;
-    font: 14.5em sans-serif;
-    width: 100vw;
-    height: 100vh;
-    margin: 0 auto;
-}
+@import "../../styles/colors-vars";
 
-.movie-item {
-    width: 300px;
-    margin: 0 20px 60px;
-}
-  
-@keyframes stroke-offset {
-    100% {
-        stroke-dashoffset: -35%;
+.not-found {
+    &__main {
+        background-color: $grey;
+    }
+
+    &__wrapper {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: column;
+    }
+
+    &__headline {
+        font-size: 30px;
+        color: $white;
+    }
+
+    &__error {
+        margin: 10px 0;
+        font-size: 90px;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        color: $solmon;
+    }
+
+    &__link {
+        &:link,
+        &:visited,
+        &:hover,
+        &:active {
+            color: $solmon;
+            border: 1px solid $solmon;
+            border-radius: 3px;
+            padding: 5px 10px;
+        }
     }
 }

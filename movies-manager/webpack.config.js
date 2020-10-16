@@ -55,7 +55,6 @@ module.exports = () => {
       extensions: [ '.tsx', '.ts', '.js' ],
     },
     plugins: [
-      new webpack.NoEmitOnErrorsPlugin(), // deprecate compilation if error occure
       new HtmlWebpackPlugin({
         chunks: ['index'],
         template: './index.html'

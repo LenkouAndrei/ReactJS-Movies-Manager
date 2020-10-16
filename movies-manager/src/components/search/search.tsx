@@ -17,16 +17,19 @@ const Search: TSearch = ({ loadData }: ISearchProps) => {
     const { query } = useParams();
     const history = useHistory();
     const inputEl = useRef(null);
-    useEffect(() => {
-        if (isInit || !query) {
-            return;
-        }
-        setIsInit(true);
-        loadData(query);
-      }, [isInit]);
+    useEffect(
+        () => {
+            if (isInit || !query) {
+                return;
+            }
+            setIsInit(true);
+            loadData(query);
+        },
+        [isInit]
+    );
     const searchText = () => {
         const trimmedText = inputEl.current.value.trim();
-        history.push(`/search/${inputEl.current.value}`)
+        history.push(`/search/${inputEl.current.value}`);
         loadData(trimmedText);
     };
 

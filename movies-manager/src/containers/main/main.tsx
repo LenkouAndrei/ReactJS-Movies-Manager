@@ -41,7 +41,7 @@ type TVoidWithNoArgs = () => void;
 type TShowModal = (modalType: string) => void;
 type THandleMovie = (modalDialogType: string, id: number) => void;
 type TUpdateMovieSet = () => void;
-type THandleCardClickWrapper = (movie: IMovie) => (_event: MouseEvent) => void; 
+type THandleCardClickWrapper = (movie: IMovie) => (_event: MouseEvent) => void;
 
 function Main({
     moviesStore,
@@ -80,10 +80,10 @@ function Main({
         hideModal();
     };
 
-    const handleCardClick: THandleCardClickWrapper  = (movie) => (_event)=> {
+    const handleCardClick: THandleCardClickWrapper  = (movie) => (_event) => {
         setMovieDetails(movie);
         history.push(`/film/${movie.id}`);
-    }
+    };
 
     const moviesCards: JSX.Element[] = moviesStore.map((movie: IMovie) => {
             return <li

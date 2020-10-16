@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header, PageName } from '../';
 import { Wrapper } from '../wrapper/wrapper';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import './not-found-page.scss';
 
 const blockName = 'not-found';
@@ -17,5 +17,5 @@ export const NotFoundPage = () => {
                 </>
             </Wrapper>
         </main>
-    </>
+    </>;
 };

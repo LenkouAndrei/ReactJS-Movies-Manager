@@ -36,7 +36,7 @@ export function Header({ pageName }: IHeaderProps): JSX.Element {
 
     const goBackOnHistory: TGoBack = (_event: MouseEvent) => {
         history.goBack();
-    }
+    };
 
     const getHeaderElement: () => TNullable<JSX.Element> = () => {
         switch (pageName) {

@@ -23,11 +23,6 @@
         box-sizing: border-box;
     }
 
-    &__error {
-        margin-top: 5px;
-        color: $red;
-    }
-
     &__icon {
         color: $grey-font-color;
 
@@ -35,8 +30,9 @@
             color: $solmon;
             position: absolute;
             top: 50%;
-            right: 15px;
+            right: 20px;
             transform: rotateY(-50%);
+            pointer-events: none;
         }
     }
 }
@@ -49,4 +45,13 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+input[type=date]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    cursor: pointer;
+}
+
+input[type=date]::-webkit-inner-spin-button {
+    display: none;
 }

@@ -36,6 +36,7 @@ function MovieForm({
     createMovie,
     editMovie
 }: ISaveChanges): JSX.Element {
+    const minDate = '1895-12-28';
     const handleSubmit: THandleSubmit = (movieInfo: IMovie) => {
         const method = movieInfo.id ? editMovie : createMovie;
         method(movieInfo);
@@ -71,10 +72,12 @@ function MovieForm({
                 .required('Required'),
             release_date: Yup.string()
                 .matches(
-                    /(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])/,
-                    // tslint:disable-next-line
-                    'Must be in a "YYYY-MM-DD" format'
+                    /^(?:(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$/,
+                    'Must be in a \"YYYY-MM-DD\" format'
                 )
+                .test('min-date', `Date must be greater than ${minDate}`, (value: string) => {
+                    return !value || +new Date(value) > +new Date(minDate);
+                })
                 .required('Required'),
             poster_path: Yup.string()
                 .matches(
@@ -83,8 +86,8 @@ function MovieForm({
                 )
                 .required('Required'),
             overview: Yup.string()
-                .min(5, 'Tesxt should be in a range from 5 to 250 symbols')
-                .max(500, 'Tesxt should be in a range from 10 to 500 symbols')
+                .min(5, 'Text should be in a range from 5 to 250 symbols')
+                .max(500, 'Text should be in a range from 10 to 500 symbols')
                 .required('Required'),
             genres: Yup.array()
                 .of(
@@ -100,7 +103,7 @@ function MovieForm({
                 .integer('Must be integer')
                 .required('Required'),
         })}
-        onSubmit={(values: IMovieInfo<ICheckboxGenre[]>) => {
+        onSubmit={(values: IMovieInfo) => {
             setTimeout(
                 () => {
                     const chosenGenres = values.genres
@@ -127,6 +130,7 @@ function MovieForm({
             <InputControl
                 label='release date'
                 name='release_date'
+                type='date'
                 icon={icoCalendar}
             />
             <InputControl

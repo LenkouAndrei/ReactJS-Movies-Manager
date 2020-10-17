@@ -1,6 +1,6 @@
 export type TNullable<T> = T | null;
 
-export interface IMovieInfo<T = string[]> {
+export interface IMovieInfo {
     title: string;
     tagline: string;
     vote_average: number;
@@ -10,7 +10,7 @@ export interface IMovieInfo<T = string[]> {
     overview: string;
     budget: number;
     revenue: number;
-    genres: T;
+    genres: (ICheckboxGenre | string)[];
     runtime: number;
 }
 

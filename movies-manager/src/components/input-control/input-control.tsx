@@ -1,6 +1,7 @@
 import React from 'react';
 import { TNullable } from '../../types/types';
 import { useField } from 'formik';
+import { ErrorMessage } from '../';
 import './input-control.scss';
 
 interface IInputControlProps {
@@ -21,7 +22,7 @@ const InputControl = ({
     type = 'text',
     ...props
 }: IInputControlProps) => {
-    const [field, meta] = useField(props.name);
+    const [field] = useField(props.name);
     const inputControl: JSX.Element = <>
         <label
             className={`${blockName}__label`}
@@ -36,9 +37,7 @@ const InputControl = ({
     </>;
     return <>
         {isWrapped && <div className={`${blockName}__field-wrapper`}>{inputControl}</div> || inputControl}
-        {meta.touched && meta.error ? (
-        <div className={`${blockName}__error`}>{meta.error}</div>
-        ) : null}
+        <ErrorMessage name={props.name}/>
     </>;
 };
 

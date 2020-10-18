@@ -11,6 +11,7 @@ function App(): JSX.Element {
         <Router>
           <Switch>
             <Route exact={true} path='/' component={SearchPage} />
+            <Route path='/search' component={SearchPage} />
             <Route path='/search/:query' component={SearchPage} />
             <Route path='/film/:id' component={DetailsPage} />
             <Route path='*' component={NotFoundPage} />

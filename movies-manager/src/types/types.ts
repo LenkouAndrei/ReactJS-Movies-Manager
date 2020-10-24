@@ -10,7 +10,7 @@ export interface IMovieInfo {
     overview: string;
     budget: number;
     revenue: number;
-    genres: string[];
+    genres: (ICheckboxGenre | string)[];
     runtime: number;
 }
 
@@ -68,4 +68,9 @@ export interface IStoreState {
     filters: IStoreFilters;
     moviesConfig: IMoviesStoreConfig;
     details: IMovieInfo;
+}
+
+export interface ICheckboxGenre {
+    label: string;
+    isChecked: boolean;
 }

@@ -1,6 +1,6 @@
 import React, { MouseEvent, useState } from 'react';
 import { connect } from 'react-redux';
-import { FormPageWithState, Modal, Wrapper } from '../';
+import { MovieFormWithState, Modal, Wrapper } from '../';
 import {
     DeleteModal,
     DetailsWithState,
@@ -110,13 +110,13 @@ function Main({
     </Wrapper>;
 
     return <main className={blockName}>
-            <Modal isOpen={isFormDialogOpen} handleClose={hideModal}>
-                <FormPageWithState onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
-            </Modal>
-            <Modal isOpen={isDeleteDialogOpen} handleClose={hideModal}>
-                {movieToEdit && <DeleteModal onDeleteConfirm={onDeleteMovie} title={movieToEdit.title}/>}
-            </Modal>
-            <div className={`${blockName}__separator`} />
+        <Modal isOpen={isFormDialogOpen} handleClose={hideModal}>
+            <MovieFormWithState onSaveChanges={updateMoviesSet} movie={ movieToEdit }/>
+        </Modal>
+        <Modal isOpen={isDeleteDialogOpen} handleClose={hideModal}>
+            {movieToEdit && <DeleteModal onDeleteConfirm={onDeleteMovie} title={movieToEdit.title}/>}
+        </Modal>
+        <div className={`${blockName}__separator`} />
         <Wrapper>
             <>
                 { props.areDetailsVisible ? <DetailsWithState /> : <SearchWithState /> }

@@ -1,0 +1,57 @@
+@import "../../styles/colors-vars";
+
+.input-control {
+    &__field-wrapper {
+        position: relative;
+        margin-top: 15px;
+    }
+
+    &__label {
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        color: $solmon;
+        display: block;
+    }
+
+    &__input {
+        width: 100%;
+        padding: 5px 15px;
+        background-color: $grey;
+        border-color: $grey-border-color;
+        color: $grey-font-color;
+        font-size: 15px;
+        box-sizing: border-box;
+    }
+
+    &__icon {
+        color: $grey-font-color;
+
+        &--bright {
+            color: $solmon;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: rotateY(-50%);
+            pointer-events: none;
+        }
+    }
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=date]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    cursor: pointer;
+}
+
+input[type=date]::-webkit-inner-spin-button {
+    display: none;
+}

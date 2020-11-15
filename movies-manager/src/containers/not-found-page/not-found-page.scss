@@ -1,0 +1,39 @@
+@import "../../styles/colors-vars";
+
+.not-found {
+    &__main {
+        background-color: $grey;
+    }
+
+    &__wrapper {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: column;
+    }
+
+    &__headline {
+        font-size: 30px;
+        color: $white;
+    }
+
+    &__error {
+        margin: 10px 0;
+        font-size: 90px;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        color: $solmon;
+    }
+
+    &__link {
+        &:link,
+        &:visited,
+        &:hover,
+        &:active {
+            color: $solmon;
+            border: 1px solid $solmon;
+            border-radius: 3px;
+            padding: 5px 10px;
+        }
+    }
+}

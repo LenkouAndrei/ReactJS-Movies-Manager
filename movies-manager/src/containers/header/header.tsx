@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Logo } from '../../components';
 import { TNullable } from '../../types/types';
 import { MovieFormWithState, Modal, Wrapper } from '../';
@@ -8,19 +9,21 @@ import './header.scss';
 
 export interface IHeaderProps {
     pageName: PageName;
-    onSearchBtnClick: () => void;
 }
 
 export enum PageName {
     Main = 'Main',
     Details = 'Details',
+    NotFound = 'NotFound',
 }
 
 type TVoidFunc = () => void;
+type TGoBack = (_event: MouseEvent) => void;
 
 const blockName = 'header';
 
-export function Header({ pageName, onSearchBtnClick }: IHeaderProps): JSX.Element {
+export function Header({ pageName }: IHeaderProps): JSX.Element {
+    const history = useHistory();
     const [ isDialogOpen, setIsDialogOpen ] = useState(false);
 
     const showModal: TVoidFunc = () => {
@@ -31,8 +34,8 @@ export function Header({ pageName, onSearchBtnClick }: IHeaderProps): JSX.Elemen
         setIsDialogOpen(false);
     };
 
-    const navigateToMainPage: TVoidFunc = () => {
-        onSearchBtnClick();
+    const goBackOnHistory: TGoBack = (_event: MouseEvent) => {
+        history.goBack();
     };
 
     const getHeaderElement: () => TNullable<JSX.Element> = () => {
@@ -46,14 +49,15 @@ export function Header({ pageName, onSearchBtnClick }: IHeaderProps): JSX.Elemen
                         <MovieFormWithState onSaveChanges={hideModal}/>
                     </Modal>
                 </>;
-          case PageName.Details:
-            return <button
-              className={'search-btn'}
-              onClick={navigateToMainPage}>
-              <FontAwesomeIcon
-                className={`${blockName}__icon`}
-                icon={faSearch}/>
-            </button>;
+            case PageName.Details:
+                return <button
+                    className={'search-btn'}
+                    onClick={goBackOnHistory}>
+                    <FontAwesomeIcon
+                        className={`${blockName}__icon`}
+                        icon={faSearch}/>
+                    </button>;
+            case PageName.NotFound:
             default:
                 return null;
         }

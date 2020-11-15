@@ -1,5 +1,6 @@
 import React, { MouseEvent, useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { MovieFormWithState, Modal, Wrapper } from '../';
 import {
     DeleteModal,
@@ -40,6 +41,7 @@ type TVoidWithNoArgs = () => void;
 type TShowModal = (modalType: string) => void;
 type THandleMovie = (modalDialogType: string, id: number) => void;
 type TUpdateMovieSet = () => void;
+type THandleCardClickWrapper = (movie: IMovie) => (_event: MouseEvent) => void;
 
 function Main({
     moviesStore,
@@ -49,6 +51,7 @@ function Main({
     setMovieDetails,
     ...props
 }: IStoredMainProps): JSX.Element {
+    const history = useHistory();
     const [ isFormDialogOpen, setIsFormDialogOpen ] = useState(false);
     const [ isDeleteDialogOpen, setIsDeleteDialogOpen ] = useState(false);
     const [ movieToEdit, setMovieToEdit ] = useState(null);
@@ -77,17 +80,17 @@ function Main({
         hideModal();
     };
 
-    const showDetails = (movie: IMovie) => (_event: MouseEvent) => {
-        setMovieDetails( movie );
-        props.onChangePage();
+    const handleCardClick: THandleCardClickWrapper  = (movie) => (_event) => {
+        setMovieDetails(movie);
+        history.push(`/film/${movie.id}`);
     };
 
     const moviesCards: JSX.Element[] = moviesStore.map((movie: IMovie) => {
             return <li
                 className={`${blockName}__movies-card`}
                 key={movie.id}
-                onClick={showDetails(movie)}>
-                <MovieCard onClickMovie={handleMovieToEditChange} movie={movie}/>
+                onClick={handleCardClick(movie)}>
+                    <MovieCard onClickMovie={handleMovieToEditChange} movie={movie}/>
             </li>;
         });
 

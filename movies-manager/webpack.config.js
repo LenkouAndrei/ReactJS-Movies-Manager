@@ -1,4 +1,5 @@
 const { merge } = require('webpack-merge');
+const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -54,7 +55,6 @@ module.exports = () => {
       extensions: [ '.tsx', '.ts', '.js' ],
     },
     plugins: [
-      new webpack.NoEmitOnErrorsPlugin(), // deprecate compilation if error occure
       new HtmlWebpackPlugin({
         chunks: ['index'],
         template: './index.html'

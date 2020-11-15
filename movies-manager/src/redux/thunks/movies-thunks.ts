@@ -17,6 +17,7 @@ import { IDetailsAction, setDetails } from '../actions/details.actions';
 import { store } from '../store/store';
 import { IMovie, IQueryParams, TNullable } from '../../types/types';
 import { Dispatch } from 'react';
+import { setGenreFilter, ISortByFilterAction } from '../actions/filter.action';
 
 const url = 'http://localhost:4000';
 const defaultQueryParams: IQueryParams = {
@@ -42,10 +43,14 @@ function handleResponse(res: Response): Promise<any> | never {
 
 export const getMoviesFromServer =
     (queryParams: IQueryParams = {}) =>
-    (dispatch: Dispatch<IMovieAction<Error | undefined | IMovie[]>>) => {
+    (dispatch: Dispatch<IMovieAction<Error | undefined | IMovie[]> | ISortByFilterAction>) => {
     dispatch(getMovies());
     const { filters } = store.getState();
-    const { sortByConfig: { chosenOption }, genresConfig: { currentGenre } } = filters;
+    let { sortByConfig: { chosenOption }, genresConfig: { currentGenre } } = filters;
+    if (queryParams.search != null && currentGenre == null) {
+        currentGenre = '';
+        dispatch(setGenreFilter(currentGenre));
+    }
 
     const requestQuery = new URLSearchParams({
         ...defaultQueryParams,

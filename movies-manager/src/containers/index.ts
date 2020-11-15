@@ -5,3 +5,6 @@ export * from './wrapper/wrapper';
 export * from './error-boundary/error-boundary';
 export * from './movie-form/movie-form';
 export * from './modal/modal';
+export * from './search-page/search-page';
+export * from './details-page/details-page';
+export * from './not-found-page/not-found-page';
